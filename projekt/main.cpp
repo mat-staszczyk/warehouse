@@ -4,9 +4,12 @@
 
 using namespace std;
 
-const int N = 100;
+int n = 100;
 
 struct Sprzet {
+    Sprzet *poprzedni;
+    Sprzet *kolejny;
+    
     int id_produktu;
     int ilosc;
     string nazwa;
@@ -14,13 +17,14 @@ struct Sprzet {
     string informacje;
     float wartosc;
     bool sprawny;
-    bool uzywany;
+    bool nowy;
 };
 
 void pokaz_menu();
+Sprzet* dodaj_sprzet(Sprzet*, string, string, string, int, float, bool, bool);
 
-void dodaj_sprzet();
-void wyswietl_sprzet();
+void dodaj_test();
+int wyswietl_sprzet(Sprzet*);
 void usun_sprzet();
 void wyszukiwanie();
 void sortowanie();
@@ -29,12 +33,19 @@ void kosz();
 int wczytaj_z_pliku(string, Sprzet*, int);
 int zapisz_do_pliku(string, Sprzet*, int);
 
-Sprzet * sprzet = new Sprzet[N];
+Sprzet * sprzet = new Sprzet;
 
 int main() {
     
+    sprzet = NULL;
     string nazwa_pliku;
     int wybor;
+    
+    int ilosc;
+    string nazwa, typ, info;
+    float wartosc;
+    bool sprawny, nowy;
+    char temp;
     
     while (1) {
         
@@ -47,10 +58,34 @@ int main() {
         switch (wybor)
         {
             case 1:
-                dodaj_sprzet();
+                cout << "Dodawanie sprzętu." << endl << endl
+                << "Nazwa: " << endl << "> ";
+                cin >> nazwa;
+                cout << "Rodzaj: " << endl << "> ";
+                cin >> typ;
+                cout << "Wartość: " << endl << "> ";
+                cin >> wartosc;
+                cout << "Ilość: " << endl << "> ";
+                cin >> ilosc;
+                cout << "Stan: sprawny (t/n)?" << endl << "> ";
+                cin >> temp;
+                if (temp == 't' || temp == 'T')
+                    sprawny = true;
+                else
+                    sprawny = false;
+                cout << "Stan: nowy (t/n)?" << endl << "> ";
+                cin >> temp;
+                if (temp == 't' || temp == 'T')
+                    nowy = true;
+                else
+                    nowy = false;
+                cout << "Dodatkowe informacje: " << endl << "> ";
+                cin >> info;
+                
+                sprzet = dodaj_sprzet(sprzet, nazwa, typ, info, ilosc, wartosc, sprawny, nowy);
                 break;
             case 2:
-                wyswietl_sprzet();
+                wyswietl_sprzet(sprzet);
                 break;
             case 3:
                 wyszukiwanie();
@@ -65,14 +100,14 @@ int main() {
                 cout << "Podaj nazwę pliku, którego dane mają zostać wczytane:" << endl;
                 fflush(stdin);
                 cin >> nazwa_pliku;
-                if(!wczytaj_z_pliku(nazwa_pliku, sprzet, N))
+                if(!wczytaj_z_pliku(nazwa_pliku, sprzet, n))
                     cout << "Błąd dostępu do pliku." << endl;
                 break;
             case 7:
                 cout << "Podaj nazwę pliku, w którym mają zostać zapisane dane." << endl;
                 fflush(stdin);
                 cin >> nazwa_pliku;
-                if(!zapisz_do_pliku(nazwa_pliku, sprzet, N))
+                if(!zapisz_do_pliku(nazwa_pliku, sprzet, n))
                     cout << "Błąd dostępu do pliku." << endl;
                 break;
             case 8:
@@ -100,7 +135,32 @@ void pokaz_menu() {
     << endl;
 };
 
-void dodaj_sprzet() {
+Sprzet* dodaj_sprzet(Sprzet *przedmiot, string nazwa, string typ, string info, int ilosc, float wartosc, bool sprawny, bool nowy)
+{
+    Sprzet *aktualny;
+    
+    aktualny = new Sprzet;
+    aktualny->nazwa = nazwa;
+    aktualny->typ = typ;
+    aktualny->informacje = info;
+    aktualny->ilosc = ilosc;
+    aktualny->wartosc = wartosc;
+    aktualny->sprawny = sprawny;
+    aktualny->nowy = nowy;
+    aktualny->kolejny = NULL;
+    if (przedmiot!=NULL) {
+        przedmiot->kolejny = aktualny;
+        aktualny->poprzedni = przedmiot;
+    } else {
+        przedmiot = aktualny;
+        przedmiot->poprzedni = NULL;
+        przedmiot->id_produktu = 0;
+    }
+    
+    return przedmiot;
+};
+
+void dodaj_test() {
     // Testowe dodanie dwóch elementów
     sprzet[0].id_produktu = 1;
     sprzet[0].ilosc = 1;
@@ -109,7 +169,7 @@ void dodaj_sprzet() {
     sprzet[0].informacje = "bez zastrzeżeń";
     sprzet[0].wartosc = 79.00;
     sprzet[0].sprawny = true;
-    sprzet[0].uzywany = false;
+    sprzet[0].nowy = false;
     
     sprzet[1].id_produktu = 2;
     sprzet[1].ilosc = 5;
@@ -118,12 +178,27 @@ void dodaj_sprzet() {
     sprzet[1].informacje = "słaba jakość";
     sprzet[1].wartosc = 11.00;
     sprzet[1].sprawny = true;
-    sprzet[1].uzywany = true;
+    sprzet[1].nowy = true;
 };
 
-void wyswietl_sprzet() {
-    cout << "Nazwa: " << sprzet[0].nazwa << endl;
-};
+int wyswietl_sprzet(Sprzet* towar) {
+    
+    if (towar == NULL)
+        return 1;
+    
+    cout << "That's the spirit!" << endl;
+    cout << "Nazwa: " << towar->nazwa << endl;
+    cout << "ID: " << towar->id_produktu << endl;
+    cout << "Rodzaj: " << towar->typ << endl;
+    cout << "Ilość: " << towar->ilosc << endl;
+    cout << "Wartość: " << towar->wartosc << endl;
+    cout << "Sprawny: " << towar->sprawny << endl;
+    cout << "Nowy: " << towar->nowy << endl << endl;
+    
+    return 0;
+}
+
+
 void usun_sprzet() {
     cout << "test" << endl;
 };
