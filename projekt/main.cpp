@@ -22,6 +22,7 @@ struct Sprzet {
 
 void pokaz_menu();
 Sprzet* dodaj_sprzet(Sprzet*, string, string, string, int, float, bool, bool);
+Sprzet* nastepny(Sprzet*);
 
 void dodaj_test();
 int wyswietl_sprzet(Sprzet*);
@@ -88,7 +89,7 @@ int main() {
                 wyswietl_sprzet(sprzet);
                 break;
             case 3:
-                wyszukiwanie();
+                sprzet = nastepny(sprzet);
                 break;
             case 4:
                 sortowanie();
@@ -127,7 +128,7 @@ void pokaz_menu() {
     << endl
     << "1. Dodaj sprzęt" << endl
     << "2. Wyswietl sprzęt" << endl
-    << "3. Wyszukaj" << endl
+    << "3. Nastepny (test)" << endl
     << "4. Sortowanie" << endl
     << "5. Kosz" << endl
     << "6. Wczytaj z pliku" << endl
@@ -159,6 +160,13 @@ Sprzet* dodaj_sprzet(Sprzet *przedmiot, string nazwa, string typ, string info, i
     
     return przedmiot;
 };
+
+Sprzet* nastepny(Sprzet *przedmiot)
+{
+    przedmiot = przedmiot->kolejny;
+    
+    return przedmiot;
+}
 
 void dodaj_test() {
     // Testowe dodanie dwóch elementów
