@@ -152,10 +152,11 @@ Sprzet* dodaj_sprzet(Sprzet *przedmiot, string nazwa, string typ, string info, i
     if (przedmiot!=NULL) {
         przedmiot->kolejny = aktualny;
         aktualny->poprzedni = przedmiot;
+        aktualny->id_produktu = (przedmiot->id_produktu) + 1;
     } else {
         przedmiot = aktualny;
         przedmiot->poprzedni = NULL;
-        przedmiot->id_produktu = 0;
+        przedmiot->id_produktu = 1;
     }
     
     return przedmiot;
