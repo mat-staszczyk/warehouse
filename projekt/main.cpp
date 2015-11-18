@@ -164,7 +164,10 @@ Sprzet* dodaj_sprzet(Sprzet *przedmiot, string nazwa, string typ, string info, i
 
 Sprzet* nastepny(Sprzet *przedmiot)
 {
-    przedmiot = przedmiot->kolejny;
+    if (przedmiot->kolejny != NULL)
+        przedmiot = przedmiot->kolejny;
+    else
+        cout << "Brak kolejnych przedmiotów.";
     
     return przedmiot;
 }
