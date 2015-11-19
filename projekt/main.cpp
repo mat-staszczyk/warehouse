@@ -23,6 +23,7 @@ struct Sprzet {
 void pokaz_menu();
 Sprzet* dodaj_sprzet(Sprzet*, string, string, string, int, float, bool, bool);
 Sprzet* nastepny(Sprzet*);
+Sprzet* poprzedni(Sprzet*);
 
 void dodaj_test();
 int wyswietl_sprzet(Sprzet*);
@@ -92,7 +93,7 @@ int main() {
                 sprzet = nastepny(sprzet);
                 break;
             case 4:
-                sortowanie();
+                sprzet = poprzedni(sprzet);
                 break;
             case 5:
                 kosz();
@@ -129,7 +130,7 @@ void pokaz_menu() {
     << "1. Dodaj sprzęt" << endl
     << "2. Wyswietl sprzęt" << endl
     << "3. Nastepny (test)" << endl
-    << "4. Sortowanie" << endl
+    << "4. Poprzedni (test)" << endl
     << "5. Kosz" << endl
     << "6. Wczytaj z pliku" << endl
     << "7. Zapisz do pliku" << endl
@@ -166,6 +167,17 @@ Sprzet* nastepny(Sprzet *przedmiot)
 {
     if (przedmiot->kolejny != NULL)
         przedmiot = przedmiot->kolejny;
+    else
+        cout << "Brak kolejnych przedmiotów.";
+    
+    return przedmiot;
+}
+
+
+Sprzet* poprzedni(Sprzet *przedmiot)
+{
+    if (przedmiot->poprzedni != NULL)
+        przedmiot = przedmiot->poprzedni;
     else
         cout << "Brak kolejnych przedmiotów.";
     
