@@ -99,18 +99,18 @@ int main() {
                 kosz();
                 break;
             case 6:
-                cout << "Podaj nazwę pliku, którego dane mają zostać wczytane:" << endl;
+                cout << "Podaj nazwę pliku, z którego mają zostać wczytane dane:" << endl;
                 fflush(stdin);
                 cin >> nazwa_pliku;
                 if(!wczytaj_z_pliku(nazwa_pliku, sprzet, n))
-                    cout << "Błąd dostępu do pliku." << endl;
+                    cout << "Brak dostępu do pliku." << endl;
                 break;
             case 7:
-                cout << "Podaj nazwę pliku, w którym mają zostać zapisane dane." << endl;
+                cout << "Podaj nazwę pliku, w którym mają zostać zapisane dane:" << endl;
                 fflush(stdin);
                 cin >> nazwa_pliku;
                 if(!zapisz_do_pliku(nazwa_pliku, sprzet, n))
-                    cout << "Błąd dostępu do pliku." << endl;
+                    cout << "Brak dostępu do pliku." << endl;
                 break;
             case 8:
                 cout << "Działanie programu zostało zakończone." << endl;
