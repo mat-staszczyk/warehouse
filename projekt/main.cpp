@@ -87,7 +87,8 @@ int main() {
                 sprzet = dodaj_sprzet(sprzet, nazwa, typ, info, ilosc, wartosc, sprawny, nowy);
                 break;
             case 2:
-                wyswietl_sprzet(sprzet);
+                if(!wyswietl_sprzet(sprzet))
+                    cout << "Lista sprzętu jest pusta." << endl;
                 break;
             case 3:
                 sprzet = nastepny(sprzet);
@@ -209,9 +210,9 @@ void dodaj_test() {
 int wyswietl_sprzet(Sprzet* towar) {
     
     if (towar == NULL)
-        return 1;
+        return 0;
     
-    cout << "That's the spirit!" << endl;
+    cout << "Dane przedmiotu:" << endl;
     cout << "Nazwa: " << towar->nazwa << endl;
     cout << "ID: " << towar->id_produktu << endl;
     cout << "Rodzaj: " << towar->typ << endl;
@@ -220,7 +221,7 @@ int wyswietl_sprzet(Sprzet* towar) {
     cout << "Sprawny: " << towar->sprawny << endl;
     cout << "Nowy: " << towar->nowy << endl << endl;
     
-    return 0;
+    return 1;
 }
 
 
