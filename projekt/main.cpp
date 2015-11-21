@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int n = 1;
+int n = 0;
 
 struct Sprzet {
     Sprzet *poprzedni;
@@ -97,7 +97,7 @@ int main() {
                 sprzet = poprzedni(sprzet);
                 break;
             case 5:
-                kosz();
+                dodaj_test();
                 break;
             case 6:
                 cout << "Podaj nazwę pliku, z którego mają zostać wczytane dane:" << endl;
@@ -112,6 +112,8 @@ int main() {
                 cin >> nazwa_pliku;
                 if(!zapisz_do_pliku(nazwa_pliku, sprzet, n))
                     cout << "Brak dostępu do pliku." << endl;
+                else
+                    cout << "Dane zostały pomyśle zapisane w pliku \"" << nazwa_pliku << "\"." << endl;
                 break;
             case 8:
                 cout << "Działanie programu zostało zakończone." << endl;
@@ -132,7 +134,7 @@ void pokaz_menu() {
     << "2. Wyswietl sprzęt" << endl
     << "3. Nastepny (test)" << endl
     << "4. Poprzedni (test)" << endl
-    << "5. Kosz" << endl
+    << "5. wczytaj test" << endl
     << "6. Wczytaj z pliku" << endl
     << "7. Zapisz do pliku" << endl
     << endl;
@@ -188,23 +190,10 @@ Sprzet* poprzedni(Sprzet *przedmiot)
 
 void dodaj_test() {
     // Testowe dodanie dwóch elementów
-    sprzet[0].id_produktu = 1;
-    sprzet[0].ilosc = 1;
-    sprzet[0].nazwa = "młot";
-    sprzet[0].typ = "budowlane";
-    sprzet[0].informacje = "bez zastrzeżeń";
-    sprzet[0].wartosc = 79.00;
-    sprzet[0].sprawny = true;
-    sprzet[0].nowy = false;
-    
-    sprzet[1].id_produktu = 2;
-    sprzet[1].ilosc = 5;
-    sprzet[1].nazwa = "wiertło";
-    sprzet[1].typ = "budowlane";
-    sprzet[1].informacje = "słaba jakość";
-    sprzet[1].wartosc = 11.00;
-    sprzet[1].sprawny = true;
-    sprzet[1].nowy = true;
+    sprzet = dodaj_sprzet(sprzet, "młot", "budowlane", "bez zastrzezen", 1, 149.99, true, true);
+    sprzet = dodaj_sprzet(sprzet, "szpadel", "budowlane", "bez zastrzezen", 1, 49.99, true, true);
+    sprzet = dodaj_sprzet(sprzet, "wiertło", "budowlane", "wysoka jakość", 1, 19.99, true, true);
+    sprzet = dodaj_sprzet(sprzet, "szpadel", "budowlane", "bez zastrzezen", 1, 49.99, true, true);
 };
 
 int wyswietl_sprzet(Sprzet* towar) {
@@ -240,6 +229,7 @@ void kosz() {
 
 int wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet)
 {
+    Sprzet *test = new Sprzet;
     ifstream plik;
 
     plik.open(nazwa_pliku.c_str(), ios::in|ios::binary);
@@ -248,9 +238,15 @@ int wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet)
         return 0;
     
     plik.read((char*)&n, sizeof(n));
-    long rozmiar_struktury = n * sizeof(Sprzet);
+    cout << n;
     
-    plik.read((char*)sprzet, rozmiar_struktury);
+    for (int i = 1; i <= n; i++)
+    {
+        plik.read((char*)test, sizeof(Sprzet));
+        cout << test->nazwa << endl;
+    }
+
+    
     plik.close();
     
     return 1;
@@ -259,16 +255,20 @@ int wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet)
 int zapisz_do_pliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
 {
     ofstream plik;
-    long rozmiar_struktury = rozmiar * sizeof(Sprzet);
-    
     plik.open(nazwa_pliku.c_str(), (ios::out|ios::binary));
-    
-    
-    
+
     if (!plik)
         return 0;
-    plik.write((char*)&n, sizeof(n));
-    plik.write((char*)sprzet, rozmiar_struktury);
+    
+    plik.write((char*)&rozmiar, sizeof(rozmiar));
+
+    for (int i = 1; i < rozmiar; i++)
+    {
+        plik.write((char*)sprzet, sizeof(Sprzet));
+        sprzet = sprzet->kolejny;
+    }
+    
+    
     plik.close();
     
     return 1;
