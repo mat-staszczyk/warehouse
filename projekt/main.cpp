@@ -32,7 +32,7 @@ void wyszukiwanie();
 void sortowanie();
 void kosz();
 
-int wczytaj_z_pliku(string, Sprzet*, int);
+int wczytaj_z_pliku(string, Sprzet*);
 int zapisz_do_pliku(string, Sprzet*, int);
 
 Sprzet * sprzet = new Sprzet;
@@ -103,7 +103,7 @@ int main() {
                 cout << "Podaj nazwę pliku, z którego mają zostać wczytane dane:" << endl;
                 fflush(stdin);
                 cin >> nazwa_pliku;
-                if(!wczytaj_z_pliku(nazwa_pliku, sprzet, n))
+                if(!wczytaj_z_pliku(nazwa_pliku, sprzet))
                     cout << "Brak dostępu do pliku." << endl;
                 break;
             case 7:
@@ -238,15 +238,17 @@ void kosz() {
     cout << "test" << endl;
 };
 
-int wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
+int wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet)
 {
     ifstream plik;
-    long rozmiar_struktury = rozmiar * sizeof(Sprzet);
 
     plik.open(nazwa_pliku.c_str(), ios::in|ios::binary);
     
     if(!plik)
         return 0;
+    
+    plik.read((char*)&n, sizeof(n));
+    long rozmiar_struktury = n * sizeof(Sprzet);
     
     plik.read((char*)sprzet, rozmiar_struktury);
     plik.close();
@@ -261,9 +263,11 @@ int zapisz_do_pliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
     
     plik.open(nazwa_pliku.c_str(), (ios::out|ios::binary));
     
+    
+    
     if (!plik)
         return 0;
-    
+    plik.write((char*)&n, sizeof(n));
     plik.write((char*)sprzet, rozmiar_struktury);
     plik.close();
     
