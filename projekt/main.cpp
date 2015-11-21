@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int n = 100;
+int n = 1;
 
 struct Sprzet {
     Sprzet *poprzedni;
@@ -160,6 +160,7 @@ Sprzet* dodaj_sprzet(Sprzet *przedmiot, string nazwa, string typ, string info, i
         przedmiot->id_produktu = 1;
     }
     
+    n++;
     return przedmiot;
 };
 
