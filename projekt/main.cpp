@@ -224,31 +224,36 @@ int wyswietl_sprzet(Sprzet* towar) {
 
 Sprzet *wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet)
 {
+    int id, ilosc, rozmiar;
+    float wartosc;
+    bool sprawny, nowy;
+    string nazwa, typ, info;
+    
     ifstream plik;
     plik.open(nazwa_pliku.c_str(), ios::in|ios::binary);
     
     plik.read((char*)&n, sizeof(n));
-    Sprzet *temp = new Sprzet[n];
-    cout << n;
+    Sprzet *temp = new Sprzet;
+    rozmiar = n;
     
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < rozmiar; i++)
     {
         plik.read((char*)temp, sizeof(Sprzet));
-        temp->kolejny=NULL;
-        if (sprzet!= NULL) {
-            sprzet->kolejny = temp;
-            temp->poprzedni = sprzet;
-            temp->id_produktu = (sprzet->id_produktu) + 1;
-        } else {
-            sprzet = temp;
-            sprzet->poprzedni = NULL;
-            sprzet->id_produktu = 1;
-        }
+        id = temp->id_produktu;
+        ilosc = temp->ilosc;
+        wartosc = temp->wartosc;
+        sprawny = temp->sprawny;
+        nowy = temp->nowy;
+        nazwa = temp->nazwa;
+        typ = temp->typ;
+        info = temp->informacje;
+
+        sprzet = dodaj_sprzet(sprzet, nazwa, typ, info, ilosc, wartosc, sprawny, nowy);
     }
     
     plik.close();
     
-    return temp;
+    return sprzet;
 };
 
 int zapisz_do_pliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
