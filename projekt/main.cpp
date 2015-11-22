@@ -29,7 +29,7 @@ Sprzet* pierwszy(Sprzet*);
 void dodaj_test();
 int wyswietl_sprzet(Sprzet*);
 
-int wczytaj_z_pliku(string, Sprzet*);
+Sprzet *wczytaj_z_pliku(string, Sprzet*);
 int zapisz_do_pliku(string, Sprzet*, int);
 
 Sprzet * sprzet = new Sprzet;
@@ -101,8 +101,9 @@ int main() {
                 cout << "Podaj nazwę pliku, z którego mają zostać wczytane dane:" << endl;
                 fflush(stdin);
                 cin >> nazwa_pliku;
-                if(!wczytaj_z_pliku(nazwa_pliku, sprzet))
-                    cout << "Brak dostępu do pliku." << endl;
+                
+                sprzet = wczytaj_z_pliku(nazwa_pliku, sprzet);
+                
                 break;
             case 7:
                 cout << "Podaj nazwę pliku, w którym mają zostać zapisane dane:" << endl;
@@ -221,29 +222,33 @@ int wyswietl_sprzet(Sprzet* towar) {
     return 1;
 }
 
-int wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet)
+Sprzet *wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet)
 {
-    Sprzet *test = new Sprzet;
     ifstream plik;
-
     plik.open(nazwa_pliku.c_str(), ios::in|ios::binary);
     
-    if(!plik)
-        return 0;
-    
     plik.read((char*)&n, sizeof(n));
+    Sprzet *temp = new Sprzet[n];
     cout << n;
     
     for (int i = 0; i < n; i++)
     {
-        plik.read((char*)test, sizeof(Sprzet));
-        cout << test->nazwa << endl;
+        plik.read((char*)temp, sizeof(Sprzet));
+        temp->kolejny=NULL;
+        if (sprzet!= NULL) {
+            sprzet->kolejny = temp;
+            temp->poprzedni = sprzet;
+            temp->id_produktu = (sprzet->id_produktu) + 1;
+        } else {
+            sprzet = temp;
+            sprzet->poprzedni = NULL;
+            sprzet->id_produktu = 1;
+        }
     }
-
     
     plik.close();
     
-    return 1;
+    return temp;
 };
 
 int zapisz_do_pliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
