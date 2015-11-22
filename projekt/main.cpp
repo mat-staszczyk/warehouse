@@ -24,13 +24,10 @@ void pokaz_menu();
 Sprzet* dodaj_sprzet(Sprzet*, string, string, string, int, float, bool, bool);
 Sprzet* nastepny(Sprzet*);
 Sprzet* poprzedni(Sprzet*);
+Sprzet* pierwszy(Sprzet*);
 
 void dodaj_test();
 int wyswietl_sprzet(Sprzet*);
-void usun_sprzet();
-void wyszukiwanie();
-void sortowanie();
-void kosz();
 
 int wczytaj_z_pliku(string, Sprzet*);
 int zapisz_do_pliku(string, Sprzet*, int);
@@ -60,6 +57,7 @@ int main() {
         switch (wybor)
         {
             case 1:
+                fflush(stdin);
                 cout << "Dodawanie sprzętu." << endl << endl
                 << "Nazwa: " << endl << "> ";
                 cin >> nazwa;
@@ -127,6 +125,16 @@ int main() {
     return 0;
 }
 
+Sprzet *pierwszy(Sprzet *towar) {
+    if (!(towar->poprzedni))
+        return towar;
+    
+    while(towar->poprzedni)
+        towar = towar->poprzedni;
+    
+    return towar;
+}
+
 void pokaz_menu() {
     cout << endl << "Menu zarządzania sprzętem:" << endl
     << endl
@@ -164,7 +172,7 @@ Sprzet* dodaj_sprzet(Sprzet *przedmiot, string nazwa, string typ, string info, i
     }
     
     n++;
-    return przedmiot;
+    return aktualny;
 };
 
 Sprzet* nastepny(Sprzet *przedmiot)
@@ -193,7 +201,7 @@ void dodaj_test() {
     sprzet = dodaj_sprzet(sprzet, "młot", "budowlane", "bez zastrzezen", 1, 149.99, true, true);
     sprzet = dodaj_sprzet(sprzet, "szpadel", "budowlane", "bez zastrzezen", 1, 49.99, true, true);
     sprzet = dodaj_sprzet(sprzet, "wiertło", "budowlane", "wysoka jakość", 1, 19.99, true, true);
-    sprzet = dodaj_sprzet(sprzet, "szpadel", "budowlane", "bez zastrzezen", 1, 49.99, true, true);
+    sprzet = dodaj_sprzet(sprzet, "wkrętarka", "budowlane", "bez zastrzezen", 1, 49.99, true, true);
 };
 
 int wyswietl_sprzet(Sprzet* towar) {
@@ -213,20 +221,6 @@ int wyswietl_sprzet(Sprzet* towar) {
     return 1;
 }
 
-
-void usun_sprzet() {
-    cout << "test" << endl;
-};
-void wyszukiwanie() {
-    cout << "test" << endl;
-};
-void sortowanie() {
-    cout << "test" << endl;
-};
-void kosz() {
-    cout << "test" << endl;
-};
-
 int wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet)
 {
     Sprzet *test = new Sprzet;
@@ -240,7 +234,7 @@ int wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet)
     plik.read((char*)&n, sizeof(n));
     cout << n;
     
-    for (int i = 1; i <= n; i++)
+    for (int i = 0; i < n; i++)
     {
         plik.read((char*)test, sizeof(Sprzet));
         cout << test->nazwa << endl;
@@ -262,12 +256,12 @@ int zapisz_do_pliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
     
     plik.write((char*)&rozmiar, sizeof(rozmiar));
 
-    for (int i = 1; i < rozmiar; i++)
-    {
-        plik.write((char*)sprzet, sizeof(Sprzet));
-        sprzet = sprzet->kolejny;
-    }
+    sprzet = pierwszy(sprzet);
     
+    do {
+        plik.write((char*)sprzet, sizeof(Sprzet));
+        cout << sprzet->nazwa;
+    } while ((sprzet = sprzet->kolejny));
     
     plik.close();
     
