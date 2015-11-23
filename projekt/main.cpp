@@ -270,7 +270,7 @@ int zapisz_do_pliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
     
     do {
         plik.write((char*)sprzet, sizeof(Sprzet));
-        cout << sprzet->nazwa;
+        //cout << sprzet->nazwa;
     } while ((sprzet = sprzet->kolejny));
     
     plik.close();
