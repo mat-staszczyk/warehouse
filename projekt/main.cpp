@@ -1,12 +1,3 @@
-//
-//  main.cpp
-//  test1
-//
-//  Created by mat on 02.12.2015.
-//  Copyright © 2015 mat. All rights reserved.
-//
-//
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -39,6 +30,7 @@ public:
     Sprzet( Sprzet & );
     ~Sprzet();
     
+    Sprzet *dodajDane();
     void wypiszDane();
 };
 
@@ -74,11 +66,9 @@ public:
 
 int main() {
     
-    int ilosc, n;
-    string nazwa, typ, info, nazwa_pliku;
-    float wartosc;
-    bool sprawny, nowy;
-    char temp, klawisz;
+    int n;
+    string nazwa_pliku;
+    char klawisz;
     
     ListaSprzetu * lista = new ListaSprzetu;
     
@@ -94,36 +84,8 @@ int main() {
         switch (klawisz)
         {
             case '1':
-                cout << "Dodawanie sprzętu." << endl << endl
-                << "Nazwa: " << endl << "> ";
-                cin >> nazwa;
-                cout << "Rodzaj: " << endl << "> ";
-                cin >> typ;
-                cout << "Wartość: " << endl << "> ";
-                cin >> wartosc;
-                cin.ignore();
-                cout << "Ilość: " << endl << "> ";
-                cin >> ilosc;
-                cin.ignore();
-                cout << "Stan: sprawny (t/n)?" << endl << "> ";
-                cin >> temp;
-                cin.ignore();
-                if (temp == 't' || temp == 'T')
-                    sprawny = true;
-                else
-                    sprawny = false;
-                cout << "Stan: nowy (t/n)?" << endl << "> ";
-                cin >> temp;
-                cin.ignore();
-                if (temp == 't' || temp == 'T') {
-                    nowy = true;
-                } else {
-                    nowy = false;
-                }
-                cout << "Dodatkowe informacje: " << endl << "> ";
-                cin >> info;
-                
-                test = new Sprzet(ilosc, nazwa, typ, info, wartosc, sprawny, nowy);
+                test = new Sprzet;
+                test = test->dodajDane();
                 
                 lista->dodajSprzet(test);
                 
@@ -200,6 +162,50 @@ Sprzet::Sprzet( Sprzet & inny )
 Sprzet::~Sprzet()
 {
     cout << "Przedmiot został usunięty." << endl;
+}
+
+Sprzet* Sprzet::dodajDane()
+{
+    int ilosc;
+    string nazwa, typ, info;
+    float wartosc;
+    char temp;
+    bool nowy, sprawny;
+    Sprzet * biezacy;
+    
+    
+    cout << "Dodawanie sprzętu." << endl << endl
+    << "Nazwa: " << endl << "> ";
+    cin >> nazwa;
+    cout << "Rodzaj: " << endl << "> ";
+    cin >> typ;
+    cout << "Wartość: " << endl << "> ";
+    cin >> wartosc;
+    cin.ignore();
+    cout << "Ilość: " << endl << "> ";
+    cin >> ilosc;
+    cin.ignore();
+    cout << "Stan: sprawny (t/n)?" << endl << "> ";
+    cin >> temp;
+    cin.ignore();
+    if (temp == 't' || temp == 'T')
+        sprawny = true;
+    else
+        sprawny = false;
+    cout << "Stan: nowy (t/n)?" << endl << "> ";
+    cin >> temp;
+    cin.ignore();
+    if (temp == 't' || temp == 'T') {
+        nowy = true;
+    } else {
+        nowy = false;
+    }
+    cout << "Dodatkowe informacje: " << endl << "> ";
+    cin >> info;
+    
+    biezacy = new Sprzet(ilosc, nazwa, typ, info, wartosc, sprawny, nowy);
+    
+    return biezacy;
 }
 
 void Sprzet::wypiszDane()
