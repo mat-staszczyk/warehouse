@@ -57,6 +57,7 @@ public:
     void nastepnyElement();
     void poprzedniElement();
     void przeniesElement(ListaSprzetu*);
+    void usunElement();
     
     Sprzet * pierwszyElement();
     ListaSprzetu * wczytajZPliku(string);
@@ -123,6 +124,9 @@ int main() {
                 else
                     cout << "Dane zostały pomyśle zapisane w pliku \"" << nazwa_pliku << "\"." << endl;
                 break;
+            case '7':
+                lista->usunElement();
+                break;
             case '8':
                 lista->przeniesElement(kosz);
                 kosz->wypiszElement();
@@ -168,7 +172,7 @@ Sprzet::Sprzet( Sprzet & inny )
 
 Sprzet::~Sprzet()
 {
-    cout << "Przedmiot został usunięty." << endl;
+    cout << endl << "Przedmiot " << this->nazwa << " został usunięty." << endl;
 }
 
 Sprzet* Sprzet::dodajDane()
@@ -253,6 +257,7 @@ void ListaSprzetu::pokaz_menu() {
     << "4. Poprzedni (test)" << endl
     << "5. Wczytaj z pliku" << endl
     << "6. Zapis do pliku" << endl
+    << "7. Usuń element" << endl
     << "8. Przenieś do kosza" << endl
     << "9. Wyjdź" << endl
     << endl;
@@ -348,6 +353,26 @@ void ListaSprzetu::przeniesElement(ListaSprzetu* innaLista)
     
 }
 
+void ListaSprzetu::usunElement()
+{
+    Sprzet *temp = sprzet;
+    
+    if (!(sprzet->poprzedni)) {
+        sprzet = sprzet->kolejny;
+        sprzet->poprzedni = NULL;
+    } else if (!(sprzet->kolejny)) {
+        sprzet = sprzet->poprzedni;
+        sprzet->kolejny = NULL;
+    } else {
+        (sprzet->poprzedni)->kolejny = sprzet->kolejny;
+        (sprzet->kolejny)->poprzedni = sprzet->poprzedni;
+        sprzet = sprzet->poprzedni;
+    }
+    
+    delete temp;
+    
+}
+
 int ListaSprzetu::iloscElementow()
 {
     return n;
@@ -406,7 +431,6 @@ int ListaSprzetu::zapisDoPliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
     
     do {
         plik.write((char*)sprzet, sizeof(Sprzet));
-        //cout << sprzet->nazwa;
     } while ((sprzet = sprzet->kolejny));
     
     plik.close();
