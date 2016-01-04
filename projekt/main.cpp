@@ -42,10 +42,12 @@ private:
     Sprzet * sprzet;
     Sprzet * pierwszy;
     int n;
+    bool autonumeracja;
     
 public:
     
     ListaSprzetu();
+    ListaSprzetu(bool);
     
     void pokaz_menu();
     void dodajSprzet(Sprzet*);
@@ -54,6 +56,7 @@ public:
     void listaJestPusta();
     void nastepnyElement();
     void poprzedniElement();
+    void przeniesElement(ListaSprzetu*);
     
     Sprzet * pierwszyElement();
     ListaSprzetu * wczytajZPliku(string);
@@ -70,7 +73,8 @@ int main() {
     string nazwa_pliku;
     char klawisz;
     
-    ListaSprzetu * lista = new ListaSprzetu;
+    ListaSprzetu *lista = new ListaSprzetu;
+    ListaSprzetu *kosz = new ListaSprzetu(false);
     
     Sprzet * test;
     
@@ -118,7 +122,10 @@ int main() {
                     cout << "Brak dostępu do pliku." << endl;
                 else
                     cout << "Dane zostały pomyśle zapisane w pliku \"" << nazwa_pliku << "\"." << endl;
-                
+                break;
+            case '8':
+                lista->przeniesElement(kosz);
+                kosz->wypiszElement();
                 break;
             default:
                 break;
@@ -226,9 +233,15 @@ void Sprzet::wypiszDane()
 
 ListaSprzetu::ListaSprzetu()
 {
+    this->autonumeracja = true;
     sprzet = NULL;
     pierwszy = NULL;
     n = 0;
+}
+
+ListaSprzetu::ListaSprzetu(bool autonumeracja)
+{
+    this->autonumeracja = autonumeracja;
 }
 
 void ListaSprzetu::pokaz_menu() {
@@ -240,6 +253,7 @@ void ListaSprzetu::pokaz_menu() {
     << "4. Poprzedni (test)" << endl
     << "5. Wczytaj z pliku" << endl
     << "6. Zapis do pliku" << endl
+    << "8. Przenieś do kosza" << endl
     << "9. Wyjdź" << endl
     << endl;
 };
@@ -247,6 +261,7 @@ void ListaSprzetu::pokaz_menu() {
 void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
 {
     Sprzet * aktualny = new Sprzet;
+    int id_przedmiotu = przedmiot->id_produktu;
     
     aktualny->nazwa = przedmiot->nazwa;
     aktualny->typ = przedmiot->typ;
@@ -266,6 +281,9 @@ void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
         przedmiot->poprzedni = NULL;
         aktualny->id_produktu = 1;
         pierwszy = przedmiot;
+    }
+    if (autonumeracja == false) {
+        aktualny->id_produktu = id_przedmiotu;
     }
     
     sprzet = aktualny;
@@ -309,6 +327,25 @@ void ListaSprzetu::poprzedniElement()
     } else {
         cout << "Brak porzednich elementów.";
     }
+}
+
+void ListaSprzetu::przeniesElement(ListaSprzetu* innaLista)
+{
+    Sprzet *nowy(sprzet);
+    
+    if (!(sprzet->poprzedni)) {
+        sprzet = sprzet->kolejny;
+        sprzet->poprzedni = NULL;
+    } else if (!(sprzet->kolejny)) {
+        sprzet = sprzet->poprzedni;
+        sprzet->kolejny = NULL;
+    } else {
+        (sprzet->poprzedni)->kolejny = sprzet->kolejny;
+        (sprzet->kolejny)->poprzedni = sprzet->poprzedni;
+        sprzet = sprzet->poprzedni;
+    }
+    innaLista->dodajSprzet(nowy);
+    
 }
 
 int ListaSprzetu::iloscElementow()
