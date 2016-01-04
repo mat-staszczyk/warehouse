@@ -1,14 +1,22 @@
+//
+//  main.cpp
+//  test1
+//
+//  Created by mat on 02.12.2015.
+//  Copyright © 2015 mat. All rights reserved.
+//
+//
+
 #include <iostream>
 #include <fstream>
 #include <string>
 
 using namespace std;
 
-int n = 0;
-
-struct Sprzet {
-    Sprzet *poprzedni;
-    Sprzet *kolejny;
+class Sprzet
+{
+    
+private:
     
     int id_produktu;
     int ilosc;
@@ -18,46 +26,74 @@ struct Sprzet {
     float wartosc;
     bool sprawny;
     bool nowy;
+    
+    Sprzet *poprzedni;
+    Sprzet *kolejny;
+    
+    friend class ListaSprzetu;
+
+public:
+    
+    Sprzet();
+    Sprzet( int, string, string, string, float, bool, bool, int=NULL);
+    Sprzet( Sprzet & );
+    ~Sprzet();
+    
+    void wypiszDane();
 };
 
-void pokaz_menu();
-Sprzet* dodaj_sprzet(Sprzet*, string, string, string, int, float, bool, bool);
-Sprzet* nastepny(Sprzet*);
-Sprzet* poprzedni(Sprzet*);
-Sprzet* pierwszy(Sprzet*);
+class ListaSprzetu
+{
+    
+private:
+    
+    Sprzet * sprzet;
+    Sprzet * pierwszy;
+    int n;
+    
+public:
+    
+    ListaSprzetu();
+    
+    void pokaz_menu();
+    void dodajSprzet(Sprzet*);
+    void poczatekListy();
+    void wypiszElement();
+    void listaJestPusta();
+    void nastepnyElement();
+    void poprzedniElement();
+    
+    Sprzet * pierwszyElement();
+    ListaSprzetu * wczytajZPliku(string);
+    
+    int iloscElementow();
+    int zapisDoPliku(string, Sprzet*, int);
 
-void dodaj_test();
-int wyswietl_sprzet(Sprzet*);
+};
 
-Sprzet *wczytaj_z_pliku(string, Sprzet*);
-int zapisz_do_pliku(string, Sprzet*, int);
-
-Sprzet * sprzet = new Sprzet;
 
 int main() {
     
-    sprzet = NULL;
-    string nazwa_pliku;
-    int wybor;
-    
-    int ilosc;
-    string nazwa, typ, info;
+    int ilosc, n;
+    string nazwa, typ, info, nazwa_pliku;
     float wartosc;
     bool sprawny, nowy;
-    char temp;
+    char temp, klawisz;
     
-    while (1) {
-        
-        pokaz_menu();
+    ListaSprzetu * lista = new ListaSprzetu;
+    
+    Sprzet * test;
+    
+    do
+    {
+        lista->pokaz_menu();
         
         cout << "> ";
-        fflush(stdin);
-        cin >> wybor;
-        
-        switch (wybor)
+        cin >> klawisz;
+        cin.ignore();
+        switch (klawisz)
         {
-            case 1:
-                fflush(stdin);
+            case '1':
                 cout << "Dodawanie sprzętu." << endl << endl
                 << "Nazwa: " << endl << "> ";
                 cin >> nazwa;
@@ -65,164 +101,221 @@ int main() {
                 cin >> typ;
                 cout << "Wartość: " << endl << "> ";
                 cin >> wartosc;
+                cin.ignore();
                 cout << "Ilość: " << endl << "> ";
                 cin >> ilosc;
+                cin.ignore();
                 cout << "Stan: sprawny (t/n)?" << endl << "> ";
                 cin >> temp;
+                cin.ignore();
                 if (temp == 't' || temp == 'T')
                     sprawny = true;
                 else
                     sprawny = false;
                 cout << "Stan: nowy (t/n)?" << endl << "> ";
                 cin >> temp;
-                if (temp == 't' || temp == 'T')
+                cin.ignore();
+                if (temp == 't' || temp == 'T') {
                     nowy = true;
-                else
+                } else {
                     nowy = false;
+                }
                 cout << "Dodatkowe informacje: " << endl << "> ";
                 cin >> info;
                 
-                sprzet = dodaj_sprzet(sprzet, nazwa, typ, info, ilosc, wartosc, sprawny, nowy);
+                test = new Sprzet(ilosc, nazwa, typ, info, wartosc, sprawny, nowy);
+                
+                lista->dodajSprzet(test);
+                
+                cout << "Dodano element: " << endl;
+                lista->wypiszElement();
                 break;
-            case 2:
-                if(!wyswietl_sprzet(sprzet))
-                    cout << "Lista sprzętu jest pusta." << endl;
+            case '2':
+                lista->wypiszElement();
                 break;
-            case 3:
-                sprzet = nastepny(sprzet);
+            case '3':
+                lista->nastepnyElement();
                 break;
-            case 4:
-                sprzet = poprzedni(sprzet);
+            case '4':
+                lista->poprzedniElement();
                 break;
-            case 5:
-                dodaj_test();
-                break;
-            case 6:
+            case '5':
                 cout << "Podaj nazwę pliku, z którego mają zostać wczytane dane:" << endl;
                 fflush(stdin);
                 cin >> nazwa_pliku;
-                
-                sprzet = wczytaj_z_pliku(nazwa_pliku, sprzet);
-                
+                lista = lista->wczytajZPliku(nazwa_pliku);
                 break;
-            case 7:
+            case '6':
+                test = lista->pierwszyElement();
+                n = lista->iloscElementow();
+                
                 cout << "Podaj nazwę pliku, w którym mają zostać zapisane dane:" << endl;
                 fflush(stdin);
                 cin >> nazwa_pliku;
-                if(!zapisz_do_pliku(nazwa_pliku, sprzet, n))
+                if(!lista->zapisDoPliku(nazwa_pliku, test, n))
                     cout << "Brak dostępu do pliku." << endl;
                 else
                     cout << "Dane zostały pomyśle zapisane w pliku \"" << nazwa_pliku << "\"." << endl;
+                
                 break;
-            case 8:
-                cout << "Działanie programu zostało zakończone." << endl;
-                return 0;
             default:
-                cout << "Błędny wybór." << endl;
                 break;
+
         }
-    }
-    
+        
+    } while (klawisz != '9' );
+
     return 0;
 }
 
-Sprzet *pierwszy(Sprzet *towar) {
-    if (!(towar->poprzedni))
-        return towar;
-    
-    while(towar->poprzedni)
-        towar = towar->poprzedni;
-    
-    return towar;
+
+// Sprzet - metody
+
+Sprzet::Sprzet()
+{
 }
 
-void pokaz_menu() {
+Sprzet::Sprzet( int ilosc, string nazwa, string typ, string informacje, float wartosc, bool sprawny, bool nowy, int id_produktu )
+{
+    this->ilosc = ilosc;
+    this->nazwa = nazwa;
+    this->typ = typ;
+    this->informacje = informacje;
+    this->wartosc = wartosc;
+    this->sprawny = sprawny;
+    this->id_produktu = NULL;
+}
+
+Sprzet::Sprzet( Sprzet & inny )
+{
+    this->ilosc = inny.ilosc;
+    this->nazwa = inny.nazwa;
+    this->typ = inny.typ;
+    this->informacje = inny.informacje;
+    this->wartosc = inny.wartosc;
+    this->sprawny = inny.sprawny;
+    this->id_produktu = inny.id_produktu;
+}
+
+Sprzet::~Sprzet()
+{
+    cout << "Przedmiot został usunięty." << endl;
+}
+
+void Sprzet::wypiszDane()
+{
+    cout << "Dane przedmiotu:" << endl;
+    
+    cout << "ID: " << this->id_produktu << endl;
+    cout << "Nazwa: " << this->nazwa << endl;
+    cout << "Rodzaj: " << this->typ << endl;
+    cout << "Ilość: " << this->ilosc << endl;
+    cout << "Wartość: " << this->wartosc << endl;
+    cout << "Sprawny: " << this->sprawny << endl;
+    cout << "Nowy: " << this->nowy << endl;
+    cout << "Informacje: " << this->informacje << endl << endl;
+}
+
+// ListaSprzetu - metody
+
+ListaSprzetu::ListaSprzetu()
+{
+    sprzet = NULL;
+    pierwszy = NULL;
+    n = 0;
+}
+
+void ListaSprzetu::pokaz_menu() {
     cout << endl << "Menu zarządzania sprzętem:" << endl
     << endl
     << "1. Dodaj sprzęt" << endl
     << "2. Wyswietl sprzęt" << endl
     << "3. Nastepny (test)" << endl
     << "4. Poprzedni (test)" << endl
-    << "5. wczytaj test" << endl
-    << "6. Wczytaj z pliku" << endl
-    << "7. Zapisz do pliku" << endl
+    << "5. Wczytaj z pliku" << endl
+    << "6. Zapis do pliku" << endl
+    << "9. Wyjdź" << endl
     << endl;
 };
 
-Sprzet* dodaj_sprzet(Sprzet *przedmiot, string nazwa, string typ, string info, int ilosc, float wartosc, bool sprawny, bool nowy)
+void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
 {
-    Sprzet *aktualny;
+    Sprzet * aktualny = new Sprzet;
     
-    aktualny = new Sprzet;
-    aktualny->nazwa = nazwa;
-    aktualny->typ = typ;
-    aktualny->informacje = info;
-    aktualny->ilosc = ilosc;
-    aktualny->wartosc = wartosc;
-    aktualny->sprawny = sprawny;
-    aktualny->nowy = nowy;
+    aktualny->nazwa = przedmiot->nazwa;
+    aktualny->typ = przedmiot->typ;
+    aktualny->informacje = przedmiot->informacje;
+    aktualny->ilosc = przedmiot->ilosc;
+    aktualny->wartosc = przedmiot->wartosc;
+    aktualny->sprawny = przedmiot->sprawny;
+    aktualny->nowy = przedmiot->nowy;
+    
     aktualny->kolejny = NULL;
-    if (przedmiot!=NULL) {
-        przedmiot->kolejny = aktualny;
-        aktualny->poprzedni = przedmiot;
-        aktualny->id_produktu = (przedmiot->id_produktu) + 1;
+    if (sprzet) {
+        sprzet->kolejny = aktualny;
+        aktualny->poprzedni = sprzet;
+        aktualny->id_produktu = (sprzet->id_produktu) + 1;
     } else {
         przedmiot = aktualny;
         przedmiot->poprzedni = NULL;
-        przedmiot->id_produktu = 1;
+        aktualny->id_produktu = 1;
+        pierwszy = przedmiot;
     }
     
+    sprzet = aktualny;
     n++;
-    return aktualny;
-};
+}
 
-Sprzet* nastepny(Sprzet *przedmiot)
+void ListaSprzetu::poczatekListy()
 {
-    if (przedmiot->kolejny != NULL)
-        przedmiot = przedmiot->kolejny;
-    else
-        cout << "Brak kolejnych przedmiotów.";
-    
-    return przedmiot;
+    sprzet = pierwszy;
 }
 
-
-Sprzet* poprzedni(Sprzet *przedmiot)
+void ListaSprzetu::wypiszElement()
 {
-    if (przedmiot->poprzedni != NULL)
-        przedmiot = przedmiot->poprzedni;
-    else
-        cout << "Brak kolejnych przedmiotów.";
-    
-    return przedmiot;
+    if (n) {
+        sprzet->wypiszDane();
+    } else {
+        listaJestPusta();
+    }
 }
 
-void dodaj_test() {
-    // Testowe dodanie dwóch elementów
-    sprzet = dodaj_sprzet(sprzet, "młot", "budowlane", "bez zastrzezen", 1, 149.99, true, true);
-    sprzet = dodaj_sprzet(sprzet, "szpadel", "budowlane", "bez zastrzezen", 1, 49.99, true, true);
-    sprzet = dodaj_sprzet(sprzet, "wiertło", "budowlane", "wysoka jakość", 1, 19.99, true, true);
-    sprzet = dodaj_sprzet(sprzet, "wkrętarka", "budowlane", "bez zastrzezen", 1, 49.99, true, true);
-};
-
-int wyswietl_sprzet(Sprzet* towar) {
-    
-    if (towar == NULL)
-        return 0;
-    
-    cout << "Dane przedmiotu:" << endl;
-    cout << "Nazwa: " << towar->nazwa << endl;
-    cout << "ID: " << towar->id_produktu << endl;
-    cout << "Rodzaj: " << towar->typ << endl;
-    cout << "Ilość: " << towar->ilosc << endl;
-    cout << "Wartość: " << towar->wartosc << endl;
-    cout << "Sprawny: " << towar->sprawny << endl;
-    cout << "Nowy: " << towar->nowy << endl << endl;
-    
-    return 1;
+void ListaSprzetu::listaJestPusta()
+{
+    cout << "Lista jest pusta" << endl;
 }
 
-Sprzet *wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet)
+void ListaSprzetu::nastepnyElement()
+{
+    if (sprzet->kolejny) {
+        sprzet = sprzet->kolejny;
+        wypiszElement();
+    } else {
+        cout << "Brak kolejnych elementów." << endl;
+    }
+}
+
+void ListaSprzetu::poprzedniElement()
+{
+    if (sprzet->poprzedni) {
+        sprzet = sprzet->poprzedni;
+        wypiszElement();
+    } else {
+        cout << "Brak porzednich elementów.";
+    }
+}
+
+int ListaSprzetu::iloscElementow()
+{
+    return n;
+}
+
+Sprzet * ListaSprzetu::pierwszyElement()
+{
+    return pierwszy;
+}
+
+ListaSprzetu * ListaSprzetu::wczytajZPliku(string nazwa_pliku)
 {
     int id, ilosc, rozmiar;
     float wartosc;
@@ -234,6 +327,7 @@ Sprzet *wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet)
     
     plik.read((char*)&n, sizeof(n));
     Sprzet *temp = new Sprzet;
+    ListaSprzetu *lista = new ListaSprzetu;
     rozmiar = n;
     
     for (int i = 0; i < rozmiar; i++)
@@ -247,26 +341,25 @@ Sprzet *wczytaj_z_pliku(string nazwa_pliku, Sprzet *sprzet)
         nazwa = temp->nazwa;
         typ = temp->typ;
         info = temp->informacje;
-
-        sprzet = dodaj_sprzet(sprzet, nazwa, typ, info, ilosc, wartosc, sprawny, nowy);
+        
+        temp = new Sprzet(ilosc, nazwa, typ, info, wartosc, sprawny, nowy, id);
+        lista->dodajSprzet(temp);
     }
     
     plik.close();
     
-    return sprzet;
+    return lista;
 };
 
-int zapisz_do_pliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
+int ListaSprzetu::zapisDoPliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
 {
     ofstream plik;
     plik.open(nazwa_pliku.c_str(), (ios::out|ios::binary));
-
+    
     if (!plik)
         return 0;
     
     plik.write((char*)&rozmiar, sizeof(rozmiar));
-
-    sprzet = pierwszy(sprzet);
     
     do {
         plik.write((char*)sprzet, sizeof(Sprzet));
