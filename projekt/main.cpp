@@ -67,11 +67,13 @@ public:
 
 };
 
-class Helper
+class Pomocnik
 {
+    
 public:
     
     string tlumaczBool(bool);
+    bool czyZawieraFraze(string, string);
 };
 
 
@@ -163,6 +165,7 @@ Sprzet::Sprzet( int ilosc, string nazwa, string typ, string informacje, float wa
     this->informacje = informacje;
     this->wartosc = wartosc;
     this->sprawny = sprawny;
+    this->nowy = nowy;
     this->id_produktu = NULL;
 }
 
@@ -174,6 +177,7 @@ Sprzet::Sprzet( Sprzet & inny )
     this->informacje = inny.informacje;
     this->wartosc = inny.wartosc;
     this->sprawny = inny.sprawny;
+    this->nowy = inny.nowy;
     this->id_produktu = inny.id_produktu;
 }
 
@@ -199,25 +203,16 @@ Sprzet* Sprzet::dodajDane()
     cin >> typ;
     cout << "Wartość: " << endl << "> ";
     cin >> wartosc;
-    cin.ignore();
     cout << "Ilość: " << endl << "> ";
     cin >> ilosc;
-    cin.ignore();
     cout << "Stan: sprawny (t/n)?" << endl << "> ";
-    cin >> temp;
     cin.ignore();
-    if (temp == 't' || temp == 'T')
-        sprawny = true;
-    else
-        sprawny = false;
+    temp = getchar();
+    sprawny = (temp == 't' || temp == 'T') ? true : false;
     cout << "Stan: nowy (t/n)?" << endl << "> ";
-    cin >> temp;
     cin.ignore();
-    if (temp == 't' || temp == 'T') {
-        nowy = true;
-    } else {
-        nowy = false;
-    }
+    temp = getchar();
+    nowy = (temp == 't' || temp == 'T') ? true : false;
     cout << "Dodatkowe informacje: " << endl << "> ";
     cin >> info;
     
@@ -228,7 +223,7 @@ Sprzet* Sprzet::dodajDane()
 
 void Sprzet::wypiszDane()
 {
-    Helper * helper = new Helper;
+    Pomocnik * pomocnik = new Pomocnik;
     
     cout << "Dane przedmiotu:" << endl;
     
@@ -237,9 +232,11 @@ void Sprzet::wypiszDane()
     cout << "Rodzaj: " << this->typ << endl;
     cout << "Ilość: " << this->ilosc << endl;
     cout << "Wartość: " << this->wartosc << endl;
-    cout << "Sprawny: " << helper->tlumaczBool(this->sprawny) << endl;
-    cout << "Nowy: " << helper->tlumaczBool(this->nowy) << endl;
+    cout << "Sprawny: " << pomocnik->tlumaczBool(this->sprawny) << endl;
+    cout << "Nowy: " << pomocnik->tlumaczBool(this->nowy) << endl;
     cout << "Informacje: " << this->informacje << endl << endl;
+    
+    delete pomocnik;
 }
 
 // ListaSprzetu - metody
@@ -447,9 +444,32 @@ int ListaSprzetu::zapisDoPliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
     return 1;
 }
 
-// Helper - metody
+// Pomocnik - metody
 
-string Helper::tlumaczBool(bool wartosc)
+string Pomocnik::tlumaczBool(bool wartosc)
 {
     return wartosc ? "tak" : "nie";
+}
+
+bool Pomocnik::czyZawieraFraze(string tekst, string nowy_tekst)
+{
+    unsigned long t_len = tekst.length();
+    unsigned long n_len = nowy_tekst.length();
+    bool flaga = false;
+    
+    for (int i = 0; i < t_len; i++)
+    {
+        if (nowy_tekst[0] == tekst[i])
+        {
+            flaga = true;
+            
+            for (int j = 0; j < n_len; j++)
+            {
+                if (nowy_tekst[j] != tekst[i+j])
+                    flaga = false;
+            }
+        }
+    }
+    
+    return (flaga == true);
 }
