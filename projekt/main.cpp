@@ -49,7 +49,7 @@ public:
     ListaSprzetu();
     ListaSprzetu(bool);
     
-    void pokaz_menu();
+    void pokazMenu();
     void dodajSprzet(Sprzet*);
     void poczatekListy();
     void wypiszElement();
@@ -67,6 +67,15 @@ public:
 
 };
 
+class Pomocnik
+{
+    
+public:
+    
+    string tlumaczBool(bool);
+    bool czyZawieraFraze(string, string);
+};
+
 
 int main() {
     
@@ -81,7 +90,7 @@ int main() {
     
     do
     {
-        lista->pokaz_menu();
+        lista->pokazMenu();
         
         cout << "> ";
         cin >> klawisz;
@@ -156,6 +165,7 @@ Sprzet::Sprzet( int ilosc, string nazwa, string typ, string informacje, float wa
     this->informacje = informacje;
     this->wartosc = wartosc;
     this->sprawny = sprawny;
+    this->nowy = nowy;
     this->id_produktu = NULL;
 }
 
@@ -167,6 +177,7 @@ Sprzet::Sprzet( Sprzet & inny )
     this->informacje = inny.informacje;
     this->wartosc = inny.wartosc;
     this->sprawny = inny.sprawny;
+    this->nowy = inny.nowy;
     this->id_produktu = inny.id_produktu;
 }
 
@@ -192,25 +203,16 @@ Sprzet* Sprzet::dodajDane()
     cin >> typ;
     cout << "Wartość: " << endl << "> ";
     cin >> wartosc;
-    cin.ignore();
     cout << "Ilość: " << endl << "> ";
     cin >> ilosc;
-    cin.ignore();
     cout << "Stan: sprawny (t/n)?" << endl << "> ";
-    cin >> temp;
     cin.ignore();
-    if (temp == 't' || temp == 'T')
-        sprawny = true;
-    else
-        sprawny = false;
+    temp = getchar();
+    sprawny = (temp == 't' || temp == 'T') ? true : false;
     cout << "Stan: nowy (t/n)?" << endl << "> ";
-    cin >> temp;
     cin.ignore();
-    if (temp == 't' || temp == 'T') {
-        nowy = true;
-    } else {
-        nowy = false;
-    }
+    temp = getchar();
+    nowy = (temp == 't' || temp == 'T') ? true : false;
     cout << "Dodatkowe informacje: " << endl << "> ";
     cin >> info;
     
@@ -221,6 +223,8 @@ Sprzet* Sprzet::dodajDane()
 
 void Sprzet::wypiszDane()
 {
+    Pomocnik * pomocnik = new Pomocnik;
+    
     cout << "Dane przedmiotu:" << endl;
     
     cout << "ID: " << this->id_produktu << endl;
@@ -228,9 +232,11 @@ void Sprzet::wypiszDane()
     cout << "Rodzaj: " << this->typ << endl;
     cout << "Ilość: " << this->ilosc << endl;
     cout << "Wartość: " << this->wartosc << endl;
-    cout << "Sprawny: " << this->sprawny << endl;
-    cout << "Nowy: " << this->nowy << endl;
+    cout << "Sprawny: " << pomocnik->tlumaczBool(this->sprawny) << endl;
+    cout << "Nowy: " << pomocnik->tlumaczBool(this->nowy) << endl;
     cout << "Informacje: " << this->informacje << endl << endl;
+    
+    delete pomocnik;
 }
 
 // ListaSprzetu - metody
@@ -248,7 +254,7 @@ ListaSprzetu::ListaSprzetu(bool autonumeracja)
     this->autonumeracja = autonumeracja;
 }
 
-void ListaSprzetu::pokaz_menu() {
+void ListaSprzetu::pokazMenu() {
     cout << endl << "Menu zarządzania sprzętem:" << endl
     << endl
     << "1. Dodaj sprzęt" << endl
@@ -436,4 +442,34 @@ int ListaSprzetu::zapisDoPliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
     plik.close();
     
     return 1;
+}
+
+// Pomocnik - metody
+
+string Pomocnik::tlumaczBool(bool wartosc)
+{
+    return wartosc ? "tak" : "nie";
+}
+
+bool Pomocnik::czyZawieraFraze(string tekst, string nowy_tekst)
+{
+    unsigned long t_len = tekst.length();
+    unsigned long n_len = nowy_tekst.length();
+    bool flaga = false;
+    
+    for (int i = 0; i < t_len; i++)
+    {
+        if (nowy_tekst[0] == tekst[i])
+        {
+            flaga = true;
+            
+            for (int j = 0; j < n_len; j++)
+            {
+                if (nowy_tekst[j] != tekst[i+j])
+                    flaga = false;
+            }
+        }
+    }
+    
+    return (flaga == true);
 }
