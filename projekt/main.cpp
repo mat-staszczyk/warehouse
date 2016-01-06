@@ -67,6 +67,13 @@ public:
 
 };
 
+class Helper
+{
+    Helper();
+    
+    string tlumaczBool(bool);
+};
+
 
 int main() {
     
@@ -436,4 +443,11 @@ int ListaSprzetu::zapisDoPliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
     plik.close();
     
     return 1;
+}
+
+// Helper - metody
+
+string Helper::tlumaczBool(bool wartosc)
+{
+    return wartosc ? "tak" : "nie";
 }
