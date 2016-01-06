@@ -49,7 +49,7 @@ public:
     ListaSprzetu();
     ListaSprzetu(bool);
     
-    void pokaz_menu();
+    void pokazMenu();
     void dodajSprzet(Sprzet*);
     void poczatekListy();
     void wypiszElement();
@@ -88,7 +88,7 @@ int main() {
     
     do
     {
-        lista->pokaz_menu();
+        lista->pokazMenu();
         
         cout << "> ";
         cin >> klawisz;
@@ -255,7 +255,7 @@ ListaSprzetu::ListaSprzetu(bool autonumeracja)
     this->autonumeracja = autonumeracja;
 }
 
-void ListaSprzetu::pokaz_menu() {
+void ListaSprzetu::pokazMenu() {
     cout << endl << "Menu zarządzania sprzętem:" << endl
     << endl
     << "1. Dodaj sprzęt" << endl
