@@ -69,7 +69,7 @@ public:
 
 class Helper
 {
-    Helper();
+public:
     
     string tlumaczBool(bool);
 };
@@ -228,6 +228,8 @@ Sprzet* Sprzet::dodajDane()
 
 void Sprzet::wypiszDane()
 {
+    Helper * helper = new Helper;
+    
     cout << "Dane przedmiotu:" << endl;
     
     cout << "ID: " << this->id_produktu << endl;
@@ -235,8 +237,8 @@ void Sprzet::wypiszDane()
     cout << "Rodzaj: " << this->typ << endl;
     cout << "Ilość: " << this->ilosc << endl;
     cout << "Wartość: " << this->wartosc << endl;
-    cout << "Sprawny: " << this->sprawny << endl;
-    cout << "Nowy: " << this->nowy << endl;
+    cout << "Sprawny: " << helper->tlumaczBool(this->sprawny) << endl;
+    cout << "Nowy: " << helper->tlumaczBool(this->nowy) << endl;
     cout << "Informacje: " << this->informacje << endl << endl;
 }
 
