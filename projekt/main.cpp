@@ -65,6 +65,7 @@ public:
     void wyswietlUszkodzone(ListaSprzetu*);
     void wyswietlNowe(ListaSprzetu*);
     void wyswietlUzywane(ListaSprzetu*);
+    void sortujRosnaco(ListaSprzetu*);
 
     Sprzet * pierwszyElement();
     ListaSprzetu * wczytajZPliku(string);
@@ -514,6 +515,26 @@ void ListaSprzetu::wyswietlUzywane(ListaSprzetu* wyniki)
             wyniki->dodajSprzet(sprzet);
 
         sprzet = (sprzet->kolejny);
+    }
+}
+
+void ListaSprzetu::sortujRosnaco(ListaSprzetu* wyniki)
+{
+    int times = n;
+    Sprzet * temp;
+    
+    while (times)
+    {
+        temp = sprzet = pierwszyElement();
+        
+        while (sprzet->kolejny) {
+            sprzet = sprzet->kolejny;
+            if (sprzet->nazwa < temp->nazwa)
+                temp = sprzet;
+            
+        }
+        wyniki->dodajSprzet(temp);
+        times--;
     }
 }
 
