@@ -59,6 +59,8 @@ public:
     void przeniesElement(ListaSprzetu*);
     void usunElement();
     void wyszukiwanieFrazy(ListaSprzetu*, string);
+    void wyszukiwanieKwoty(ListaSprzetu*, float, float);
+    void wyszukiwanieLicznosci(ListaSprzetu*, int, int);
 
     Sprzet * pierwszyElement();
     ListaSprzetu * wczytajZPliku(string);
@@ -75,6 +77,8 @@ public:
 
     string tlumaczBool(bool);
     string pobierzFraze();
+    float * pobierzKwoty();
+    int * pobierzLiczbe();
     bool czyZawieraFraze(string, string);
 };
 
@@ -82,7 +86,9 @@ public:
 int main() {
 
     int n;
+    int * liczba;
     string nazwa_pliku, fraza;
+    float * kwoty;
     char klawisz;
 
     ListaSprzetu *lista = new ListaSprzetu;
@@ -147,6 +153,16 @@ int main() {
             case '9':
                 fraza = pom->pobierzFraze();
                 lista->wyszukiwanieFrazy(wyniki, fraza);
+                wyniki->wypiszElement();
+                break;
+            case 'a':
+                kwoty = pom->pobierzKwoty();
+                lista->wyszukiwanieKwoty(wyniki, kwoty[0], kwoty[1]);
+                wyniki->wypiszElement();
+                break;
+            case 'b':
+                liczba = pom->pobierzLiczbe();
+                lista->wyszukiwanieLicznosci(wyniki, liczba[0], liczba[1]);
                 wyniki->wypiszElement();
                 break;
             default:
@@ -274,8 +290,10 @@ void ListaSprzetu::pokazMenu() {
     << "6. Zapis do pliku" << endl
     << "7. Usuń element" << endl
     << "8. Przenieś do kosza" << endl
-    << "9. Wyszukaj" << endl
-    << "e. Wyjdź"
+    << "9. Wyszukaj tekst" << endl
+    << "a. Wyszukaj wartość" << endl
+    << "b. Wyszukaj liczność" << endl
+    << "z. Wyjdź"
     << endl;
 };
 
@@ -407,6 +425,36 @@ void ListaSprzetu::wyszukiwanieFrazy(ListaSprzetu* wyniki, string tekst)
     }
 }
 
+void ListaSprzetu::wyszukiwanieKwoty(ListaSprzetu* wyniki, float kwota_od, float kwota_do)
+{
+    Pomocnik * przeszukiwacz = new Pomocnik;
+    sprzet = pierwszyElement();
+
+    while (sprzet)
+    {
+        float wartosc = sprzet->wartosc;
+        if (wartosc >= kwota_od && wartosc <= kwota_do)
+            wyniki->dodajSprzet(sprzet);
+
+        sprzet = (sprzet->kolejny);
+    }
+}
+
+void ListaSprzetu::wyszukiwanieLicznosci(ListaSprzetu* wyniki, int liczba_od, int liczba_do)
+{
+    Pomocnik * przeszukiwacz = new Pomocnik;
+    sprzet = pierwszyElement();
+
+    while (sprzet)
+    {
+        float ilosc = sprzet->ilosc;
+        if (ilosc >= liczba_od && ilosc <= liczba_do)
+            wyniki->dodajSprzet(sprzet);
+
+        sprzet = (sprzet->kolejny);
+    }
+}
+
 int ListaSprzetu::iloscElementow()
 {
     return n;
@@ -509,4 +557,28 @@ string Pomocnik::pobierzFraze()
     cout << "Szukaj: \n> ";
     cin >> fraza;
     return fraza;
+}
+
+float * Pomocnik::pobierzKwoty()
+{
+    float kwoty[2];
+
+    cout << "Proszę podać zakres wyszukiwania: \n> (od:) ";
+    cin >> kwoty[0];
+    cout << "> (do:) ";
+    cin >> kwoty[1];
+
+    return kwoty;
+}
+
+int * Pomocnik::pobierzLiczbe()
+{
+    int licznosc[2];
+
+    cout << "Proszę podać zakres wyszukiwania: \n> (od:) ";
+    cin >> licznosc[0];
+    cout << "> (do:) ";
+    cin >> licznosc[1];
+
+    return licznosc;
 }
