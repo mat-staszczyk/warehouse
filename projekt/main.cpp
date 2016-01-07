@@ -6,9 +6,9 @@ using namespace std;
 
 class Sprzet
 {
-    
+
 private:
-    
+
     int id_produktu;
     int ilosc;
     string nazwa;
@@ -17,38 +17,38 @@ private:
     float wartosc;
     bool sprawny;
     bool nowy;
-    
+
     Sprzet *poprzedni;
     Sprzet *kolejny;
-    
+
     friend class ListaSprzetu;
 
 public:
-    
+
     Sprzet();
     Sprzet( int, string, string, string, float, bool, bool, int=NULL);
     Sprzet( Sprzet & );
     ~Sprzet();
-    
+
     Sprzet *dodajDane();
     void wypiszDane();
 };
 
 class ListaSprzetu
 {
-    
+
 private:
-    
+
     Sprzet * sprzet;
     Sprzet * pierwszy;
     int n;
     bool autonumeracja;
-    
+
 public:
-    
+
     ListaSprzetu();
     ListaSprzetu(bool);
-    
+
     void pokazMenu();
     void dodajSprzet(Sprzet*);
     void poczatekListy();
@@ -58,10 +58,11 @@ public:
     void poprzedniElement();
     void przeniesElement(ListaSprzetu*);
     void usunElement();
-    
+    void wyszukiwanieFrazy(ListaSprzetu*, string);
+
     Sprzet * pierwszyElement();
     ListaSprzetu * wczytajZPliku(string);
-    
+
     int iloscElementow();
     int zapisDoPliku(string, Sprzet*, int);
 
@@ -69,29 +70,32 @@ public:
 
 class Pomocnik
 {
-    
+
 public:
-    
+
     string tlumaczBool(bool);
+    string pobierzFraze();
     bool czyZawieraFraze(string, string);
 };
 
 
 int main() {
-    
+
     int n;
-    string nazwa_pliku;
+    string nazwa_pliku, fraza;
     char klawisz;
-    
+
     ListaSprzetu *lista = new ListaSprzetu;
     ListaSprzetu *kosz = new ListaSprzetu(false);
-    
+    ListaSprzetu *wyniki = new ListaSprzetu(false);
+    Pomocnik * pom = new Pomocnik;
+
     Sprzet * test;
-    
+
     do
     {
         lista->pokazMenu();
-        
+
         cout << "> ";
         cin >> klawisz;
         cin.ignore();
@@ -100,9 +104,9 @@ int main() {
             case '1':
                 test = new Sprzet;
                 test = test->dodajDane();
-                
+
                 lista->dodajSprzet(test);
-                
+
                 cout << "Dodano element: " << endl;
                 lista->wypiszElement();
                 break;
@@ -124,7 +128,7 @@ int main() {
             case '6':
                 test = lista->pierwszyElement();
                 n = lista->iloscElementow();
-                
+
                 cout << "Podaj nazwę pliku, w którym mają zostać zapisane dane:" << endl;
                 fflush(stdin);
                 cin >> nazwa_pliku;
@@ -140,12 +144,17 @@ int main() {
                 lista->przeniesElement(kosz);
                 kosz->wypiszElement();
                 break;
+            case '9':
+                fraza = pom->pobierzFraze();
+                lista->wyszukiwanieFrazy(wyniki, fraza);
+                wyniki->wypiszElement();
+                break;
             default:
                 break;
 
         }
-        
-    } while (klawisz != '9' );
+
+    } while (klawisz != 'e' );
 
     return 0;
 }
@@ -194,8 +203,8 @@ Sprzet* Sprzet::dodajDane()
     char temp;
     bool nowy, sprawny;
     Sprzet * biezacy;
-    
-    
+
+
     cout << "Dodawanie sprzętu." << endl << endl
     << "Nazwa: " << endl << "> ";
     cin >> nazwa;
@@ -215,18 +224,18 @@ Sprzet* Sprzet::dodajDane()
     nowy = (temp == 't' || temp == 'T') ? true : false;
     cout << "Dodatkowe informacje: " << endl << "> ";
     cin >> info;
-    
+
     biezacy = new Sprzet(ilosc, nazwa, typ, info, wartosc, sprawny, nowy);
-    
+
     return biezacy;
 }
 
 void Sprzet::wypiszDane()
 {
     Pomocnik * pomocnik = new Pomocnik;
-    
+
     cout << "Dane przedmiotu:" << endl;
-    
+
     cout << "ID: " << this->id_produktu << endl;
     cout << "Nazwa: " << this->nazwa << endl;
     cout << "Rodzaj: " << this->typ << endl;
@@ -235,7 +244,7 @@ void Sprzet::wypiszDane()
     cout << "Sprawny: " << pomocnik->tlumaczBool(this->sprawny) << endl;
     cout << "Nowy: " << pomocnik->tlumaczBool(this->nowy) << endl;
     cout << "Informacje: " << this->informacje << endl << endl;
-    
+
     delete pomocnik;
 }
 
@@ -265,7 +274,8 @@ void ListaSprzetu::pokazMenu() {
     << "6. Zapis do pliku" << endl
     << "7. Usuń element" << endl
     << "8. Przenieś do kosza" << endl
-    << "9. Wyjdź" << endl
+    << "9. Wyszukaj" << endl
+    << "e. Wyjdź"
     << endl;
 };
 
@@ -273,7 +283,7 @@ void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
 {
     Sprzet * aktualny = new Sprzet;
     int id_przedmiotu = przedmiot->id_produktu;
-    
+
     aktualny->nazwa = przedmiot->nazwa;
     aktualny->typ = przedmiot->typ;
     aktualny->informacje = przedmiot->informacje;
@@ -281,7 +291,7 @@ void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
     aktualny->wartosc = przedmiot->wartosc;
     aktualny->sprawny = przedmiot->sprawny;
     aktualny->nowy = przedmiot->nowy;
-    
+
     aktualny->kolejny = NULL;
     if (sprzet) {
         sprzet->kolejny = aktualny;
@@ -296,7 +306,7 @@ void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
     if (autonumeracja == false) {
         aktualny->id_produktu = id_przedmiotu;
     }
-    
+
     sprzet = aktualny;
     n++;
 }
@@ -343,7 +353,7 @@ void ListaSprzetu::poprzedniElement()
 void ListaSprzetu::przeniesElement(ListaSprzetu* innaLista)
 {
     Sprzet *nowy(sprzet);
-    
+
     if (!(sprzet->poprzedni)) {
         sprzet = sprzet->kolejny;
         sprzet->poprzedni = NULL;
@@ -357,13 +367,13 @@ void ListaSprzetu::przeniesElement(ListaSprzetu* innaLista)
     }
     n--;
     innaLista->dodajSprzet(nowy);
-    
+
 }
 
 void ListaSprzetu::usunElement()
 {
     Sprzet *temp = sprzet;
-    
+
     if (!(sprzet->poprzedni)) {
         sprzet = sprzet->kolejny;
         sprzet->poprzedni = NULL;
@@ -377,7 +387,24 @@ void ListaSprzetu::usunElement()
     }
     n--;
     delete temp;
-    
+
+}
+
+void ListaSprzetu::wyszukiwanieFrazy(ListaSprzetu* wyniki, string tekst)
+{
+    Pomocnik * przeszukiwacz = new Pomocnik;
+    sprzet = pierwszyElement();
+
+    while (sprzet)
+    {
+        string nazwa = sprzet->nazwa, rodzaj = sprzet->typ, info = sprzet->informacje;
+
+        if (przeszukiwacz->czyZawieraFraze(nazwa, tekst) || przeszukiwacz->czyZawieraFraze(rodzaj, tekst) ||
+        przeszukiwacz->czyZawieraFraze(info, tekst))
+            wyniki->dodajSprzet(sprzet);
+
+        sprzet = (sprzet->kolejny);
+    }
 }
 
 int ListaSprzetu::iloscElementow()
@@ -396,15 +423,15 @@ ListaSprzetu * ListaSprzetu::wczytajZPliku(string nazwa_pliku)
     float wartosc;
     bool sprawny, nowy;
     string nazwa, typ, info;
-    
+
     ifstream plik;
     plik.open(nazwa_pliku.c_str(), ios::in|ios::binary);
-    
+
     plik.read((char*)&n, sizeof(n));
     Sprzet *temp = new Sprzet;
     ListaSprzetu *lista = new ListaSprzetu;
     rozmiar = n;
-    
+
     for (int i = 0; i < rozmiar; i++)
     {
         plik.read((char*)temp, sizeof(Sprzet));
@@ -416,13 +443,13 @@ ListaSprzetu * ListaSprzetu::wczytajZPliku(string nazwa_pliku)
         nazwa = temp->nazwa;
         typ = temp->typ;
         info = temp->informacje;
-        
+
         temp = new Sprzet(ilosc, nazwa, typ, info, wartosc, sprawny, nowy, id);
         lista->dodajSprzet(temp);
     }
-    
+
     plik.close();
-    
+
     return lista;
 };
 
@@ -430,18 +457,18 @@ int ListaSprzetu::zapisDoPliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
 {
     ofstream plik;
     plik.open(nazwa_pliku.c_str(), (ios::out|ios::binary));
-    
+
     if (!plik)
         return 0;
-    
+
     plik.write((char*)&rozmiar, sizeof(rozmiar));
-    
+
     do {
         plik.write((char*)sprzet, sizeof(Sprzet));
     } while ((sprzet = sprzet->kolejny));
-    
+
     plik.close();
-    
+
     return 1;
 }
 
@@ -457,13 +484,13 @@ bool Pomocnik::czyZawieraFraze(string tekst, string nowy_tekst)
     unsigned long t_len = tekst.length();
     unsigned long n_len = nowy_tekst.length();
     bool flaga = false;
-    
+
     for (int i = 0; i < t_len; i++)
     {
         if (nowy_tekst[0] == tekst[i])
         {
             flaga = true;
-            
+
             for (int j = 0; j < n_len; j++)
             {
                 if (nowy_tekst[j] != tekst[i+j])
@@ -471,6 +498,15 @@ bool Pomocnik::czyZawieraFraze(string tekst, string nowy_tekst)
             }
         }
     }
-    
+
     return (flaga == true);
+}
+
+string Pomocnik::pobierzFraze()
+{
+    string fraza;
+
+    cout << "Szukaj: \n> ";
+    cin >> fraza;
+    return fraza;
 }
