@@ -396,7 +396,10 @@ void ListaSprzetu::przeniesElement(ListaSprzetu* innaLista)
 {
     Sprzet *nowy(sprzet);
 
-    if (!(sprzet->poprzedni)) {
+    if (!sprzet->poprzedni && !sprzet->kolejny) {
+        sprzet = NULL;
+        pierwszy = NULL;
+    } else if (!(sprzet->poprzedni)) {
         sprzet = sprzet->kolejny;
         sprzet->poprzedni = NULL;
     } else if (!(sprzet->kolejny)) {
@@ -465,7 +468,6 @@ void ListaSprzetu::wyszukiwanieKwoty(ListaSprzetu* wyniki, float kwota_od, float
 
 void ListaSprzetu::wyszukiwanieLicznosci(ListaSprzetu* wyniki, int liczba_od, int liczba_do)
 {
-    Pomocnik * przeszukiwacz = new Pomocnik;
     sprzet = pierwszyElement();
 
     while (sprzet)
@@ -634,7 +636,7 @@ string Pomocnik::pobierzFraze()
 
 float * Pomocnik::pobierzKwoty()
 {
-    float kwoty[2];
+    float *kwoty;
 
     cout << "Proszę podać zakres wyszukiwania: \n> (od:) ";
     cin >> kwoty[0];
@@ -646,7 +648,7 @@ float * Pomocnik::pobierzKwoty()
 
 int * Pomocnik::pobierzLiczbe()
 {
-    int licznosc[2];
+    int *licznosc;
 
     cout << "Proszę podać zakres wyszukiwania: \n> (od:) ";
     cin >> licznosc[0];
