@@ -395,31 +395,18 @@ void ListaSprzetu::poprzedniElement()
 void ListaSprzetu::przeniesElement(ListaSprzetu* innaLista)
 {
     Sprzet *nowy(sprzet);
-
-    if (!sprzet->poprzedni && !sprzet->kolejny) {
-        sprzet = NULL;
-        pierwszy = NULL;
-    } else if (!(sprzet->poprzedni)) {
-        sprzet = sprzet->kolejny;
-        sprzet->poprzedni = NULL;
-    } else if (!(sprzet->kolejny)) {
-        sprzet = sprzet->poprzedni;
-        sprzet->kolejny = NULL;
-    } else {
-        (sprzet->poprzedni)->kolejny = sprzet->kolejny;
-        (sprzet->kolejny)->poprzedni = sprzet->poprzedni;
-        sprzet = sprzet->poprzedni;
-    }
-    n--;
     innaLista->dodajSprzet(nowy);
-
+    usunElement();
 }
 
 void ListaSprzetu::usunElement()
 {
     Sprzet *temp = sprzet;
 
-    if (!(sprzet->poprzedni)) {
+    if (!sprzet->poprzedni && !sprzet->kolejny) {
+        sprzet = NULL;
+        pierwszy = NULL;
+    } else if (!(sprzet->poprzedni)) {
         sprzet = sprzet->kolejny;
         sprzet->poprzedni = NULL;
     } else if (!(sprzet->kolejny)) {
