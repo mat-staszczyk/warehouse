@@ -355,6 +355,7 @@ void ListaSprzetu::przeniesElement(ListaSprzetu* innaLista)
         (sprzet->kolejny)->poprzedni = sprzet->poprzedni;
         sprzet = sprzet->poprzedni;
     }
+    n--;
     innaLista->dodajSprzet(nowy);
     
 }
@@ -374,7 +375,7 @@ void ListaSprzetu::usunElement()
         (sprzet->kolejny)->poprzedni = sprzet->poprzedni;
         sprzet = sprzet->poprzedni;
     }
-    
+    n--;
     delete temp;
     
 }
