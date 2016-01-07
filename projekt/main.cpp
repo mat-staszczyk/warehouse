@@ -451,7 +451,6 @@ void ListaSprzetu::wyszukiwanieFrazy(ListaSprzetu* wyniki, string tekst)
 
 void ListaSprzetu::wyszukiwanieKwoty(ListaSprzetu* wyniki, float kwota_od, float kwota_do)
 {
-    Pomocnik * przeszukiwacz = new Pomocnik;
     sprzet = pierwszyElement();
 
     while (sprzet)
