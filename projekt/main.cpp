@@ -14,7 +14,7 @@ private:
     string nazwa;
     string typ;
     string informacje;
-    float wartosc;
+    double wartosc;
     bool sprawny;
     bool nowy;
 
@@ -26,7 +26,7 @@ private:
 public:
 
     Sprzet();
-    Sprzet( int, string, string, string, float, bool, bool, int=NULL);
+    Sprzet( int, string, string, string, double, bool, bool, int=NULL);
     Sprzet( Sprzet & );
     ~Sprzet();
 
@@ -50,6 +50,12 @@ public:
 
 	enum ATR
 	{
+		nazwa,
+		typ,
+		informacje,
+		id,
+		ilosc,
+		wartosc,
 		sprawny,
 		nowy
 	};
@@ -67,7 +73,8 @@ public:
     void przeniesElement(ListaSprzetu*);
     void usunElement();
     void wyszukiwanie(ListaSprzetu*, string); // wyszukaj frazę
-    void wyszukiwanie(ListaSprzetu*, float, float); // wyszukaj kwotę
+	void wyszukiwanie(ListaSprzetu*, int); // wyszukaj id
+    void wyszukiwanie(ListaSprzetu*, double, double); // wyszukaj kwotę
     void wyszukiwanie(ListaSprzetu*, int, int); // wyszukaj liczność
 	void wyszukiwanie(ListaSprzetu*, ATR, bool); // wyszukaj sprzęt o podanym stanie
     void sortuj(ListaSprzetu*, string, bool);
@@ -87,7 +94,7 @@ public:
 
     string tlumaczBool(bool);
     string pobierzFraze();
-    float * pobierzKwoty();
+    double * pobierzKwoty();
     int * pobierzLiczbe();
     bool czyZawieraFraze(string, string);
 };
@@ -100,7 +107,7 @@ int main() {
     int n;
     int * liczba;
     string nazwa_pliku, fraza;
-    float * kwoty;
+    double * kwoty;
     char klawisz;
 
     ListaSprzetu *lista = new ListaSprzetu;
@@ -212,7 +219,7 @@ Sprzet::Sprzet()
 {
 }
 
-Sprzet::Sprzet( int ilosc, string nazwa, string typ, string informacje, float wartosc, bool sprawny, bool nowy, int id_produktu )
+Sprzet::Sprzet( int ilosc, string nazwa, string typ, string informacje, double wartosc, bool sprawny, bool nowy, int id_produktu )
 {
     this->ilosc = ilosc;
     this->nazwa = nazwa;
@@ -245,7 +252,7 @@ Sprzet* Sprzet::dodajDane()
 {
     int ilosc;
     string nazwa, typ, info;
-    float wartosc;
+    double wartosc;
     char temp;
     bool nowy, sprawny;
     Sprzet * biezacy;
@@ -434,6 +441,7 @@ void ListaSprzetu::usunElement()
 
 void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, string tekst)
 {
+	Sprzet *temp = sprzet;;
     Pomocnik * przeszukiwacz = new Pomocnik;
     sprzet = pierwszyElement();
 
@@ -447,26 +455,43 @@ void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, string tekst)
 
         sprzet = (sprzet->kolejny);
     }
-	sprzet = pierwszyElement();
+	sprzet = temp;
 }
 
-void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, float kwota_od, float kwota_do)
+void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, int id)
 {
+	Sprzet *temp = sprzet;;
+	sprzet = pierwszyElement();
+
+	while (sprzet)
+	{
+		if (sprzet->id_produktu == id)
+			wyniki->dodajSprzet(sprzet);
+
+		sprzet = (sprzet->kolejny);
+	}
+	sprzet = temp;
+}
+
+void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, double kwota_od, double kwota_do)
+{
+	Sprzet *temp = sprzet;;
     sprzet = pierwszyElement();
 
     while (sprzet)
     {
-        float wartosc = sprzet->wartosc;
+        double wartosc = sprzet->wartosc;
         if (wartosc >= kwota_od && wartosc <= kwota_do)
             wyniki->dodajSprzet(sprzet);
 
         sprzet = (sprzet->kolejny);
     }
-	sprzet = pierwszyElement();
+	sprzet = temp;
 }
 
 void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, int liczba_od, int liczba_do)
 {
+	Sprzet *temp = sprzet;;
     sprzet = pierwszyElement();
 
     while (sprzet)
@@ -477,7 +502,7 @@ void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, int liczba_od, int liczba_
 
         sprzet = (sprzet->kolejny);
     }
-	sprzet = pierwszyElement();
+	sprzet = temp;
 }
 
 void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, ATR atrybut, bool wartosc)
@@ -542,7 +567,7 @@ Sprzet * ListaSprzetu::pierwszyElement()
 ListaSprzetu * ListaSprzetu::wczytajZPliku(string nazwa_pliku)
 {
     int id, ilosc, rozmiar;
-    float wartosc;
+    double wartosc;
     bool sprawny, nowy;
     string nazwa, typ, info;
 
@@ -636,10 +661,10 @@ string Pomocnik::pobierzFraze()
     return fraza;
 }
 
-float * Pomocnik::pobierzKwoty()
+double * Pomocnik::pobierzKwoty()
 {
-    float kwoty[2];
-	float *wsk_kwoty;
+    double kwoty[2];
+	double *wsk_kwoty;
 
     cout << "Proszę podać zakres wyszukiwania: \n> (od:) ";
     cin >> kwoty[0];
