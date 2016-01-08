@@ -610,13 +610,13 @@ bool Pomocnik::czyZawieraFraze(string tekst, string nowy_tekst)
 
     bool flaga = false;
 
-    for (int i = 0; i < t_len && (t_len - i) >= n_len; i++)
+    for (size_t i = 0; i < t_len && (t_len - i) >= n_len; i++)
     {
         if (nowy_tekst[0] == tekst[i])
         {
             flaga = true;
 
-            for (int j = 0; j < n_len; j++)
+            for (size_t j = 0; j < n_len; j++)
             {
                 if (nowy_tekst[j] != tekst[i+j])
                     flaga = false;
