@@ -438,6 +438,7 @@ void ListaSprzetu::wyszukiwanieFrazy(ListaSprzetu* wyniki, string tekst)
 
         sprzet = (sprzet->kolejny);
     }
+	sprzet = pierwszyElement();
 }
 
 void ListaSprzetu::wyszukiwanieKwoty(ListaSprzetu* wyniki, float kwota_od, float kwota_do)
@@ -452,6 +453,7 @@ void ListaSprzetu::wyszukiwanieKwoty(ListaSprzetu* wyniki, float kwota_od, float
 
         sprzet = (sprzet->kolejny);
     }
+	sprzet = pierwszyElement();
 }
 
 void ListaSprzetu::wyszukiwanieLicznosci(ListaSprzetu* wyniki, int liczba_od, int liczba_do)
@@ -466,6 +468,7 @@ void ListaSprzetu::wyszukiwanieLicznosci(ListaSprzetu* wyniki, int liczba_od, in
 
         sprzet = (sprzet->kolejny);
     }
+	sprzet = pierwszyElement();
 }
 
 void ListaSprzetu::wyswietlSprawne(ListaSprzetu* wyniki)
@@ -479,6 +482,7 @@ void ListaSprzetu::wyswietlSprawne(ListaSprzetu* wyniki)
 
         sprzet = (sprzet->kolejny);
     }
+	sprzet = pierwszyElement();
 }
 void ListaSprzetu::wyswietlUszkodzone(ListaSprzetu* wyniki)
 {
@@ -491,6 +495,7 @@ void ListaSprzetu::wyswietlUszkodzone(ListaSprzetu* wyniki)
 
         sprzet = (sprzet->kolejny);
     }
+	sprzet = pierwszyElement();
 }
 void ListaSprzetu::wyswietlNowe(ListaSprzetu* wyniki)
 {
@@ -503,6 +508,7 @@ void ListaSprzetu::wyswietlNowe(ListaSprzetu* wyniki)
 
         sprzet = (sprzet->kolejny);
     }
+	sprzet = pierwszyElement();
 }
 
 void ListaSprzetu::wyswietlUzywane(ListaSprzetu* wyniki)
@@ -516,6 +522,7 @@ void ListaSprzetu::wyswietlUzywane(ListaSprzetu* wyniki)
 
         sprzet = (sprzet->kolejny);
     }
+	sprzet = pierwszyElement();
 }
 
 void ListaSprzetu::sortujRosnaco(ListaSprzetu* wyniki)
@@ -644,24 +651,28 @@ string Pomocnik::pobierzFraze()
 
 float * Pomocnik::pobierzKwoty()
 {
-    float *kwoty;
+    float kwoty[2];
+	float *wsk_kwoty;
 
     cout << "Proszę podać zakres wyszukiwania: \n> (od:) ";
     cin >> kwoty[0];
     cout << "> (do:) ";
     cin >> kwoty[1];
 
-    return kwoty;
+	wsk_kwoty = &(kwoty[0]);
+    return wsk_kwoty;
 }
 
 int * Pomocnik::pobierzLiczbe()
 {
-    int *licznosc;
+    int licznosc[2];
+	int *wsk_licz;
 
     cout << "Proszę podać zakres wyszukiwania: \n> (od:) ";
     cin >> licznosc[0];
     cout << "> (do:) ";
     cin >> licznosc[1];
 
-    return licznosc;
+	wsk_licz = &(licznosc[0]);
+    return wsk_licz;
 }
