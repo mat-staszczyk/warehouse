@@ -471,7 +471,7 @@ void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, int liczba_od, int liczba_
 
     while (sprzet)
     {
-        float ilosc = sprzet->ilosc;
+        int ilosc = sprzet->ilosc;
         if (ilosc >= liczba_od && ilosc <= liczba_do)
             wyniki->dodajSprzet(sprzet);
 
