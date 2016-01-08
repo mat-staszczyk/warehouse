@@ -30,6 +30,8 @@ public:
     Sprzet( Sprzet & );
     ~Sprzet();
 
+	enum ATR;
+
     Sprzet *dodajDane();
     void wypiszDane();
 };
@@ -46,6 +48,12 @@ private:
 
 public:
 
+	enum ATR
+	{
+		sprawny,
+		nowy
+	};
+
     ListaSprzetu();
     ListaSprzetu(bool);
 
@@ -58,14 +66,11 @@ public:
     void poprzedniElement();
     void przeniesElement(ListaSprzetu*);
     void usunElement();
-    void wyszukiwanieFrazy(ListaSprzetu*, string);
-    void wyszukiwanieKwoty(ListaSprzetu*, float, float);
-    void wyszukiwanieLicznosci(ListaSprzetu*, int, int);
-    void wyswietlSprawne(ListaSprzetu*);
-    void wyswietlUszkodzone(ListaSprzetu*);
-    void wyswietlNowe(ListaSprzetu*);
-    void wyswietlUzywane(ListaSprzetu*);
-    void sortujRosnaco(ListaSprzetu*);
+    void wyszukiwanie(ListaSprzetu*, string); // wyszukaj frazę
+    void wyszukiwanie(ListaSprzetu*, float, float); // wyszukaj kwotę
+    void wyszukiwanie(ListaSprzetu*, int, int); // wyszukaj liczność
+	void wyszukiwanie(ListaSprzetu*, ATR, bool); // wyszukaj sprzęt o podanym stanie
+    void sortuj(ListaSprzetu*, string, bool);
 
     Sprzet * pierwszyElement();
     ListaSprzetu * wczytajZPliku(string);
@@ -90,6 +95,8 @@ public:
 
 int main() {
 
+	ListaSprzetu::ATR nowy = ListaSprzetu::ATR::nowy;
+	ListaSprzetu::ATR sprawny = ListaSprzetu::ATR::sprawny;
     int n;
     int * liczba;
     string nazwa_pliku, fraza;
@@ -157,41 +164,43 @@ int main() {
                 break;
             case '9':
                 fraza = pom->pobierzFraze();
-                lista->wyszukiwanieFrazy(wyniki, fraza);
+                lista->wyszukiwanie(wyniki, fraza);
                 wyniki->wypiszElement();
                 break;
             case 'a':
                 kwoty = pom->pobierzKwoty();
-                lista->wyszukiwanieKwoty(wyniki, kwoty[0], kwoty[1]);
+                lista->wyszukiwanie(wyniki, kwoty[0], kwoty[1]);
                 wyniki->wypiszElement();
                 break;
             case 'b':
                 liczba = pom->pobierzLiczbe();
-                lista->wyszukiwanieLicznosci(wyniki, liczba[0], liczba[1]);
+                lista->wyszukiwanie(wyniki, liczba[0], liczba[1]);
                 wyniki->wypiszElement();
                 break;
             case 'c':
-                lista->wyswietlSprawne(wyniki);
+                lista->wyszukiwanie(wyniki, sprawny, true);
                 wyniki->wypiszElement();
                 break;
             case 'd':
-                lista->wyswietlUszkodzone(wyniki);
+				lista->wyszukiwanie(wyniki, sprawny, false);
                 wyniki->wypiszElement();
                 break;
             case 'e':
-                lista->wyswietlNowe(wyniki);
+				lista->wyszukiwanie(wyniki, nowy, true);
                 wyniki->wypiszElement();
                 break;
             case 'f':
-                lista->wyswietlUzywane(wyniki);
+				lista->wyszukiwanie(wyniki, nowy, false);
                 wyniki->wypiszElement();
                 break;
+			case 'g':
+				wyniki->wypiszElement();
             default:
                 break;
 
         }
 
-    } while (klawisz != 'e' );
+    } while (klawisz != 'z' );
 
     return 0;
 }
@@ -423,7 +432,7 @@ void ListaSprzetu::usunElement()
 
 }
 
-void ListaSprzetu::wyszukiwanieFrazy(ListaSprzetu* wyniki, string tekst)
+void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, string tekst)
 {
     Pomocnik * przeszukiwacz = new Pomocnik;
     sprzet = pierwszyElement();
@@ -441,7 +450,7 @@ void ListaSprzetu::wyszukiwanieFrazy(ListaSprzetu* wyniki, string tekst)
 	sprzet = pierwszyElement();
 }
 
-void ListaSprzetu::wyszukiwanieKwoty(ListaSprzetu* wyniki, float kwota_od, float kwota_do)
+void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, float kwota_od, float kwota_do)
 {
     sprzet = pierwszyElement();
 
@@ -456,7 +465,7 @@ void ListaSprzetu::wyszukiwanieKwoty(ListaSprzetu* wyniki, float kwota_od, float
 	sprzet = pierwszyElement();
 }
 
-void ListaSprzetu::wyszukiwanieLicznosci(ListaSprzetu* wyniki, int liczba_od, int liczba_do)
+void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, int liczba_od, int liczba_do)
 {
     sprzet = pierwszyElement();
 
@@ -471,61 +480,36 @@ void ListaSprzetu::wyszukiwanieLicznosci(ListaSprzetu* wyniki, int liczba_od, in
 	sprzet = pierwszyElement();
 }
 
-void ListaSprzetu::wyswietlSprawne(ListaSprzetu* wyniki)
+void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, ATR atrybut, bool wartosc)
 {
-    sprzet = pierwszyElement();
-
-    while (sprzet)
-    {
-        if (sprzet->sprawny)
-            wyniki->dodajSprzet(sprzet);
-
-        sprzet = (sprzet->kolejny);
-    }
+	bool warunek;
+	Sprzet *temp = sprzet;;
 	sprzet = pierwszyElement();
-}
-void ListaSprzetu::wyswietlUszkodzone(ListaSprzetu* wyniki)
-{
-    sprzet = pierwszyElement();
 
-    while (sprzet)
-    {
-        if (!(sprzet->sprawny))
-            wyniki->dodajSprzet(sprzet);
+	while (sprzet)
+	{
+		switch (atrybut)
+		{
+		case nowy:
+			warunek = wartosc ? (sprzet->nowy) : (!(sprzet->nowy));
+			break;
+		case sprawny:
+			warunek = wartosc ? (sprzet->sprawny) : (!(sprzet->sprawny));
+			break;
+		default:
+			break;
+		}
 
-        sprzet = (sprzet->kolejny);
-    }
-	sprzet = pierwszyElement();
-}
-void ListaSprzetu::wyswietlNowe(ListaSprzetu* wyniki)
-{
-    sprzet = pierwszyElement();
+		if (warunek)
+			wyniki->dodajSprzet(sprzet);
 
-    while (sprzet)
-    {
-        if (sprzet->nowy)
-            wyniki->dodajSprzet(sprzet);
+		sprzet = (sprzet->kolejny);
+	}
 
-        sprzet = (sprzet->kolejny);
-    }
-	sprzet = pierwszyElement();
+	sprzet = temp;
 }
 
-void ListaSprzetu::wyswietlUzywane(ListaSprzetu* wyniki)
-{
-    sprzet = pierwszyElement();
-
-    while (sprzet)
-    {
-        if (!(sprzet->nowy))
-            wyniki->dodajSprzet(sprzet);
-
-        sprzet = (sprzet->kolejny);
-    }
-	sprzet = pierwszyElement();
-}
-
-void ListaSprzetu::sortujRosnaco(ListaSprzetu* wyniki)
+void ListaSprzetu::sortuj(ListaSprzetu* wyniki, string wartosc, bool rosnaco)
 {
     int times = n;
     Sprzet * temp;
