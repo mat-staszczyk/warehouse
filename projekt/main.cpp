@@ -605,9 +605,12 @@ bool Pomocnik::czyZawieraFraze(string tekst, string nowy_tekst)
 {
     unsigned long t_len = tekst.length();
     unsigned long n_len = nowy_tekst.length();
+
+
+
     bool flaga = false;
 
-    for (int i = 0; i < t_len; i++)
+    for (int i = 0; i < t_len && (t_len - i) >= n_len; i++)
     {
         if (nowy_tekst[0] == tekst[i])
         {
