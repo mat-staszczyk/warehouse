@@ -77,7 +77,7 @@ public:
     void wyszukiwanie(ListaSprzetu*, double, double); // wyszukaj kwotę
     void wyszukiwanie(ListaSprzetu*, int, int); // wyszukaj liczność
 	void wyszukiwanie(ListaSprzetu*, ATR, bool); // wyszukaj sprzęt o podanym stanie
-    void sortuj(ListaSprzetu*, string, bool);
+    void sortuj(ListaSprzetu*, ATR, bool=true);
 
     Sprzet * pierwszyElement();
     ListaSprzetu * wczytajZPliku(string);
@@ -104,6 +104,7 @@ int main() {
 
 	ListaSprzetu::ATR nowy = ListaSprzetu::ATR::nowy;
 	ListaSprzetu::ATR sprawny = ListaSprzetu::ATR::sprawny;
+	ListaSprzetu::ATR nazwa = ListaSprzetu::ATR::nazwa;
     int n;
     int * liczba;
     string nazwa_pliku, fraza;
@@ -201,7 +202,13 @@ int main() {
                 wyniki->wypiszElement();
                 break;
 			case 'g':
-				wyniki->wypiszElement();
+				lista->sortuj(wyniki, nowy);
+				lista->wypiszElement();
+				lista->nastepnyElement();
+				lista->wypiszElement();
+				lista->nastepnyElement();
+				lista->wypiszElement();
+				break;
             default:
                 break;
 
@@ -334,6 +341,7 @@ void ListaSprzetu::pokazMenu() {
     << "d. Wyświetl uszkodzone" << endl
     << "e. Wyświetl nowe" << endl
     << "f. Wyświetl używane" << endl
+	<< "g. Sortowanie" << endl
     << "z. Wyjdź"
     << endl;
 };
@@ -372,7 +380,7 @@ void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
 
 void ListaSprzetu::poczatekListy()
 {
-    sprzet = pierwszy;
+	sprzet = pierwszyElement();
 }
 
 void ListaSprzetu::wypiszElement()
@@ -534,24 +542,37 @@ void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, ATR atrybut, bool wartosc)
 	sprzet = temp;
 }
 
-void ListaSprzetu::sortuj(ListaSprzetu* wyniki, string wartosc, bool rosnaco)
+void ListaSprzetu::sortuj(ListaSprzetu* wyniki, ATR atrybut, bool rosnaco)
 {
-    int times = n;
-    Sprzet * temp;
+	Sprzet * zmiana;
+	Sprzet * temp = pierwszyElement();
+	sprzet = temp->kolejny;
     
-    while (times)
+    while (sprzet)
     {
-        temp = sprzet = pierwszyElement();
-        
-        while (sprzet->kolejny) {
-            sprzet = sprzet->kolejny;
-            if (sprzet->nazwa < temp->nazwa)
-                temp = sprzet;
-            
-        }
-        wyniki->dodajSprzet(temp);
-        times--;
+		if (temp->nazwa > sprzet->nazwa)
+		{
+			while (temp)
+			{
+				if (sprzet->nazwa < temp->nazwa)
+				{
+					zmiana = sprzet;
+					sprzet = temp;
+					temp = zmiana;
+				} else break;
+
+				if (!(temp->kolejny)) break;
+				sprzet = temp;
+				temp = temp->poprzedni;
+			}
+		}
+
+		if (!(sprzet->kolejny)) break;
+		temp = sprzet;
+		sprzet = sprzet->kolejny;
     }
+
+	sprzet = pierwszyElement();
 }
 
 int ListaSprzetu::iloscElementow()
@@ -561,7 +582,12 @@ int ListaSprzetu::iloscElementow()
 
 Sprzet * ListaSprzetu::pierwszyElement()
 {
-    return pierwszy;
+	while (sprzet->poprzedni)
+	{
+		sprzet = sprzet->poprzedni;
+	}
+
+	return sprzet;
 }
 
 ListaSprzetu * ListaSprzetu::wczytajZPliku(string nazwa_pliku)
