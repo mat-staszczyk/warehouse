@@ -75,7 +75,8 @@ public:
     void wyszukiwanie(ListaSprzetu*, double, double); // wyszukaj kwotę
     void wyszukiwanie(ListaSprzetu*, int, int); // wyszukaj liczność
 	void wyszukiwanie(ListaSprzetu*, ATR, bool); // wyszukaj sprzęt o podanym stanie
-    void sortuj(ListaSprzetu*, ATR, bool=true);
+    void zamien(Sprzet*);
+    void sortowanie(ListaSprzetu*);
 
     Sprzet * pierwszyElement();
     ListaSprzetu * wczytajZPliku(string);
@@ -95,6 +96,7 @@ public:
     double * pobierzKwoty();
     int * pobierzLiczbe();
     bool czyZawieraFraze(string, string);
+    void * zamien(Sprzet*, Sprzet*);
 };
 
 
@@ -199,12 +201,13 @@ int main() {
                 wyniki->wypiszElement();
                 break;
 			case 'g':
-				lista->sortuj(wyniki, nowy);
-				lista->wypiszElement();
-				lista->nastepnyElement();
-				lista->wypiszElement();
-				lista->nastepnyElement();
-				lista->wypiszElement();
+				lista->sortowanie(wyniki);
+                wyniki->poczatekListy();
+				wyniki->wypiszElement();
+				wyniki->nastepnyElement();
+				wyniki->wypiszElement();
+				wyniki->nastepnyElement();
+				wyniki->wypiszElement();
 				break;
             default:
                 break;
@@ -338,7 +341,7 @@ void ListaSprzetu::pokazMenu() {
     << "d. Wyświetl uszkodzone" << endl
     << "e. Wyświetl nowe" << endl
     << "f. Wyświetl używane" << endl
-	<< "g. Sortowanie" << endl
+	<< "g. Sortowanie wg nazwy" << endl
     << "z. Wyjdź"
     << endl;
 };
@@ -540,38 +543,112 @@ void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, ATR atrybut, bool wartosc)
 	sprzet = temp;
 }
 
-void ListaSprzetu::sortuj(ListaSprzetu* wyniki, ATR atrybut, bool rosnaco)
+/*
+ 
+ Sprzet *zamien(Sprzet *pierwszy, Sprzet *drugi)
+ {
+ 
+ if (pierwszy->poprzedni)
+ (pierwszy->poprzedni)->nastepny = drugi;
+ 
+ if (drugi->nastepny)
+ (drugi->nastepny)->poprzedni = pierwszy;
+ 
+ drugi->poprzedni = pierwszy->poprzedni;
+ pierwszy->poprzedni = drugi;
+ pierwszy->nastepny = drugi->nastepny;
+ drugi->nastepny = pierwszy;
+ 
+ return drugi;
+ }
+ 
+ */
+
+void ListaSprzetu::zamien(Sprzet * drugi)
+{
+    if (sprzet->poprzedni)
+        (sprzet->poprzedni)->kolejny = drugi;
+    
+    if (drugi->kolejny)
+        (drugi->kolejny)->poprzedni = sprzet;
+    
+    drugi->poprzedni = sprzet->poprzedni;
+    sprzet->poprzedni = drugi;
+    sprzet->kolejny = drugi->kolejny;
+    drugi->kolejny = sprzet;
+    
+    sprzet = drugi;
+}
+/*
+void ListaSprzetu::sortowanie(ListaSprzetu* wyniki, ATR atrybut, bool rosnaco)
 {
 	Sprzet * zmiana;
 	Sprzet * temp = pierwszyElement();
 	sprzet = temp->kolejny;
     
-    while (sprzet)
+    while (sprzet->kolejny)
     {
 		if (temp->nazwa > sprzet->nazwa)
 		{
 			while (temp)
 			{
-				if (sprzet->nazwa < temp->nazwa)
+				if (temp->nazwa > sprzet->nazwa)
 				{
 					zmiana = sprzet;
 					sprzet = temp;
 					temp = zmiana;
-				} else break;
+				}
 
-				if (!(temp->kolejny)) break;
-				sprzet = temp;
+                sprzet = sprzet->poprzedni;
 				temp = temp->poprzedni;
 			}
 		}
 
-		if (!(sprzet->kolejny)) break;
 		temp = sprzet;
 		sprzet = sprzet->kolejny;
     }
 
 	sprzet = pierwszyElement();
 }
+*/
+
+void ListaSprzetu::sortowanie(ListaSprzetu *wyniki)
+{
+    sprzet = pierwszyElement();
+    Sprzet * temp = sprzet;
+    sprzet = temp->kolejny;
+    
+    while (sprzet)
+    {
+        if (temp->nazwa > sprzet->nazwa)
+        {
+            while (temp)
+            {
+                if (temp->nazwa > sprzet->nazwa)
+                    zamien(temp);
+                
+                sprzet = temp;
+                temp = temp->poprzedni;
+            }
+        }
+        
+        temp = sprzet;
+        sprzet = sprzet->kolejny;
+    }
+    
+    sprzet = temp;
+    sprzet = pierwszyElement();
+    
+    while (sprzet)
+    {
+        wyniki->dodajSprzet(sprzet);
+        sprzet = sprzet->kolejny;
+    }
+    
+    sprzet = temp;
+    sprzet = pierwszyElement();
+}
+
 
 int ListaSprzetu::iloscElementow()
 {
