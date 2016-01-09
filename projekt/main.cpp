@@ -50,7 +50,7 @@ public:
 	{
 		nazwa,
 		typ,
-		informacje,
+		info,
 		id,
 		ilosc,
 		wartosc,
@@ -76,13 +76,16 @@ public:
     void wyszukiwanie(ListaSprzetu*, int, int); // wyszukaj liczność
 	void wyszukiwanie(ListaSprzetu*, ATR, bool); // wyszukaj sprzęt o podanym stanie
     void zamien(Sprzet*);
-    void sortowanie(ListaSprzetu*);
+    void sortowanie(ListaSprzetu*, ATR, bool=true);
 
     Sprzet * pierwszyElement();
     ListaSprzetu * wczytajZPliku(string);
 
     int iloscElementow();
     int zapisDoPliku(string, Sprzet*, int);
+    
+private:
+    bool sprawdz_warunek(Sprzet*, Sprzet*, ATR, bool);
 
 };
 
@@ -102,8 +105,15 @@ public:
 
 int main() {
 
+    ListaSprzetu::ATR nazwa = ListaSprzetu::ATR::nazwa;
+    ListaSprzetu::ATR typ = ListaSprzetu::ATR::typ;
+    ListaSprzetu::ATR info = ListaSprzetu::ATR::info;
+    ListaSprzetu::ATR id = ListaSprzetu::ATR::id;
+    ListaSprzetu::ATR ilosc = ListaSprzetu::ATR::ilosc;
+    ListaSprzetu::ATR wartosc = ListaSprzetu::ATR::wartosc;
 	ListaSprzetu::ATR nowy = ListaSprzetu::ATR::nowy;
 	ListaSprzetu::ATR sprawny = ListaSprzetu::ATR::sprawny;
+    
     int n;
     int * liczba;
     string nazwa_pliku, fraza;
@@ -201,7 +211,7 @@ int main() {
                 wyniki->wypiszElement();
                 break;
 			case 'g':
-				lista->sortowanie(wyniki);
+				lista->sortowanie(wyniki, nazwa);
                 wyniki->poczatekListy();
 				wyniki->wypiszElement();
 				wyniki->nastepnyElement();
@@ -558,19 +568,25 @@ void ListaSprzetu::zamien(Sprzet * temp)
 }
 
 
-void ListaSprzetu::sortowanie(ListaSprzetu *wyniki, )
+void ListaSprzetu::sortowanie(ListaSprzetu *wyniki, ATR atrybut, bool rosnaco)
 {
+    bool warunek;
     sprzet = pierwszyElement();
     Sprzet * temp = sprzet;
     sprzet = temp->kolejny;
-    
+
+ 
     while (sprzet)
     {
-        if (temp->nazwa > sprzet->nazwa)
+        warunek = sprawdz_warunek(temp, sprzet, atrybut, rosnaco);
+        
+        if (warunek)
         {
             while (temp)
             {
-                if (temp->nazwa > sprzet->nazwa)
+                warunek = sprawdz_warunek(temp, sprzet, atrybut, rosnaco);
+                
+                if (warunek)
                     zamien(temp);
                 
                 sprzet = temp;
@@ -664,6 +680,41 @@ int ListaSprzetu::zapisDoPliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
     plik.close();
 
     return 1;
+}
+
+bool ListaSprzetu::sprawdz_warunek(Sprzet *temp, Sprzet *sprzet, ATR atrybut, bool rosnaco)
+{
+    bool warunek;
+    
+    switch (atrybut)
+    {
+        case nazwa:
+            warunek = (temp->nazwa > sprzet->nazwa);
+            break;
+        case typ:
+            warunek = (temp->typ > sprzet->typ);
+            break;
+        case info:
+            warunek = (temp->informacje > sprzet->informacje);
+            break;
+        case id:
+            warunek = (temp->id_produktu > sprzet->id_produktu);
+            break;
+        case ilosc:
+            warunek = (temp->ilosc > sprzet->ilosc);
+            break;
+        case wartosc:
+            warunek = (temp->wartosc > sprzet->wartosc);
+            break;
+        default:
+            warunek = false;
+            break;
+    }
+    
+    if (!rosnaco)
+        warunek = !warunek;
+    
+    return warunek;
 }
 
 // Pomocnik - metody
