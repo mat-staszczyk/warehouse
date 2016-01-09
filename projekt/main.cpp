@@ -30,8 +30,6 @@ public:
     Sprzet( Sprzet & );
     ~Sprzet();
 
-	enum ATR;
-
     Sprzet *dodajDane();
     void wypiszDane();
 };
@@ -104,7 +102,6 @@ int main() {
 
 	ListaSprzetu::ATR nowy = ListaSprzetu::ATR::nowy;
 	ListaSprzetu::ATR sprawny = ListaSprzetu::ATR::sprawny;
-	ListaSprzetu::ATR nazwa = ListaSprzetu::ATR::nazwa;
     int n;
     int * liczba;
     string nazwa_pliku, fraza;
@@ -530,6 +527,7 @@ void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, ATR atrybut, bool wartosc)
 			warunek = wartosc ? (sprzet->sprawny) : (!(sprzet->sprawny));
 			break;
 		default:
+            warunek = false;
 			break;
 		}
 
