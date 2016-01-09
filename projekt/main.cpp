@@ -205,9 +205,7 @@ int main() {
                 wyniki->poczatekListy();
 				wyniki->wypiszElement();
 				wyniki->nastepnyElement();
-				wyniki->wypiszElement();
 				wyniki->nastepnyElement();
-				wyniki->wypiszElement();
 				break;
             default:
                 break;
@@ -449,7 +447,7 @@ void ListaSprzetu::usunElement()
 
 void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, string tekst)
 {
-	Sprzet *temp = sprzet;;
+	Sprzet *temp = sprzet;
     Pomocnik * przeszukiwacz = new Pomocnik;
     sprzet = pierwszyElement();
 
@@ -543,76 +541,24 @@ void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, ATR atrybut, bool wartosc)
 	sprzet = temp;
 }
 
-/*
- 
- Sprzet *zamien(Sprzet *pierwszy, Sprzet *drugi)
- {
- 
- if (pierwszy->poprzedni)
- (pierwszy->poprzedni)->nastepny = drugi;
- 
- if (drugi->nastepny)
- (drugi->nastepny)->poprzedni = pierwszy;
- 
- drugi->poprzedni = pierwszy->poprzedni;
- pierwszy->poprzedni = drugi;
- pierwszy->nastepny = drugi->nastepny;
- drugi->nastepny = pierwszy;
- 
- return drugi;
- }
- 
- */
-
-void ListaSprzetu::zamien(Sprzet * drugi)
+void ListaSprzetu::zamien(Sprzet * temp)
 {
-    if (sprzet->poprzedni)
-        (sprzet->poprzedni)->kolejny = drugi;
+
+    if (temp->poprzedni)
+        (temp->poprzedni)->kolejny = sprzet;
     
-    if (drugi->kolejny)
-        (drugi->kolejny)->poprzedni = sprzet;
+    if (sprzet->kolejny)
+        (sprzet->kolejny)->poprzedni = temp;
     
-    drugi->poprzedni = sprzet->poprzedni;
-    sprzet->poprzedni = drugi;
-    sprzet->kolejny = drugi->kolejny;
-    drugi->kolejny = sprzet;
+    sprzet->poprzedni = temp->poprzedni;
+    temp->poprzedni = sprzet;
+    temp->kolejny = sprzet->kolejny;
+    sprzet->kolejny = temp;
     
-    sprzet = drugi;
 }
-/*
-void ListaSprzetu::sortowanie(ListaSprzetu* wyniki, ATR atrybut, bool rosnaco)
-{
-	Sprzet * zmiana;
-	Sprzet * temp = pierwszyElement();
-	sprzet = temp->kolejny;
-    
-    while (sprzet->kolejny)
-    {
-		if (temp->nazwa > sprzet->nazwa)
-		{
-			while (temp)
-			{
-				if (temp->nazwa > sprzet->nazwa)
-				{
-					zmiana = sprzet;
-					sprzet = temp;
-					temp = zmiana;
-				}
 
-                sprzet = sprzet->poprzedni;
-				temp = temp->poprzedni;
-			}
-		}
 
-		temp = sprzet;
-		sprzet = sprzet->kolejny;
-    }
-
-	sprzet = pierwszyElement();
-}
-*/
-
-void ListaSprzetu::sortowanie(ListaSprzetu *wyniki)
+void ListaSprzetu::sortowanie(ListaSprzetu *wyniki, )
 {
     sprzet = pierwszyElement();
     Sprzet * temp = sprzet;
