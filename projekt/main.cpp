@@ -15,8 +15,8 @@ private:
     string typ;
     string informacje;
     double wartosc;
-    bool sprawny;
-    bool nowy;
+    int sprawny;
+    int nowy;
 
     Sprzet *poprzedni;
     Sprzet *kolejny;
@@ -26,11 +26,12 @@ private:
 public:
 
     Sprzet();
-    Sprzet( int, string, string, string, double, bool, bool, int=NULL);
+    Sprzet( int, string, string, string, double, int, int, int=NULL);
     Sprzet( Sprzet & );
     ~Sprzet();
 
-    Sprzet *dodajDane();
+    Sprzet *podajDane();
+    void edytujDate();
     void wypiszDane();
 };
 
@@ -63,6 +64,7 @@ public:
 
     void pokazMenu();
     void dodajSprzet(Sprzet*);
+    void edytujSprzet(Sprzet*);
     void poczatekListy();
     void wypiszElement();
     void listaJestPusta();
@@ -94,7 +96,7 @@ class Pomocnik
 
 public:
 
-    string tlumaczBool(bool);
+    string tlumaczKod(int);
     string pobierzFraze();
     double * pobierzKwoty();
     int * pobierzLiczbe();
@@ -106,11 +108,11 @@ public:
 int main() {
 
     ListaSprzetu::ATR nazwa = ListaSprzetu::ATR::nazwa;
-    ListaSprzetu::ATR typ = ListaSprzetu::ATR::typ;
-    ListaSprzetu::ATR info = ListaSprzetu::ATR::info;
-    ListaSprzetu::ATR id = ListaSprzetu::ATR::id;
-    ListaSprzetu::ATR ilosc = ListaSprzetu::ATR::ilosc;
-    ListaSprzetu::ATR wartosc = ListaSprzetu::ATR::wartosc;
+    //ListaSprzetu::ATR typ = ListaSprzetu::ATR::typ;
+    //ListaSprzetu::ATR info = ListaSprzetu::ATR::info;
+    //ListaSprzetu::ATR id = ListaSprzetu::ATR::id;
+    //ListaSprzetu::ATR ilosc = ListaSprzetu::ATR::ilosc;
+    //ListaSprzetu::ATR wartosc = ListaSprzetu::ATR::wartosc;
 	ListaSprzetu::ATR nowy = ListaSprzetu::ATR::nowy;
 	ListaSprzetu::ATR sprawny = ListaSprzetu::ATR::sprawny;
     
@@ -138,7 +140,7 @@ int main() {
         {
             case '1':
                 test = new Sprzet;
-                test = test->dodajDane();
+                test = test->podajDane();
 
                 lista->dodajSprzet(test);
 
@@ -234,7 +236,7 @@ Sprzet::Sprzet()
 {
 }
 
-Sprzet::Sprzet( int ilosc, string nazwa, string typ, string informacje, double wartosc, bool sprawny, bool nowy, int id_produktu )
+Sprzet::Sprzet( int ilosc, string nazwa, string typ, string informacje, double wartosc, int sprawny, int nowy, int id_produktu )
 {
     this->ilosc = ilosc;
     this->nazwa = nazwa;
@@ -263,18 +265,16 @@ Sprzet::~Sprzet()
     cout << endl << "Przedmiot " << this->nazwa << " został usunięty." << endl;
 }
 
-Sprzet* Sprzet::dodajDane()
+Sprzet* Sprzet::podajDane()
 {
     int ilosc;
     string nazwa, typ, info;
     double wartosc;
     char temp;
-    bool nowy, sprawny;
+    int nowy, sprawny;
     Sprzet * biezacy;
 
-
-    cout << "Dodawanie sprzętu." << endl << endl
-    << "Nazwa: " << endl << "> ";
+    cout << endl << "Nazwa: " << endl << "> ";
     cin >> nazwa;
     cout << "Rodzaj: " << endl << "> ";
     cin >> typ;
@@ -285,11 +285,22 @@ Sprzet* Sprzet::dodajDane()
     cout << "Stan: sprawny (t/n)?" << endl << "> ";
     cin.ignore();
     temp = getchar();
-    sprawny = (temp == 't' || temp == 'T') ? true : false;
+    if (temp == 't' || temp == 'T')
+        sprawny = 1;
+    else if (temp == 'n' || temp == 'N')
+        sprawny = 0;
+    else
+        sprawny = 2;
+    temp = '\0';
     cout << "Stan: nowy (t/n)?" << endl << "> ";
-    cin.ignore();
     temp = getchar();
-    nowy = (temp == 't' || temp == 'T') ? true : false;
+    if (temp == 't' || temp == 'T')
+        nowy = 1;
+    else if (temp == 'n' || temp == 'N')
+        nowy = 0;
+    else
+        nowy = 2;
+    temp = '\0';
     cout << "Dodatkowe informacje: " << endl << "> ";
     cin >> info;
 
@@ -309,8 +320,8 @@ void Sprzet::wypiszDane()
     cout << "Rodzaj: " << this->typ << endl;
     cout << "Ilość: " << this->ilosc << endl;
     cout << "Wartość: " << this->wartosc << endl;
-    cout << "Sprawny: " << pomocnik->tlumaczBool(this->sprawny) << endl;
-    cout << "Nowy: " << pomocnik->tlumaczBool(this->nowy) << endl;
+    cout << "Sprawny: " << pomocnik->tlumaczKod(this->sprawny) << endl;
+    cout << "Nowy: " << pomocnik->tlumaczKod(this->nowy) << endl;
     cout << "Informacje: " << this->informacje << endl << endl;
 
     delete pomocnik;
@@ -384,6 +395,12 @@ void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
 
     sprzet = aktualny;
     n++;
+}
+
+void ListaSprzetu::edytujSprzet(Sprzet* temp)
+{
+    sprzet->nazwa = temp->nazwa;
+    sprzet->typ = temp->typ;
 }
 
 void ListaSprzetu::poczatekListy()
@@ -631,7 +648,7 @@ ListaSprzetu * ListaSprzetu::wczytajZPliku(string nazwa_pliku)
 {
     int id, ilosc, rozmiar;
     double wartosc;
-    bool sprawny, nowy;
+    int sprawny, nowy;
     string nazwa, typ, info;
 
     ifstream plik;
@@ -719,9 +736,9 @@ bool ListaSprzetu::sprawdz_warunek(Sprzet *temp, Sprzet *sprzet, ATR atrybut, bo
 
 // Pomocnik - metody
 
-string Pomocnik::tlumaczBool(bool wartosc)
+string Pomocnik::tlumaczKod(int wartosc)
 {
-    return wartosc ? "tak" : "nie";
+    return (wartosc == 1) ? "tak" : "nie";
 }
 
 bool Pomocnik::czyZawieraFraze(string tekst, string nowy_tekst)

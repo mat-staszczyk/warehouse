@@ -2,16 +2,16 @@
 #Projekt zaliczeniowy
 na 3:
 
-* Stworzyć nowy plik w miejsce dotychczasowego
-* dopisywać nowy rekord na koniec, musi umieć przeglądać bazę po 1 rekordzie w przód i w tył (nie listing (for, cout)
+* [x] Stworzyć nowy plik w miejsce dotychczasowego
+* [x] dopisywać nowy rekord na koniec, musi umieć przeglądać bazę po 1 rekordzie w przód i w tył (nie listing (for, cout)
 * edycja (poprawienie rekordu bieżącego)
-* usuwanie rekordu bieżącego
-* zapis bazy danych
-* otwarcie istniejącego pliku
-* wyszukiwanie wg dwóch kryteriów:
+* [x] usuwanie rekordu bieżącego
+* [x] zapis bazy danych
+* [x] otwarcie istniejącego pliku
+* [x] wyszukiwanie wg dwóch kryteriów:
 		1. tekstowe
 		2. numeryczne
-* sortowanie
+* [x] sortowanie
 
 Dodatki:
 
@@ -19,7 +19,7 @@ Dodatki:
 * Usuwanie grupowe (stare faktury, przeterm. towar)
 * Instytucja kosza (z obsługą)
 * Wyszukiwanie wielokryterialne
-* Nałożenie filtra na bazę (toggle)
+* [x] Nałożenie filtra na bazę (toggle)
 * Zabezpieczenia danych
 
 Założenia:
