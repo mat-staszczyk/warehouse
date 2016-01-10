@@ -280,15 +280,18 @@ Sprzet* Sprzet::podajDane()
     Sprzet * biezacy;
 
     cout << endl << "Nazwa: " << endl << "> ";
-    cin >> nazwa;
+    fflush(stdin);
+    getline(cin, nazwa);
     cout << "Rodzaj: " << endl << "> ";
-    cin >> typ;
+    fflush(stdin);
+    getline(cin, typ);
     
     while (flaga)
     {
         cout << "Wartość: " << endl << "> ";
-        cin >> s_temp;
-        if (s_temp == "")
+        fflush(stdin);
+        getline(cin, s_temp);
+        if (s_temp == "\n")
         {
             wartosc = -1;
             flaga = false;
@@ -305,11 +308,13 @@ Sprzet* Sprzet::podajDane()
     while (flaga)
     {
         cout << "Ilość: " << endl << "> ";
-        cin >> s_temp;
-        if (s_temp == "")
+        fflush(stdin);
+        getline(cin, s_temp);
+        if (s_temp == "\n")
         {
             ilosc = -1;
             flaga = false;
+            cin.ignore();
         }
         else
         {
@@ -317,32 +322,40 @@ Sprzet* Sprzet::podajDane()
             flaga = (ilosc >= 0) ? false : true;
         }
     }
-    s_temp = "";
+    if (s_temp == "\n")
+    {
+        s_temp = "";
+    }
     cout << "Stan: sprawny (t/n)?" << endl << "> ";
-    cin.ignore();
     fflush(stdin);
-    temp = getchar();
-    if (temp == 't' || temp == 'T')
+    cin.clear();
+    cin.ignore( 1000, '\n' );
+    getline(cin, s_temp);
+    if (s_temp == "t" || s_temp == "T")
         sprawny = 1;
-    else if (temp == 'n' || temp == 'N')
+    else if (s_temp == "n" || s_temp == "N")
         sprawny = 0;
     else
+    {
         sprawny = 2;
+        cin.ignore();
+    }
     cout << "Stan: nowy (t/n)?" << endl << "> ";
-    cin.ignore();
-    fflush(stdin);
     temp = '\0';
-    temp = getchar();
-    if (temp == 't' || temp == 'T')
+    fflush(stdin);
+    getline(cin, s_temp);
+    if (s_temp == "t" || s_temp == "T")
         nowy = 1;
-    else if (temp == 'n' || temp == 'N')
+    else if (s_temp == "n" || s_temp == "N")
         nowy = 0;
     else
-        nowy = 2;
-    fflush(stdin);
-    temp = '\0';
+    {
+        sprawny = 2;
+        cin.ignore();
+    }
     cout << "Dodatkowe informacje: " << endl << "> ";
-    cin >> info;
+    cin.ignore();
+    getline(cin, info);
 
     biezacy = new Sprzet(ilosc, nazwa, typ, info, wartosc, sprawny, nowy);
 
