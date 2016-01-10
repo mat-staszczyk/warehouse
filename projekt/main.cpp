@@ -219,6 +219,11 @@ int main() {
 				wyniki->nastepnyElement();
 				wyniki->nastepnyElement();
 				break;
+            case 'h':
+                test = new Sprzet;
+                test = test->podajDane();
+                lista->edytujSprzet(test);
+                lista->wypiszElement();
             default:
                 break;
 
@@ -238,11 +243,11 @@ Sprzet::Sprzet()
 
 Sprzet::Sprzet( int ilosc, string nazwa, string typ, string informacje, double wartosc, int sprawny, int nowy, int id_produktu )
 {
-    this->ilosc = ilosc;
     this->nazwa = nazwa;
     this->typ = typ;
     this->informacje = informacje;
-    this->wartosc = wartosc;
+    this->wartosc = (wartosc == -1) ? 0 : wartosc;
+    this->ilosc = (ilosc == -1) ? 0 : ilosc;
     this->sprawny = sprawny;
     this->nowy = nowy;
     this->id_produktu = NULL;
@@ -267,23 +272,55 @@ Sprzet::~Sprzet()
 
 Sprzet* Sprzet::podajDane()
 {
-    int ilosc;
-    string nazwa, typ, info;
+    bool flaga = true;
+    string nazwa, typ, info, s_temp;
     double wartosc;
     char temp;
-    int nowy, sprawny;
+    int ilosc, nowy, sprawny;
     Sprzet * biezacy;
 
     cout << endl << "Nazwa: " << endl << "> ";
     cin >> nazwa;
     cout << "Rodzaj: " << endl << "> ";
     cin >> typ;
-    cout << "Wartość: " << endl << "> ";
-    cin >> wartosc;
-    cout << "Ilość: " << endl << "> ";
-    cin >> ilosc;
+    
+    while (flaga)
+    {
+        cout << "Wartość: " << endl << "> ";
+        cin >> s_temp;
+        if (s_temp == "")
+        {
+            wartosc = -1;
+            flaga = false;
+        }
+        else
+        {
+            wartosc = atof(s_temp.c_str());
+            flaga = (wartosc >= 0) ? false : true;
+        }
+    }
+    s_temp = "";
+    flaga = true;
+    
+    while (flaga)
+    {
+        cout << "Ilość: " << endl << "> ";
+        cin >> s_temp;
+        if (s_temp == "")
+        {
+            ilosc = -1;
+            flaga = false;
+        }
+        else
+        {
+            ilosc = atof(s_temp.c_str());
+            flaga = (ilosc >= 0) ? false : true;
+        }
+    }
+    s_temp = "";
     cout << "Stan: sprawny (t/n)?" << endl << "> ";
     cin.ignore();
+    fflush(stdin);
     temp = getchar();
     if (temp == 't' || temp == 'T')
         sprawny = 1;
@@ -291,8 +328,10 @@ Sprzet* Sprzet::podajDane()
         sprawny = 0;
     else
         sprawny = 2;
-    temp = '\0';
     cout << "Stan: nowy (t/n)?" << endl << "> ";
+    cin.ignore();
+    fflush(stdin);
+    temp = '\0';
     temp = getchar();
     if (temp == 't' || temp == 'T')
         nowy = 1;
@@ -300,6 +339,7 @@ Sprzet* Sprzet::podajDane()
         nowy = 0;
     else
         nowy = 2;
+    fflush(stdin);
     temp = '\0';
     cout << "Dodatkowe informacje: " << endl << "> ";
     cin >> info;
@@ -399,8 +439,13 @@ void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
 
 void ListaSprzetu::edytujSprzet(Sprzet* temp)
 {
-    sprzet->nazwa = temp->nazwa;
-    sprzet->typ = temp->typ;
+    sprzet->nazwa = (temp->nazwa == "") ? sprzet->nazwa : temp->nazwa;
+    sprzet->typ = (temp->typ == "") ? sprzet->typ : temp->typ;
+    sprzet->informacje = (temp->informacje == "") ? sprzet->informacje : temp->informacje;
+    sprzet->sprawny = (temp->sprawny == 2) ? sprzet->sprawny : temp->sprawny;
+    sprzet->nowy = (temp->nowy == 2) ? sprzet->nowy : temp->nowy;
+    sprzet->ilosc = (temp->ilosc == -1) ? sprzet->ilosc : temp->ilosc;
+    sprzet->wartosc = (temp->wartosc == -1) ? sprzet->wartosc : temp->wartosc;
 }
 
 void ListaSprzetu::poczatekListy()
@@ -738,7 +783,13 @@ bool ListaSprzetu::sprawdz_warunek(Sprzet *temp, Sprzet *sprzet, ATR atrybut, bo
 
 string Pomocnik::tlumaczKod(int wartosc)
 {
-    return (wartosc == 1) ? "tak" : "nie";
+    //return (wartosc == 1) ? "tak" : "nie";
+    if (wartosc == 2)
+        return "lol";
+        else if (wartosc == 1)
+            return "Tak";
+    else
+        return "nie";
 }
 
 bool Pomocnik::czyZawieraFraze(string tekst, string nowy_tekst)
