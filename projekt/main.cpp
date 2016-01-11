@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <locale.h>
+#include <windows.h>
 
 using namespace std;
 
@@ -9,7 +10,6 @@ class Sprzet
 {
 
 private:
-
 	int id_produktu;
 	int ilosc;
 	string nazwa;
@@ -25,7 +25,6 @@ private:
 	friend class ListaSprzetu;
 
 public:
-
 	Sprzet();
 	Sprzet(int, string, string, string, double, int, int, int = NULL);
 	Sprzet(Sprzet &);
@@ -33,6 +32,9 @@ public:
 
 	Sprzet *podajDane();
 	void wypiszDane();
+
+private:
+	void gotoxy(int, int);
 };
 
 class ListaSprzetu
@@ -351,18 +353,25 @@ void Sprzet::wypiszDane()
 {
 	Pomocnik * pomocnik = new Pomocnik;
 
-	cout << "Dane przedmiotu:" << endl;
-
-	cout << "ID: " << this->id_produktu << endl;
-	cout << "Nazwa: " << this->nazwa << endl;
-	cout << "Rodzaj: " << this->typ << endl;
-	cout << "Iloœæ: " << this->ilosc << endl;
-	cout << "Wartoœæ: " << this->wartosc << endl;
-	cout << "Sprawny: " << pomocnik->tlumaczKod(this->sprawny) << endl;
-	cout << "Nowy: " << pomocnik->tlumaczKod(this->nowy) << endl;
+	cout << "Dane przedmiotu:" << endl << endl;
+	cout << "ID:         " << this->id_produktu << endl;
+	cout << "Nazwa:      " << this->nazwa << endl;
+	cout << "Rodzaj:     " << this->typ << endl;
+	cout << "Iloœæ:      " << this->ilosc << endl;
+	cout << "Wartoœæ:    " << this->wartosc << endl;
+	cout << "Sprawny:    " << pomocnik->tlumaczKod(this->sprawny) << endl;
+	cout << "Nowy:       " << pomocnik->tlumaczKod(this->nowy) << endl;
 	cout << "Informacje: " << this->informacje << endl << endl;
 
 	delete pomocnik;
+}
+
+void Sprzet::gotoxy(int x, int y)
+{
+	COORD c;
+	c.X = x - 1;
+	c.Y = y - 1;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
 
 // ListaSprzetu - metody
