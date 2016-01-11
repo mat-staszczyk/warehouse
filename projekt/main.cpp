@@ -43,7 +43,7 @@ private:
 
 	Sprzet * sprzet;
 	Sprzet * pierwszy;
-	int n;
+	int n = 0;
 	bool autonumeracja;
 
 public:
@@ -94,8 +94,20 @@ private:
 class Menu
 {
 public:
+	ListaSprzetu *lista, *kosz, *wyniki;
+
+	Menu();
+
+	void glowne();
+	void zarzadzanieSprzetem();
+	void sprzet();
+	void wyszukiwanie();
+	void sortowanie();
+	void zarzadzanieKoszem();
+	void wyjscie();
+
 	void opis_glowne(int=XX, int=YY);
-	void opis_lista(int=XX, int=YY);
+	void opis_zarzadzanie(int=XX, int=YY);
 	void opis_sprzet(int=XX, int=YY);
 	void opis_wyszukiwanie(int=XX, int=YY);
 	void opis_sortowanie(int=XX, int=YY);
@@ -116,7 +128,7 @@ public:
 	void gotoxy(int, int);
 };
 
-
+/*
 int main() {
 
 	// Dodanie obs³ugi polskich znaków pod Windows (VS2015)
@@ -248,7 +260,7 @@ int main() {
 			break;
 		case 'j':
 			system("cls");
-			menu->opis_lista();
+			menu->opis_zarzadzanie();
 			cin.get();
 			break;
 		case 'k':
@@ -285,7 +297,34 @@ int main() {
 
 	return 0;
 }
+*/
 
+int main()
+{
+	// Dodanie obs³ugi polskich znaków pod Windows (VS2015)
+	setlocale(LC_ALL, "polish");
+
+	ListaSprzetu::ATR nazwa = ListaSprzetu::ATR::nazwa;
+	//ListaSprzetu::ATR typ = ListaSprzetu::ATR::typ;
+	//ListaSprzetu::ATR info = ListaSprzetu::ATR::info;
+	//ListaSprzetu::ATR id = ListaSprzetu::ATR::id;
+	//ListaSprzetu::ATR ilosc = ListaSprzetu::ATR::ilosc;
+	//ListaSprzetu::ATR wartosc = ListaSprzetu::ATR::wartosc;
+	ListaSprzetu::ATR nowy = ListaSprzetu::ATR::nowy;
+	ListaSprzetu::ATR sprawny = ListaSprzetu::ATR::sprawny;
+
+	int * liczba;
+	string fraza;
+	double * kwoty;
+	char klawisz;
+
+	Pomocnik * pom = new Pomocnik;
+	Menu * menu = new Menu;
+
+	menu->glowne();
+
+	return 0;
+}
 
 // Sprzet - metody
 
@@ -428,6 +467,9 @@ ListaSprzetu::ListaSprzetu()
 ListaSprzetu::ListaSprzetu(bool autonumeracja)
 {
 	this->autonumeracja = autonumeracja;
+	sprzet = NULL;
+	pierwszy = NULL;
+	n = 0;
 }
 
 void ListaSprzetu::pokazMenu() {
@@ -513,6 +555,16 @@ void ListaSprzetu::wypiszElement()
 	}
 }
 
+void ListaSprzetu::poprzedniElement()
+{
+	if (sprzet->poprzedni) {
+		sprzet = sprzet->poprzedni;
+	}
+	else {
+		cout << "Brak porzednich elementów.";
+	}
+}
+
 void ListaSprzetu::listaJestPusta()
 {
 	cout << "Lista jest pusta" << endl;
@@ -522,19 +574,8 @@ void ListaSprzetu::nastepnyElement()
 {
 	if (sprzet->kolejny) {
 		sprzet = sprzet->kolejny;
-		wypiszElement();
 	} else {
 		cout << "Brak kolejnych elementów." << endl;
-	}
-}
-
-void ListaSprzetu::poprzedniElement()
-{
-	if (sprzet->poprzedni) {
-		sprzet = sprzet->poprzedni;
-		wypiszElement();
-	} else {
-		cout << "Brak porzednich elementów.";
 	}
 }
 
@@ -835,6 +876,158 @@ bool ListaSprzetu::sprawdz_warunek(Sprzet *temp, Sprzet *sprzet, ATR atrybut, bo
 
 // Menu - metody
 
+Menu::Menu()
+{
+	lista = new ListaSprzetu;
+	kosz = new ListaSprzetu(false);
+	wyniki = new ListaSprzetu(false);
+}
+
+void Menu::glowne()
+{
+	string nazwa_pliku;
+	char klawisz;
+
+	Sprzet * test;
+
+	system("cls");
+	do
+	{
+		opis_glowne();
+
+		cin >> klawisz;
+		cin.ignore();
+
+		switch (klawisz)
+		{
+		case '1':
+			zarzadzanieSprzetem();
+			break;
+		case '2':
+			cout << "Podaj nazwê pliku, z którego maj¹ zostaæ wczytane dane:" << endl;
+			fflush(stdin);
+			cin >> nazwa_pliku;
+			lista = lista->wczytajZPliku(nazwa_pliku);
+			break;
+		case '3':
+			int n;
+			test = lista->pierwszyElement();
+			n = lista->iloscElementow();
+
+			cout << "Podaj nazwê pliku, w którym maj¹ zostaæ zapisane dane:" << endl;
+			fflush(stdin);
+			cin >> nazwa_pliku;
+			if (!lista->zapisDoPliku(nazwa_pliku, test, n))
+				cout << "Brak dostêpu do pliku." << endl;
+			else
+				cout << "Dane zosta³y pomyœle zapisane w pliku \"" << nazwa_pliku << "\"." << endl;
+			break;
+		default:
+			break;
+
+		}
+
+	} while (klawisz != '4');
+}
+
+void Menu::zarzadzanieSprzetem()
+{
+	char klawisz;
+	Sprzet *test;
+
+	system("cls");
+	do
+	{
+		
+		opis_zarzadzanie();
+
+		cin >> klawisz;
+		cin.ignore();
+
+		switch (klawisz)
+		{
+		case '1':
+			sprzet();
+			break;
+		case '2':
+			test = new Sprzet;
+			test = test->podajDane();
+			lista->dodajSprzet(test);
+			cout << "Dodano element: " << endl;
+			lista->wypiszElement();
+			break;
+		case '3':
+			wyszukiwanie();
+			break;
+		case '4':
+			zarzadzanieKoszem();
+			break;
+		default:
+			break;
+
+		}
+
+	} while (klawisz != '5');
+}
+
+void Menu::sprzet()
+{
+	char klawisz;
+	Sprzet *test;
+
+	system("cls");
+	do
+	{
+		lista->wypiszElement();
+		opis_sprzet();
+		
+		cin >> klawisz;
+		cin.ignore();
+
+		switch (klawisz)
+		{
+		case '1':
+			lista->poprzedniElement();
+			break;
+		case '2':
+			lista->nastepnyElement();
+			break;
+		case '3':
+			lista->przeniesElement(kosz);
+			kosz->wypiszElement();
+			break;
+		case '4':
+			zarzadzanieKoszem();
+			break;
+		default:
+			break;
+
+		}
+
+	} while (klawisz != '5');
+}
+
+void Menu::wyszukiwanie()
+{
+	opis_wyszukiwanie();
+}
+
+void Menu::sortowanie()
+{
+	opis_sortowanie();
+}
+
+void Menu::zarzadzanieKoszem()
+{
+	kosz->wypiszElement();
+	opis_kosz();
+}
+
+void Menu::wyjscie()
+{
+
+}
+
 void Menu::opis_glowne(int x, int y)
 {
 	Pomocnik *pom = new Pomocnik;
@@ -859,7 +1052,7 @@ void Menu::opis_glowne(int x, int y)
 	cout << "> ";
 }
 
-void Menu::opis_lista(int x, int y)
+void Menu::opis_zarzadzanie(int x, int y)
 {
 	Pomocnik *pom = new Pomocnik;
 
@@ -879,9 +1072,9 @@ void Menu::opis_lista(int x, int y)
 	cout << "3. Wyszukaj";
 	pom->gotoxy(x, y++);
 	cout << "4. Wyœwietl zawartoœæ kosza";
-	pom->gotoxy(x, y += 2);
+	pom->gotoxy(x, y++);
 	cout << "5. Powrót";
-	pom->gotoxy(x, y); 
+	pom->gotoxy(x, ++y); 
 	cout << "> ";
 }
 
