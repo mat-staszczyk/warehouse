@@ -3,6 +3,8 @@
 #include <string>
 #include <locale.h>
 #include <windows.h>
+#define XX 10
+#define YY 3
 
 using namespace std;
 
@@ -32,9 +34,6 @@ public:
 
 	Sprzet *podajDane();
 	void wypiszDane();
-
-private:
-	void gotoxy(int, int);
 };
 
 class ListaSprzetu
@@ -92,6 +91,18 @@ private:
 	void zamien(Sprzet*);
 };
 
+class Menu
+{
+public:
+	void opis_glowne(int=XX, int=YY);
+	void opis_lista(int=XX, int=YY);
+	void opis_sprzet();
+	void opis_wyszukiwanie(int=XX, int=YY);
+	void opis_sortowanie(int=XX, int=YY);
+	void opis_kosz();
+	void opis_wyjscie();
+};
+
 class Pomocnik
 {
 
@@ -102,6 +113,7 @@ public:
 	double * pobierzKwoty();
 	int * pobierzLiczbe();
 	bool czyZawieraFraze(string, string);
+	void gotoxy(int, int);
 };
 
 
@@ -129,6 +141,7 @@ int main() {
 	ListaSprzetu *kosz = new ListaSprzetu(false);
 	ListaSprzetu *wyniki = new ListaSprzetu(false);
 	Pomocnik * pom = new Pomocnik;
+	Menu * menu = new Menu;
 
 	Sprzet * test;
 
@@ -227,6 +240,27 @@ int main() {
 			test = test->podajDane();
 			lista->edytujSprzet(test);
 			lista->wypiszElement();
+			break;
+		case 'i':
+			system("cls");
+			menu->opis_glowne();
+			cin.get();
+			break;
+		case 'j':
+			system("cls");
+			menu->opis_lista();
+			cin.get();
+			break;
+		case 'k':
+			system("cls");
+			menu->opis_wyszukiwanie();
+			cin.get();
+			break;
+		case 'l':
+			system("cls");
+			menu->opis_sortowanie();
+			cin.get();
+			break;
 		default:
 			break;
 
@@ -364,14 +398,6 @@ void Sprzet::wypiszDane()
 	cout << "Informacje: " << this->informacje << endl << endl;
 
 	delete pomocnik;
-}
-
-void Sprzet::gotoxy(int x, int y)
-{
-	COORD c;
-	c.X = x - 1;
-	c.Y = y - 1;
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
 
 // ListaSprzetu - metody
@@ -792,6 +818,138 @@ bool ListaSprzetu::sprawdz_warunek(Sprzet *temp, Sprzet *sprzet, ATR atrybut, bo
 	return warunek;
 }
 
+// Menu - metody
+
+void Menu::opis_glowne(int x, int y)
+{
+	Pomocnik *pom = new Pomocnik;
+
+	pom->gotoxy(x, y++);
+	cout << "###################";
+	pom->gotoxy(x, y++);
+	cout << "### MENU G£ÓWNE ###";
+	pom->gotoxy(x, y++); y++;
+	cout << "###################";
+	pom->gotoxy(x, y++);
+	cout << "Wybierz jedn¹ z poni¿szych opcji:";
+	pom->gotoxy(x, y++);
+	cout << "1. Zarz¹dzanie stanem magazynu";
+	pom->gotoxy(x, y++);
+	cout << "2. Wczytaj dane z pliku";
+	pom->gotoxy(x, y++);
+	cout << "3. Zapisz dane do pliku";
+	pom->gotoxy(x, y++); y++;
+	cout << "4. Zakoñcz";
+	pom->gotoxy(x, ++y);
+	cout << "> ";
+}
+
+void Menu::opis_lista(int x, int y)
+{
+	Pomocnik *pom = new Pomocnik;
+
+	pom->gotoxy(x, y++);
+	cout << "############################";
+	pom->gotoxy(x, y++);
+	cout << "### ZARZ¥DZANIE SPRZÊTEM ###";
+	pom->gotoxy(x, y++); y++;
+	cout << "############################";
+	pom->gotoxy(x, y++); 
+	cout << "Wybierz jedn¹ z poni¿szych opcji:";
+	pom->gotoxy(x, y++);
+	cout << "1. Wyœwietl dane sprzêtu";
+	pom->gotoxy(x, y++);
+	cout << "2. Dodaj sprzêtu.";
+	pom->gotoxy(x, y++);
+	cout << "3. Wyszukaj";
+	pom->gotoxy(x, y++);
+	cout << "4. Wyœwietl zawartoœæ kosza";
+	pom->gotoxy(x, y += 2);
+	cout << "5. Wróc do menu g³ównego";
+	pom->gotoxy(x, y); 
+	cout << "> ";
+}
+
+void Menu::opis_sprzet()
+{
+
+}
+
+void Menu::opis_wyszukiwanie(int x, int y)
+{
+	Pomocnik *pom = new Pomocnik;
+
+	pom->gotoxy(x, y++);
+	cout << "####################";
+	pom->gotoxy(x, y++);
+	cout << "### WYSZUKIWANIE ###";
+	pom->gotoxy(x, y++); y++;
+	cout << "####################";
+	pom->gotoxy(x, y++);
+	cout << "Proszê wybraæ kryterium wyszukiwania:";
+	pom->gotoxy(x, y++);
+	cout << "1. Tekst";
+	pom->gotoxy(x, y++);
+	cout << "2. Licznoœæ";
+	pom->gotoxy(x, y++);
+	cout << "3. Wartoœæ";
+	pom->gotoxy(x, y++);
+	cout << "4. Wyœwietl nowe przedmioty";
+	pom->gotoxy(x, y++);
+	cout << "5. Wyœwietl sprawne przedmioty";
+	pom->gotoxy(x, y++);
+	cout << "6. Wyœwietl u¿ywane przedmioty";
+	pom->gotoxy(x, y++);
+	cout << "7. Wyœwietl uszkodzone przedmioty";
+	pom->gotoxy(x, y++);
+	cout << "8. Wróc do poprzedniego menu";
+	pom->gotoxy(x, ++y);
+	cout << "> ";
+}
+
+void Menu::opis_sortowanie(int x, int y)
+{
+	x += 60;
+	Pomocnik *pom = new Pomocnik;
+
+	pom->gotoxy(x, y++);
+	cout << "####################";
+	pom->gotoxy(x, y++);
+	cout << "#### SORTOWANIE ####";
+	pom->gotoxy(x, y++); y++;
+	cout << "####################";
+	pom->gotoxy(x, y++);
+	cout << "Wybierz kryterium sortowania:";
+	pom->gotoxy(x, y++);
+	cout << "1. ID";
+	pom->gotoxy(x, y++);
+	cout << "2. Nazwa";
+	pom->gotoxy(x, y++);
+	cout << "3. Typ";
+	pom->gotoxy(x, y++);
+	cout << "4. Wartoœæ";
+	pom->gotoxy(x, y++);
+	cout << "5. Iloœæ";
+	pom->gotoxy(x, y++);
+	cout << "6. Wróc do poprzedniego menu";
+	pom->gotoxy(x, ++y);
+	cout << "> ";
+}
+
+void Menu::opis_kosz()
+{
+
+}
+
+void Menu::opis_wyjscie()
+{
+	cout << "Czy chcesz zapisaæ dane przed wyjœciem?" << endl << endl
+		<< "1. Tak " << endl
+		<< "2. Nie" << endl
+		<< "3. Anuluj" << endl << endl
+		<< "> ";
+}
+
 // Pomocnik - metody
 
 string Pomocnik::tlumaczKod(int wartosc)
@@ -860,4 +1018,12 @@ int * Pomocnik::pobierzLiczbe()
 
 	wsk_licz = &(licznosc[0]);
 	return wsk_licz;
+}
+
+void Pomocnik::gotoxy(int x, int y)
+{
+	COORD c;
+	c.X = x - 1;
+	c.Y = y - 1;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
