@@ -77,7 +77,6 @@ public:
 	void wyszukiwanie(ListaSprzetu*, double, double); // wyszukaj kwotê
 	void wyszukiwanie(ListaSprzetu*, int, int); // wyszukaj licznoœæ
 	void wyszukiwanie(ListaSprzetu*, ATR, bool); // wyszukaj sprzêt o podanym stanie
-	void zamien(Sprzet*);
 	void sortowanie(ListaSprzetu*, ATR, bool = true);
 
 	Sprzet * pierwszyElement();
@@ -88,7 +87,7 @@ public:
 
 private:
 	bool sprawdz_warunek(Sprzet*, Sprzet*, ATR, bool);
-
+	void zamien(Sprzet*);
 };
 
 class Pomocnik
@@ -543,7 +542,7 @@ void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, string tekst)
 
 void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, int id)
 {
-	Sprzet *temp = sprzet;;
+	Sprzet *temp = sprzet;
 	sprzet = pierwszyElement();
 
 	while (sprzet)
@@ -558,7 +557,7 @@ void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, int id)
 
 void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, double kwota_od, double kwota_do)
 {
-	Sprzet *temp = sprzet;;
+	Sprzet *temp = sprzet;
 	sprzet = pierwszyElement();
 
 	while (sprzet)
@@ -574,7 +573,7 @@ void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, double kwota_od, double kw
 
 void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, int liczba_od, int liczba_do)
 {
-	Sprzet *temp = sprzet;;
+	Sprzet *temp = sprzet;
 	sprzet = pierwszyElement();
 
 	while (sprzet)
@@ -591,7 +590,7 @@ void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, int liczba_od, int liczba_
 void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, ATR atrybut, bool wartosc)
 {
 	int warunek;
-	Sprzet *temp = sprzet;;
+	Sprzet *temp = sprzet;
 	sprzet = pierwszyElement();
 
 	while (sprzet)
