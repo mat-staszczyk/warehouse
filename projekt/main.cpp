@@ -101,7 +101,6 @@ public:
 	double * pobierzKwoty();
 	int * pobierzLiczbe();
 	bool czyZawieraFraze(string, string);
-	void zamien(Sprzet*, Sprzet*);
 };
 
 
