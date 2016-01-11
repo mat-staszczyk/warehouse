@@ -3,7 +3,7 @@
 #include <string>
 #include <locale.h>
 #include <windows.h>
-#define XX 10
+#define XX 8
 #define YY 3
 
 using namespace std;
@@ -96,11 +96,11 @@ class Menu
 public:
 	void opis_glowne(int=XX, int=YY);
 	void opis_lista(int=XX, int=YY);
-	void opis_sprzet();
+	void opis_sprzet(int=XX, int=YY);
 	void opis_wyszukiwanie(int=XX, int=YY);
 	void opis_sortowanie(int=XX, int=YY);
-	void opis_kosz();
-	void opis_wyjscie();
+	void opis_kosz(int=XX, int=YY);
+	void opis_wyjscie(int=XX, int=YY);
 };
 
 class Pomocnik
@@ -259,6 +259,21 @@ int main() {
 		case 'l':
 			system("cls");
 			menu->opis_sortowanie();
+			cin.get();
+			break;
+		case 'm':
+			system("cls");
+			menu->opis_sprzet();
+			cin.get();
+			break;
+		case 'n':
+			system("cls");
+			menu->opis_kosz();
+			cin.get();
+			break;
+		case 'o':
+			system("cls");
+			menu->opis_wyjscie();
 			cin.get();
 			break;
 		default:
@@ -831,9 +846,9 @@ void Menu::opis_glowne(int x, int y)
 	pom->gotoxy(x, y++); y++;
 	cout << "###################";
 	pom->gotoxy(x, y++);
-	cout << "Wybierz jedn¹ z poni¿szych opcji:";
+	cout << "Wybierz jedn¹ z opcji:";
 	pom->gotoxy(x, y++);
-	cout << "1. Zarz¹dzanie stanem magazynu";
+	cout << "1. Zarz¹dzanie magazynem";
 	pom->gotoxy(x, y++);
 	cout << "2. Wczytaj dane z pliku";
 	pom->gotoxy(x, y++);
@@ -855,7 +870,7 @@ void Menu::opis_lista(int x, int y)
 	pom->gotoxy(x, y++); y++;
 	cout << "############################";
 	pom->gotoxy(x, y++); 
-	cout << "Wybierz jedn¹ z poni¿szych opcji:";
+	cout << "Wybierz jedn¹ z opcji:";
 	pom->gotoxy(x, y++);
 	cout << "1. Wyœwietl dane sprzêtu";
 	pom->gotoxy(x, y++);
@@ -865,14 +880,31 @@ void Menu::opis_lista(int x, int y)
 	pom->gotoxy(x, y++);
 	cout << "4. Wyœwietl zawartoœæ kosza";
 	pom->gotoxy(x, y += 2);
-	cout << "5. Wróc do menu g³ównego";
+	cout << "5. Powrót";
 	pom->gotoxy(x, y); 
 	cout << "> ";
 }
 
-void Menu::opis_sprzet()
+void Menu::opis_sprzet(int x, int y)
 {
+	int t_x = XX;
+	y += 23;
+	Pomocnik *pom = new Pomocnik;
 
+	pom->gotoxy(x, y);
+	cout << "1. Poprzedni";
+	pom->gotoxy((x += 15), y);
+	cout << "2. Nastêpny";
+	pom->gotoxy((x += 15), y);
+	cout << "3. Edycja";
+	pom->gotoxy((x += 13), y);
+	cout << "4. Sortuj";
+	pom->gotoxy((x += 13), y);
+	cout << "5. Do kosza";
+	pom->gotoxy((x += 15), y);
+	cout << "6. Powrót";
+	pom->gotoxy(t_x, (y+1));
+	cout << "> ";
 }
 
 void Menu::opis_wyszukiwanie(int x, int y)
@@ -886,7 +918,7 @@ void Menu::opis_wyszukiwanie(int x, int y)
 	pom->gotoxy(x, y++); y++;
 	cout << "####################";
 	pom->gotoxy(x, y++);
-	cout << "Proszê wybraæ kryterium wyszukiwania:";
+	cout << "Kryterium wyszukiwania:";
 	pom->gotoxy(x, y++);
 	cout << "1. Tekst";
 	pom->gotoxy(x, y++);
@@ -894,22 +926,22 @@ void Menu::opis_wyszukiwanie(int x, int y)
 	pom->gotoxy(x, y++);
 	cout << "3. Wartoœæ";
 	pom->gotoxy(x, y++);
-	cout << "4. Wyœwietl nowe przedmioty";
+	cout << "4. Nowe przedmioty";
 	pom->gotoxy(x, y++);
-	cout << "5. Wyœwietl sprawne przedmioty";
+	cout << "5. Sprawne przedmioty";
 	pom->gotoxy(x, y++);
-	cout << "6. Wyœwietl u¿ywane przedmioty";
+	cout << "6. U¿ywane przedmioty";
 	pom->gotoxy(x, y++);
-	cout << "7. Wyœwietl uszkodzone przedmioty";
+	cout << "7. Uszkodzone przedmioty";
 	pom->gotoxy(x, y++);
-	cout << "8. Wróc do poprzedniego menu";
+	cout << "8. Powrót";
 	pom->gotoxy(x, ++y);
 	cout << "> ";
 }
 
 void Menu::opis_sortowanie(int x, int y)
 {
-	x += 60;
+	x += 50;
 	Pomocnik *pom = new Pomocnik;
 
 	pom->gotoxy(x, y++);
@@ -919,7 +951,7 @@ void Menu::opis_sortowanie(int x, int y)
 	pom->gotoxy(x, y++); y++;
 	cout << "####################";
 	pom->gotoxy(x, y++);
-	cout << "Wybierz kryterium sortowania:";
+	cout << "Kryterium sortowania:";
 	pom->gotoxy(x, y++);
 	cout << "1. ID";
 	pom->gotoxy(x, y++);
@@ -931,23 +963,52 @@ void Menu::opis_sortowanie(int x, int y)
 	pom->gotoxy(x, y++);
 	cout << "5. Iloœæ";
 	pom->gotoxy(x, y++);
-	cout << "6. Wróc do poprzedniego menu";
+	cout << "6. Powrót";
 	pom->gotoxy(x, ++y);
 	cout << "> ";
 }
 
-void Menu::opis_kosz()
+void Menu::opis_kosz(int x, int y)
 {
+	int t_x = XX;
+	y += 23;
+	Pomocnik *pom = new Pomocnik;
 
+	pom->gotoxy(x, y);
+	cout << "1. Poprzedni";
+	pom->gotoxy((x += 14), y);
+	cout << "2. Nastêpny";
+	pom->gotoxy((x += 13), y);
+	cout << "3. Usuñ";
+	pom->gotoxy((x += 9), y);
+	cout << "4. Usuñ wszystkie";
+	pom->gotoxy((x += 19), y);
+	cout << "5. Przywróæ";
+	pom->gotoxy((x += 13), y);
+	cout << "6. Przywróc wszystkie";
+	pom->gotoxy((x += 23), y);
+	cout << "7. Powrót";
+	pom->gotoxy(t_x, (y + 1));
+	cout << "> ";
 }
 
-void Menu::opis_wyjscie()
+void Menu::opis_wyjscie(int x, int y)
 {
-	cout << "Czy chcesz zapisaæ dane przed wyjœciem?" << endl << endl
-		<< "1. Tak " << endl
-		<< "2. Nie" << endl
-		<< "3. Anuluj" << endl << endl
-		<< "> ";
+	Pomocnik *pom = new Pomocnik;
+
+	x += 15;
+	y += 5;
+
+	pom->gotoxy(x, y++); y++;
+	cout << "Czy chcesz zapisaæ dane przed wyjœciem?";
+	pom->gotoxy(x, y++);
+	cout << "1. Tak ";
+	pom->gotoxy(x, y++);
+	cout << "2. Nie";
+	pom->gotoxy(x, y++);
+	cout << "3. Anuluj";
+	pom->gotoxy(x, ++y);
+	cout << "> ";
 }
 
 // Pomocnik - metody
