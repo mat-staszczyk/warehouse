@@ -292,13 +292,10 @@ Sprzet* Sprzet::podajDane()
 		cout << "Wartoœæ: " << endl << "> ";
 		fflush(stdin);
 		getline(cin, s_temp);
-		if (s_temp == "\n")
-		{
+		if (s_temp == "\n") {
 			wartosc = -1;
 			flaga = false;
-		}
-		else
-		{
+		} else {
 			wartosc = atof(s_temp.c_str());
 			flaga = (wartosc >= 0) ? false : true;
 		}
@@ -311,13 +308,10 @@ Sprzet* Sprzet::podajDane()
 		cout << "Iloœæ: " << endl << "> ";
 		fflush(stdin);
 		getline(cin, s_temp);
-		if (s_temp == "\n")
-		{
+		if (s_temp == "\n") {
 			ilosc = -1;
 			flaga = false;
-		}
-		else
-		{
+		} else {
 			ilosc = atoi(s_temp.c_str());
 			flaga = (ilosc >= 0) ? false : true;
 		}
@@ -406,6 +400,7 @@ void ListaSprzetu::pokazMenu() {
 		<< "e. Wyœwietl nowe" << endl
 		<< "f. Wyœwietl u¿ywane" << endl
 		<< "g. Sortowanie wg nazwy" << endl
+		<< "h. Edycja elementu" << endl
 		<< "z. WyjdŸ"
 		<< endl;
 };
@@ -479,8 +474,7 @@ void ListaSprzetu::nastepnyElement()
 	if (sprzet->kolejny) {
 		sprzet = sprzet->kolejny;
 		wypiszElement();
-	}
-	else {
+	} else {
 		cout << "Brak kolejnych elementów." << endl;
 	}
 }
@@ -490,8 +484,7 @@ void ListaSprzetu::poprzedniElement()
 	if (sprzet->poprzedni) {
 		sprzet = sprzet->poprzedni;
 		wypiszElement();
-	}
-	else {
+	} else {
 		cout << "Brak porzednich elementów.";
 	}
 }
