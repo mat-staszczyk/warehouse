@@ -32,8 +32,8 @@ public:
 	Sprzet(Sprzet &);
 	~Sprzet();
 
-	Sprzet *podajDane();
-	void wypiszDane();
+	Sprzet *podajDane(int=XX, int=YY);
+	void wypiszDane(int=XX, int=YY);
 };
 
 class ListaSprzetu
@@ -68,7 +68,7 @@ public:
 	void edytujSprzet(Sprzet*);
 	void poczatekListy();
 	void wypiszElement();
-	void listaJestPusta();
+	void listaJestPusta(int=XX, int=YY);
 	void nastepnyElement();
 	void poprzedniElement();
 	void przeniesElement(ListaSprzetu*);
@@ -78,7 +78,7 @@ public:
 	void wyszukiwanie(ListaSprzetu*, double, double); // wyszukaj kwotê
 	void wyszukiwanie(ListaSprzetu*, int, int); // wyszukaj licznoœæ
 	void wyszukiwanie(ListaSprzetu*, ATR, bool); // wyszukaj sprzêt o podanym stanie
-	void sortowanie(ListaSprzetu*, ATR, bool = true);
+	void sortowanie(ATR, bool=true);
 
 	Sprzet * pierwszyElement();
 	ListaSprzetu * wczytajZPliku(string);
@@ -113,6 +113,8 @@ public:
 	void opis_sortowanie(int=XX, int=YY);
 	void opis_kosz(int=XX, int=YY);
 	void opis_wyjscie(int=XX, int=YY);
+	void opis_kierunekSortowania(int = XX, int = YY);
+	bool sortujRosnaco();
 };
 
 class Pomocnik
@@ -361,24 +363,43 @@ Sprzet::~Sprzet()
 	cout << endl << "Przedmiot " << this->nazwa << " zosta³ usuniêty." << endl;
 }
 
-Sprzet* Sprzet::podajDane()
+Sprzet* Sprzet::podajDane(int x, int y)
 {
 	bool flaga = true;
 	string nazwa, typ, info, s_temp;
 	double wartosc;
-	int ilosc, nowy, sprawny;
+	int ilosc, nowy, sprawny, t_x = (x+27), t_y = (y+5);
 	Sprzet * biezacy;
+	Pomocnik * pom = new Pomocnik;
 
-	cout << endl << "Nazwa: " << endl << "> ";
+	pom->gotoxy(x, y++);
+	cout << "Podaj dane przedmiotu:";
+	pom->gotoxy(x, ( y+= 4));
+	cout << "Nazwa:";
+	pom->gotoxy(x, (y += 2));
+	cout << "Rodzaj: ";
+	pom->gotoxy(x, (y += 2));
+	cout << "Wartoœæ: ";
+	pom->gotoxy(x, (y += 2));
+	cout << "Iloœæ: ";
+	pom->gotoxy(x, (y += 2));
+	cout << "Sprawny? (t/n):";
+	pom->gotoxy(x, (y += 2));
+	cout << "Nowy? (t/n):";
+	pom->gotoxy(x, (y += 2));
+	cout << "Informacje: ";
+
+
+	pom->gotoxy(t_x, t_y);
 	fflush(stdin);
 	getline(cin, nazwa);
-	cout << "Rodzaj: " << endl << "> ";
+	pom->gotoxy(t_x, (t_y+=2));
 	fflush(stdin);
 	getline(cin, typ);
 
 	while (flaga)
 	{
-		cout << "Wartoœæ: " << endl << "> ";
+		pom->gotoxy(t_x, (t_y+=2));
 		fflush(stdin);
 		getline(cin, s_temp);
 		if (s_temp == "\n") {
@@ -394,7 +415,7 @@ Sprzet* Sprzet::podajDane()
 
 	while (flaga)
 	{
-		cout << "Iloœæ: " << endl << "> ";
+		pom->gotoxy(t_x, (t_y+=2));
 		fflush(stdin);
 		getline(cin, s_temp);
 		if (s_temp == "\n") {
@@ -409,7 +430,7 @@ Sprzet* Sprzet::podajDane()
 	{
 		s_temp = "";
 	}
-	cout << "Stan: sprawny (t/n)?" << endl << "> ";
+	pom->gotoxy(t_x, (t_y+=2));
 	fflush(stdin);
 	getline(cin, s_temp);
 	if (s_temp == "t" || s_temp == "T")
@@ -419,7 +440,7 @@ Sprzet* Sprzet::podajDane()
 	else
 		sprawny = 2;
 
-	cout << "Stan: nowy (t/n)?" << endl << "> ";
+	pom->gotoxy(t_x, (t_y+=2));
 	fflush(stdin);
 	getline(cin, s_temp);
 	if (s_temp == "t" || s_temp == "T")
@@ -429,7 +450,7 @@ Sprzet* Sprzet::podajDane()
 	else
 		nowy = 2;
 
-	cout << "Dodatkowe informacje: " << endl << "> ";
+	pom->gotoxy(t_x, (t_y+=2));
 	getline(cin, info);
 
 	biezacy = new Sprzet(ilosc, nazwa, typ, info, wartosc, sprawny, nowy);
@@ -437,19 +458,28 @@ Sprzet* Sprzet::podajDane()
 	return biezacy;
 }
 
-void Sprzet::wypiszDane()
+void Sprzet::wypiszDane(int x, int y)
 {
 	Pomocnik * pomocnik = new Pomocnik;
 
+	pomocnik->gotoxy(x, y++);
 	cout << "Dane przedmiotu:" << endl << endl;
-	cout << "ID:         " << this->id_produktu << endl;
-	cout << "Nazwa:      " << this->nazwa << endl;
-	cout << "Rodzaj:     " << this->typ << endl;
-	cout << "Iloœæ:      " << this->ilosc << endl;
-	cout << "Wartoœæ:    " << this->wartosc << endl;
-	cout << "Sprawny:    " << pomocnik->tlumaczKod(this->sprawny) << endl;
-	cout << "Nowy:       " << pomocnik->tlumaczKod(this->nowy) << endl;
-	cout << "Informacje: " << this->informacje << endl << endl;
+	pomocnik->gotoxy(x, (y+=2));
+	cout << "ID:             " << this->id_produktu << endl;
+	pomocnik->gotoxy(x, (y += 2));
+	cout << "Nazwa:          " << this->nazwa << endl;
+	pomocnik->gotoxy(x, (y += 2));
+	cout << "Rodzaj:         " << this->typ << endl;
+	pomocnik->gotoxy(x, (y += 2));
+	cout << "Iloœæ:          " << this->ilosc << endl;
+	pomocnik->gotoxy(x, (y += 2));
+	cout << "Wartoœæ:        " << this->wartosc << endl;
+	pomocnik->gotoxy(x, (y += 2));
+	cout << "Sprawny:        " << pomocnik->tlumaczKod(this->sprawny) << endl;
+	pomocnik->gotoxy(x, (y += 2));
+	cout << "Nowy:           " << pomocnik->tlumaczKod(this->nowy) << endl;
+	pomocnik->gotoxy(x, (y += 2));
+	cout << "Informacje:     " << this->informacje << endl << endl;
 
 	delete pomocnik;
 }
@@ -557,58 +587,59 @@ void ListaSprzetu::wypiszElement()
 
 void ListaSprzetu::poprzedniElement()
 {
-	if (sprzet->poprzedni) {
+	if (n && sprzet->poprzedni)
 		sprzet = sprzet->poprzedni;
-	}
-	else {
-		cout << "Brak porzednich elementów.";
-	}
 }
 
-void ListaSprzetu::listaJestPusta()
+void ListaSprzetu::listaJestPusta(int x, int y)
 {
+	Pomocnik *pom = new Pomocnik;
+	pom->gotoxy((x+2), (y+6));
 	cout << "Lista jest pusta" << endl;
 }
 
 void ListaSprzetu::nastepnyElement()
 {
-	if (sprzet->kolejny) {
+	if (n && sprzet->kolejny)
 		sprzet = sprzet->kolejny;
-	} else {
-		cout << "Brak kolejnych elementów." << endl;
-	}
 }
 
 void ListaSprzetu::przeniesElement(ListaSprzetu* innaLista)
 {
-	Sprzet *nowy(sprzet);
-	innaLista->dodajSprzet(nowy);
-	usunElement();
+	if (n)
+	{
+		Sprzet *nowy(sprzet);
+		innaLista->dodajSprzet(nowy);
+		usunElement();
+	}
 }
 
 void ListaSprzetu::usunElement()
 {
-	Sprzet *temp = sprzet;
+	if (n)
+	{
+		Sprzet *temp = sprzet;
 
-	if (!sprzet->poprzedni && !sprzet->kolejny) {
-		sprzet = NULL;
-		pierwszy = NULL;
+		if (!sprzet->poprzedni && !sprzet->kolejny) {
+			sprzet = NULL;
+			pierwszy = NULL;
+		}
+		else if (!(sprzet->poprzedni)) {
+			sprzet = sprzet->kolejny;
+			sprzet->poprzedni = NULL;
+		}
+		else if (!(sprzet->kolejny)) {
+			sprzet = sprzet->poprzedni;
+			sprzet->kolejny = NULL;
+		}
+		else {
+			(sprzet->poprzedni)->kolejny = sprzet->kolejny;
+			(sprzet->kolejny)->poprzedni = sprzet->poprzedni;
+			sprzet = sprzet->poprzedni;
+		}
+		n--;
+		delete temp;
 	}
-	else if (!(sprzet->poprzedni)) {
-		sprzet = sprzet->kolejny;
-		sprzet->poprzedni = NULL;
-	}
-	else if (!(sprzet->kolejny)) {
-		sprzet = sprzet->poprzedni;
-		sprzet->kolejny = NULL;
-	}
-	else {
-		(sprzet->poprzedni)->kolejny = sprzet->kolejny;
-		(sprzet->kolejny)->poprzedni = sprzet->poprzedni;
-		sprzet = sprzet->poprzedni;
-	}
-	n--;
-	delete temp;
 
 }
 
@@ -725,7 +756,7 @@ void ListaSprzetu::zamien(Sprzet * temp)
 }
 
 
-void ListaSprzetu::sortowanie(ListaSprzetu *wyniki, ATR atrybut, bool rosnaco)
+void ListaSprzetu::sortowanie(ATR atrybut, bool rosnaco)
 {
 	bool warunek;
 	sprzet = pierwszyElement();
@@ -752,15 +783,6 @@ void ListaSprzetu::sortowanie(ListaSprzetu *wyniki, ATR atrybut, bool rosnaco)
 		}
 
 		temp = sprzet;
-		sprzet = sprzet->kolejny;
-	}
-
-	sprzet = temp;
-	sprzet = pierwszyElement();
-
-	while (sprzet)
-	{
-		wyniki->dodajSprzet(sprzet);
 		sprzet = sprzet->kolejny;
 	}
 
@@ -887,10 +909,10 @@ void Menu::glowne()
 {
 	string nazwa_pliku;
 	char klawisz;
-
 	Sprzet * test;
 
 	system("cls");
+
 	do
 	{
 		opis_glowne();
@@ -934,11 +956,10 @@ void Menu::zarzadzanieSprzetem()
 {
 	char klawisz;
 	Sprzet *test;
-
-	system("cls");
+	
 	do
 	{
-		
+		system("cls");
 		opis_zarzadzanie();
 
 		cin >> klawisz;
@@ -950,11 +971,10 @@ void Menu::zarzadzanieSprzetem()
 			sprzet();
 			break;
 		case '2':
+			system("cls");
 			test = new Sprzet;
 			test = test->podajDane();
 			lista->dodajSprzet(test);
-			cout << "Dodano element: " << endl;
-			lista->wypiszElement();
 			break;
 		case '3':
 			wyszukiwanie();
@@ -975,9 +995,9 @@ void Menu::sprzet()
 	char klawisz;
 	Sprzet *test;
 
-	system("cls");
 	do
 	{
+		system("cls");
 		lista->wypiszElement();
 		opis_sprzet();
 		
@@ -993,18 +1013,20 @@ void Menu::sprzet()
 			lista->nastepnyElement();
 			break;
 		case '3':
-			lista->przeniesElement(kosz);
-			kosz->wypiszElement();
+			test = new Sprzet;
+			test = test->podajDane();
+			lista->edytujSprzet(test);
 			break;
 		case '4':
-			zarzadzanieKoszem();
+			sortowanie();
 			break;
+		case '5':
+			lista->przeniesElement(kosz);
 		default:
 			break;
-
 		}
 
-	} while (klawisz != '5');
+	} while (klawisz != '6');
 }
 
 void Menu::wyszukiwanie()
@@ -1014,7 +1036,51 @@ void Menu::wyszukiwanie()
 
 void Menu::sortowanie()
 {
-	opis_sortowanie();
+	ListaSprzetu::ATR nazwa = ListaSprzetu::ATR::nazwa;
+	ListaSprzetu::ATR typ = ListaSprzetu::ATR::typ;
+	ListaSprzetu::ATR info = ListaSprzetu::ATR::info;
+	ListaSprzetu::ATR id = ListaSprzetu::ATR::id;
+	ListaSprzetu::ATR ilosc = ListaSprzetu::ATR::ilosc;
+	ListaSprzetu::ATR wartosc = ListaSprzetu::ATR::wartosc;
+
+	char klawisz;
+	bool wybor;
+
+	do
+	{
+		system("cls");
+		opis_sortowanie();
+
+		cin >> klawisz;
+		cin.ignore();
+
+		switch (klawisz)
+		{
+		case '1':
+			wybor = sortujRosnaco();
+			lista->sortowanie(id, wybor);
+			break;
+		case '2':
+			wybor = sortujRosnaco();
+			lista->sortowanie(nazwa, wybor);
+			break;
+		case '3':
+			wybor = sortujRosnaco();
+			lista->sortowanie(typ, wybor);
+			break;
+		case '4':
+			wybor = sortujRosnaco();
+			lista->sortowanie(wartosc, wybor);
+			break;
+		case '5':
+			wybor = sortujRosnaco();
+			lista->sortowanie(ilosc, wybor);
+		default:
+			break;
+		}
+
+	} while (klawisz != '6');
+
 }
 
 void Menu::zarzadzanieKoszem()
@@ -1067,7 +1133,7 @@ void Menu::opis_zarzadzanie(int x, int y)
 	pom->gotoxy(x, y++);
 	cout << "1. Wyœwietl dane sprzêtu";
 	pom->gotoxy(x, y++);
-	cout << "2. Dodaj sprzêtu.";
+	cout << "2. Dodaj sprzêt.";
 	pom->gotoxy(x, y++);
 	cout << "3. Wyszukaj";
 	pom->gotoxy(x, y++);
@@ -1159,6 +1225,43 @@ void Menu::opis_sortowanie(int x, int y)
 	cout << "6. Powrót";
 	pom->gotoxy(x, ++y);
 	cout << "> ";
+}
+
+void Menu::opis_kierunekSortowania(int x, int y)
+{
+	x += 50;
+	Pomocnik *pom = new Pomocnik;
+
+	pom->gotoxy(x, y++);
+	cout << "Kierunek sortowania:";
+	pom->gotoxy(x, y++);
+	cout << "1. Rosn¹co";
+	pom->gotoxy(x, y++);
+	cout << "2. Malej¹co";
+	pom->gotoxy(x, ++y);
+	cout << "> ";	
+}
+
+bool Menu::sortujRosnaco()
+{
+	char klawisz;
+
+	do
+	{
+		cin >> klawisz;
+		cin.ignore();
+
+		switch (klawisz)
+		{
+			case '1':
+				return true;
+			case '2':
+				return false;
+			default:
+				break;
+		}
+
+	} while (true);
 }
 
 void Menu::opis_kosz(int x, int y)
