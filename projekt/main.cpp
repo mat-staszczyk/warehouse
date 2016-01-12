@@ -1049,6 +1049,7 @@ void Menu::sortowanie()
 	do
 	{
 		system("cls");
+		lista->wypiszElement();
 		opis_sortowanie();
 
 		cin >> klawisz;
@@ -1059,22 +1060,23 @@ void Menu::sortowanie()
 		case '1':
 			wybor = sortujRosnaco();
 			lista->sortowanie(id, wybor);
-			break;
+			return;
 		case '2':
 			wybor = sortujRosnaco();
 			lista->sortowanie(nazwa, wybor);
-			break;
+			return;
 		case '3':
 			wybor = sortujRosnaco();
 			lista->sortowanie(typ, wybor);
-			break;
+			return;
 		case '4':
 			wybor = sortujRosnaco();
 			lista->sortowanie(wartosc, wybor);
-			break;
+			return;
 		case '5':
 			wybor = sortujRosnaco();
 			lista->sortowanie(ilosc, wybor);
+			return;
 		default:
 			break;
 		}
@@ -1200,7 +1202,7 @@ void Menu::opis_wyszukiwanie(int x, int y)
 
 void Menu::opis_sortowanie(int x, int y)
 {
-	x += 50;
+	x += 45;
 	Pomocnik *pom = new Pomocnik;
 
 	pom->gotoxy(x, y++);
@@ -1229,7 +1231,7 @@ void Menu::opis_sortowanie(int x, int y)
 
 void Menu::opis_kierunekSortowania(int x, int y)
 {
-	x += 50;
+	x += 70;
 	Pomocnik *pom = new Pomocnik;
 
 	pom->gotoxy(x, y++);
@@ -1248,6 +1250,7 @@ bool Menu::sortujRosnaco()
 
 	do
 	{
+		opis_kierunekSortowania();
 		cin >> klawisz;
 		cin.ignore();
 
