@@ -123,9 +123,10 @@ class Pomocnik
 public:
 
 	string tlumaczKod(int);
-	string pobierzFraze();
-	double * pobierzKwoty();
-	int * pobierzLiczbe();
+	string pobierzFraze(int = XX, int = YY);
+	double * pobierzKwoty(int = XX, int = YY);
+	int * pobierzLiczbe(int = XX, int = YY);
+	int pobierzId(int=XX, int=YY);
 	bool czyZawieraFraze(string, string);
 	void gotoxy(int, int);
 };
@@ -305,20 +306,6 @@ int main()
 {
 	// Dodanie obs³ugi polskich znaków pod Windows (VS2015)
 	setlocale(LC_ALL, "polish");
-
-	ListaSprzetu::ATR nazwa = ListaSprzetu::ATR::nazwa;
-	//ListaSprzetu::ATR typ = ListaSprzetu::ATR::typ;
-	//ListaSprzetu::ATR info = ListaSprzetu::ATR::info;
-	//ListaSprzetu::ATR id = ListaSprzetu::ATR::id;
-	//ListaSprzetu::ATR ilosc = ListaSprzetu::ATR::ilosc;
-	//ListaSprzetu::ATR wartosc = ListaSprzetu::ATR::wartosc;
-	ListaSprzetu::ATR nowy = ListaSprzetu::ATR::nowy;
-	ListaSprzetu::ATR sprawny = ListaSprzetu::ATR::sprawny;
-
-	int * liczba;
-	string fraza;
-	double * kwoty;
-	char klawisz;
 
 	Pomocnik * pom = new Pomocnik;
 	Menu * menu = new Menu;
@@ -1031,7 +1018,81 @@ void Menu::sprzet()
 
 void Menu::wyszukiwanie()
 {
-	opis_wyszukiwanie();
+	
+	ListaSprzetu::ATR nowy = ListaSprzetu::ATR::nowy;
+	ListaSprzetu::ATR sprawny = ListaSprzetu::ATR::sprawny;
+	Pomocnik * pom = new Pomocnik;
+	string fraza;
+	char klawisz;
+
+	do
+	{
+		system("cls");
+		opis_wyszukiwanie();
+
+		cin >> klawisz;
+		cin.ignore();
+		/*
+		cout << "1. ID";
+		pom->gotoxy(x, y++);
+		cout << "2. Tekst";
+		pom->gotoxy(x, y++);
+		cout << "3. Licznoœæ";
+		pom->gotoxy(x, y++);
+		cout << "4. Wartoœæ";
+		pom->gotoxy(x, y++);
+		cout << "5. Nowe przedmioty";
+		pom->gotoxy(x, y++);
+		cout << "6. Sprawne przedmioty";
+		pom->gotoxy(x, y++);
+		cout << "7. U¿ywane przedmioty";
+		pom->gotoxy(x, y++);
+		cout << "8. Uszkodzone przedmioty";
+		*/
+		switch (klawisz)
+		{
+		case '1':
+			system("cls");
+			int id;
+			id = pom->pobierzId();
+			lista->wyszukiwanie(wyniki, id);
+			wyniki->wypiszElement();
+			break;
+		case '2':
+			fraza = pom->pobierzFraze();
+			lista->wyszukiwanie(wyniki, fraza);
+			wyniki->wypiszElement();
+			break;
+		case '3':
+			int * liczby;
+			liczby = pom->pobierzLiczbe();
+			lista->wyszukiwanie(wyniki, liczby[0], liczby[1]);
+			wyniki->wypiszElement();
+			break;
+		case '4':
+			double * kwoty;
+			kwoty = pom->pobierzKwoty();
+			lista->wyszukiwanie(wyniki, kwoty[0], kwoty[1]);
+			wyniki->wypiszElement();
+			break;
+		case '5':
+			lista->wyszukiwanie(wyniki, nowy, true);
+			wyniki->wypiszElement();
+			break;
+		case '6':
+			lista->wyszukiwanie(wyniki, sprawny, true);
+			wyniki->wypiszElement();
+		case '7':
+			lista->wyszukiwanie(wyniki, nowy, false);
+			wyniki->wypiszElement();
+		case '8':
+			lista->wyszukiwanie(wyniki, sprawny, false);
+			wyniki->wypiszElement();
+		default:
+			break;
+		}
+
+	} while (klawisz != '9');
 }
 
 void Menu::sortowanie()
@@ -1181,21 +1242,23 @@ void Menu::opis_wyszukiwanie(int x, int y)
 	pom->gotoxy(x, y++);
 	cout << "Kryterium wyszukiwania:";
 	pom->gotoxy(x, y++);
-	cout << "1. Tekst";
+	cout << "1. ID";
 	pom->gotoxy(x, y++);
-	cout << "2. Licznoœæ";
+	cout << "2. Tekst";
 	pom->gotoxy(x, y++);
-	cout << "3. Wartoœæ";
+	cout << "3. Licznoœæ";
 	pom->gotoxy(x, y++);
-	cout << "4. Nowe przedmioty";
+	cout << "4. Wartoœæ";
 	pom->gotoxy(x, y++);
-	cout << "5. Sprawne przedmioty";
+	cout << "5. Nowe przedmioty";
 	pom->gotoxy(x, y++);
-	cout << "6. U¿ywane przedmioty";
+	cout << "6. Sprawne przedmioty";
 	pom->gotoxy(x, y++);
-	cout << "7. Uszkodzone przedmioty";
+	cout << "7. U¿ywane przedmioty";
 	pom->gotoxy(x, y++);
-	cout << "8. Powrót";
+	cout << "8. Uszkodzone przedmioty";
+	pom->gotoxy(x, y++);
+	cout << "9. Powrót";
 	pom->gotoxy(x, ++y);
 	cout << "> ";
 }
@@ -1343,41 +1406,79 @@ bool Pomocnik::czyZawieraFraze(string tekst, string nowy_tekst)
 	return (flaga == true);
 }
 
-string Pomocnik::pobierzFraze()
+string Pomocnik::pobierzFraze(int x, int y)
 {
 	string fraza;
 
-	cout << "Szukaj: \n> ";
+	x += 30;
+
+	gotoxy(x, y++);
+	cout << "Szukaj:";
+	gotoxy(x, y);
+	cout << "> ";
+	gotoxy((x+3), y);
 	cin >> fraza;
 	return fraza;
 }
 
-double * Pomocnik::pobierzKwoty()
+double * Pomocnik::pobierzKwoty(int x, int y)
 {
 	double kwoty[2];
 	double *wsk_kwoty;
 
-	cout << "Proszê podaæ zakres wyszukiwania: \n> (od:) ";
+	x += 30;
+
+	gotoxy(x, y++);
+	cout << "Proszê podaæ zakres wyszukiwania:";
+	gotoxy(x, y);
+	cout << "(od:) > ";
+	gotoxy((x+8), y++);
 	cin >> kwoty[0];
-	cout << "> (do:) ";
+	gotoxy(x, y);
+	cout << "(do:) >";
+	gotoxy((x+8), y++);
 	cin >> kwoty[1];
 
 	wsk_kwoty = &(kwoty[0]);
 	return wsk_kwoty;
 }
 
-int * Pomocnik::pobierzLiczbe()
+int * Pomocnik::pobierzLiczbe(int x, int y)
 {
 	int licznosc[2];
 	int *wsk_licz;
 
-	cout << "Proszê podaæ zakres wyszukiwania: \n> (od:) ";
+	x += 30;
+
+	gotoxy(x, y++);
+	cout << "Proszê podaæ zakres wyszukiwania:";
+	gotoxy(x, y);
+	cout << "(od:) > ";
+	gotoxy((x+8), y++);
 	cin >> licznosc[0];
-	cout << "> (do:) ";
+	gotoxy(x, y);
+	cout << "(do:) > ";
+	gotoxy((x + 8), y++);
 	cin >> licznosc[1];
 
 	wsk_licz = &(licznosc[0]);
+	cin.ignore();
 	return wsk_licz;
+}
+
+int Pomocnik::pobierzId(int x, int y)
+{
+	int id;
+
+	x += 30;
+
+	gotoxy(x, y++);
+	cout << "Proszê podaæ poszukiwany nr ID: \n> ";
+	gotoxy(x, y++);
+	cin >> id;
+
+	cin.ignore();
+	return id;
 }
 
 void Pomocnik::gotoxy(int x, int y)
