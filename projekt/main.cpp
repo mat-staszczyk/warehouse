@@ -65,14 +65,16 @@ public:
 
 	void pokazMenu();
 	void dodajSprzet(Sprzet*);
-	void edytujSprzet(Sprzet*);
+	void edytujSprzet();
 	void poczatekListy();
 	void wypiszElement();
 	void listaJestPusta(int=XX, int=YY);
 	void nastepnyElement();
 	void poprzedniElement();
 	void przeniesElement(ListaSprzetu*);
+	void przeniesWszystko(ListaSprzetu*);
 	void usunElement();
+	void usunWszystkie();
 	void wyszukiwanie(ListaSprzetu*, string); // wyszukaj frazê
 	void wyszukiwanie(ListaSprzetu*, int); // wyszukaj id
 	void wyszukiwanie(ListaSprzetu*, double, double); // wyszukaj kwotê
@@ -130,177 +132,6 @@ public:
 	bool czyZawieraFraze(string, string);
 	void gotoxy(int, int);
 };
-
-/*
-int main() {
-
-	// Dodanie obs³ugi polskich znaków pod Windows (VS2015)
-	setlocale(LC_ALL, "polish");
-
-	ListaSprzetu::ATR nazwa = ListaSprzetu::ATR::nazwa;
-	//ListaSprzetu::ATR typ = ListaSprzetu::ATR::typ;
-	//ListaSprzetu::ATR info = ListaSprzetu::ATR::info;
-	//ListaSprzetu::ATR id = ListaSprzetu::ATR::id;
-	//ListaSprzetu::ATR ilosc = ListaSprzetu::ATR::ilosc;
-	//ListaSprzetu::ATR wartosc = ListaSprzetu::ATR::wartosc;
-	ListaSprzetu::ATR nowy = ListaSprzetu::ATR::nowy;
-	ListaSprzetu::ATR sprawny = ListaSprzetu::ATR::sprawny;
-
-	int n;
-	int * liczba;
-	string nazwa_pliku, fraza;
-	double * kwoty;
-	char klawisz;
-
-	ListaSprzetu *lista = new ListaSprzetu;
-	ListaSprzetu *kosz = new ListaSprzetu(false);
-	ListaSprzetu *wyniki = new ListaSprzetu(false);
-	Pomocnik * pom = new Pomocnik;
-	Menu * menu = new Menu;
-
-	Sprzet * test;
-
-	do
-	{
-		lista->pokazMenu();
-
-		cout << "> ";
-		cin >> klawisz;
-		cin.ignore();
-		switch (klawisz)
-		{
-		case '1':
-			test = new Sprzet;
-			test = test->podajDane();
-
-			lista->dodajSprzet(test);
-
-			cout << "Dodano element: " << endl;
-			lista->wypiszElement();
-			break;
-		case '2':
-			lista->wypiszElement();
-			break;
-		case '3':
-			lista->nastepnyElement();
-			break;
-		case '4':
-			lista->poprzedniElement();
-			break;
-		case '5':
-			cout << "Podaj nazwê pliku, z którego maj¹ zostaæ wczytane dane:" << endl;
-			fflush(stdin);
-			cin >> nazwa_pliku;
-			lista = lista->wczytajZPliku(nazwa_pliku);
-			break;
-		case '6':
-			test = lista->pierwszyElement();
-			n = lista->iloscElementow();
-
-			cout << "Podaj nazwê pliku, w którym maj¹ zostaæ zapisane dane:" << endl;
-			fflush(stdin);
-			cin >> nazwa_pliku;
-			if (!lista->zapisDoPliku(nazwa_pliku, test, n))
-				cout << "Brak dostêpu do pliku." << endl;
-			else
-				cout << "Dane zosta³y pomyœle zapisane w pliku \"" << nazwa_pliku << "\"." << endl;
-			break;
-		case '7':
-			lista->usunElement();
-			break;
-		case '8':
-			lista->przeniesElement(kosz);
-			kosz->wypiszElement();
-			break;
-		case '9':
-			fraza = pom->pobierzFraze();
-			lista->wyszukiwanie(wyniki, fraza);
-			wyniki->wypiszElement();
-			break;
-		case 'a':
-			kwoty = pom->pobierzKwoty();
-			lista->wyszukiwanie(wyniki, kwoty[0], kwoty[1]);
-			wyniki->wypiszElement();
-			break;
-		case 'b':
-			liczba = pom->pobierzLiczbe();
-			lista->wyszukiwanie(wyniki, liczba[0], liczba[1]);
-			wyniki->wypiszElement();
-			break;
-		case 'c':
-			lista->wyszukiwanie(wyniki, sprawny, true);
-			wyniki->wypiszElement();
-			break;
-		case 'd':
-			lista->wyszukiwanie(wyniki, sprawny, false);
-			wyniki->wypiszElement();
-			break;
-		case 'e':
-			lista->wyszukiwanie(wyniki, nowy, true);
-			wyniki->wypiszElement();
-			break;
-		case 'f':
-			lista->wyszukiwanie(wyniki, nowy, false);
-			wyniki->wypiszElement();
-			break;
-		case 'g':
-			lista->sortowanie(wyniki, nazwa);
-			wyniki->poczatekListy();
-			wyniki->wypiszElement();
-			wyniki->nastepnyElement();
-			wyniki->nastepnyElement();
-			break;
-		case 'h':
-			test = new Sprzet;
-			test = test->podajDane();
-			lista->edytujSprzet(test);
-			lista->wypiszElement();
-			break;
-		case 'i':
-			system("cls");
-			menu->opis_glowne();
-			cin.get();
-			break;
-		case 'j':
-			system("cls");
-			menu->opis_zarzadzanie();
-			cin.get();
-			break;
-		case 'k':
-			system("cls");
-			menu->opis_wyszukiwanie();
-			cin.get();
-			break;
-		case 'l':
-			system("cls");
-			menu->opis_sortowanie();
-			cin.get();
-			break;
-		case 'm':
-			system("cls");
-			menu->opis_sprzet();
-			cin.get();
-			break;
-		case 'n':
-			system("cls");
-			menu->opis_kosz();
-			cin.get();
-			break;
-		case 'o':
-			system("cls");
-			menu->opis_wyjscie();
-			cin.get();
-			break;
-		default:
-			break;
-
-		}
-
-	} while (klawisz != 'z');
-
-	return 0;
-}
-*/
 
 int main()
 {
@@ -546,15 +377,21 @@ void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
 	n++;
 }
 
-void ListaSprzetu::edytujSprzet(Sprzet* temp)
+void ListaSprzetu::edytujSprzet()
 {
-	sprzet->nazwa = (temp->nazwa == "") ? sprzet->nazwa : temp->nazwa;
-	sprzet->typ = (temp->typ == "") ? sprzet->typ : temp->typ;
-	sprzet->informacje = (temp->informacje == "") ? sprzet->informacje : temp->informacje;
-	sprzet->sprawny = (temp->sprawny == 2) ? sprzet->sprawny : temp->sprawny;
-	sprzet->nowy = (temp->nowy == 2) ? sprzet->nowy : temp->nowy;
-	sprzet->ilosc = (temp->ilosc == -1) ? sprzet->ilosc : temp->ilosc;
-	sprzet->wartosc = (temp->wartosc == -1) ? sprzet->wartosc : temp->wartosc;
+	if (n)
+	{
+		Sprzet * temp = new Sprzet;
+		temp = temp->podajDane();
+
+		sprzet->nazwa = (temp->nazwa == "") ? sprzet->nazwa : temp->nazwa;
+		sprzet->typ = (temp->typ == "") ? sprzet->typ : temp->typ;
+		sprzet->informacje = (temp->informacje == "") ? sprzet->informacje : temp->informacje;
+		sprzet->sprawny = (temp->sprawny == 2) ? sprzet->sprawny : temp->sprawny;
+		sprzet->nowy = (temp->nowy == 2) ? sprzet->nowy : temp->nowy;
+		sprzet->ilosc = (temp->ilosc == -1) ? sprzet->ilosc : temp->ilosc;
+		sprzet->wartosc = (temp->wartosc == -1) ? sprzet->wartosc : temp->wartosc;
+	}
 }
 
 void ListaSprzetu::poczatekListy()
@@ -601,6 +438,14 @@ void ListaSprzetu::przeniesElement(ListaSprzetu* innaLista)
 	}
 }
 
+void ListaSprzetu::przeniesWszystko(ListaSprzetu* innaLinsta)
+{
+	while (n)
+	{
+		przeniesElement(innaLinsta);
+	}
+}
+
 void ListaSprzetu::usunElement()
 {
 	if (n)
@@ -627,7 +472,12 @@ void ListaSprzetu::usunElement()
 		n--;
 		delete temp;
 	}
+}
 
+void ListaSprzetu::usunWszystkie()
+{
+	while (n) 
+		usunElement();
 }
 
 void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, string tekst)
@@ -750,19 +600,20 @@ void ListaSprzetu::sortowanie(ATR atrybut, bool rosnaco)
 	Sprzet * temp = sprzet;
 	sprzet = temp->kolejny;
 
-
 	while (sprzet)
 	{
 		warunek = sprawdz_warunek(temp, sprzet, atrybut, rosnaco);
-
+			
 		if (warunek)
 		{
 			while (temp)
 			{
 				warunek = sprawdz_warunek(temp, sprzet, atrybut, rosnaco);
-
+					
 				if (warunek)
+				{
 					zamien(temp);
+				}
 
 				sprzet = temp;
 				temp = temp->poprzedni;
@@ -785,12 +636,14 @@ int ListaSprzetu::iloscElementow()
 
 Sprzet * ListaSprzetu::pierwszyElement()
 {
-	while (sprzet->poprzedni)
+	if (n)
 	{
-		sprzet = sprzet->poprzedni;
+		while (sprzet->poprzedni)
+		{
+			sprzet = sprzet->poprzedni;
+		}
 	}
-
-	return sprzet;
+		return sprzet;
 }
 
 ListaSprzetu * ListaSprzetu::wczytajZPliku(string nazwa_pliku)
@@ -898,10 +751,9 @@ void Menu::glowne()
 	char klawisz;
 	Sprzet * test;
 
-	system("cls");
-
 	do
 	{
+		system("cls");
 		opis_glowne();
 
 		cin >> klawisz;
@@ -937,6 +789,7 @@ void Menu::glowne()
 		}
 
 	} while (klawisz != '4');
+
 }
 
 void Menu::zarzadzanieSprzetem()
@@ -971,16 +824,15 @@ void Menu::zarzadzanieSprzetem()
 			break;
 		default:
 			break;
-
 		}
 
 	} while (klawisz != '5');
+
 }
 
 void Menu::sprzet()
 {
 	char klawisz;
-	Sprzet *test;
 
 	do
 	{
@@ -1000,20 +852,23 @@ void Menu::sprzet()
 			lista->nastepnyElement();
 			break;
 		case '3':
-			test = new Sprzet;
-			test = test->podajDane();
-			lista->edytujSprzet(test);
+			lista->edytujSprzet();
 			break;
 		case '4':
 			sortowanie();
 			break;
 		case '5':
 			lista->przeniesElement(kosz);
+			break;
+		case '6':
+			lista->przeniesWszystko(kosz);
+			break;
 		default:
 			break;
 		}
 
-	} while (klawisz != '6');
+	} while (klawisz != '7');
+
 }
 
 void Menu::wyszukiwanie()
@@ -1032,27 +887,10 @@ void Menu::wyszukiwanie()
 
 		cin >> klawisz;
 		cin.ignore();
-		/*
-		cout << "1. ID";
-		pom->gotoxy(x, y++);
-		cout << "2. Tekst";
-		pom->gotoxy(x, y++);
-		cout << "3. Licznoœæ";
-		pom->gotoxy(x, y++);
-		cout << "4. Wartoœæ";
-		pom->gotoxy(x, y++);
-		cout << "5. Nowe przedmioty";
-		pom->gotoxy(x, y++);
-		cout << "6. Sprawne przedmioty";
-		pom->gotoxy(x, y++);
-		cout << "7. U¿ywane przedmioty";
-		pom->gotoxy(x, y++);
-		cout << "8. Uszkodzone przedmioty";
-		*/
+
 		switch (klawisz)
 		{
 		case '1':
-			system("cls");
 			int id;
 			id = pom->pobierzId();
 			lista->wyszukiwanie(wyniki, id);
@@ -1107,11 +945,57 @@ void Menu::sortowanie()
 	char klawisz;
 	bool wybor;
 
+
+	if (lista->iloscElementow())
+	{
+		do
+		{
+			system("cls");
+			lista->wypiszElement();
+			opis_sortowanie();
+
+			cin >> klawisz;
+			cin.ignore();
+
+			switch (klawisz)
+			{
+			case '1':
+				wybor = sortujRosnaco();
+				lista->sortowanie(id, wybor);
+				return;
+			case '2':
+				wybor = sortujRosnaco();
+				lista->sortowanie(nazwa, wybor);
+				return;
+			case '3':
+				wybor = sortujRosnaco();
+				lista->sortowanie(typ, wybor);
+				return;
+			case '4':
+				wybor = sortujRosnaco();
+				lista->sortowanie(wartosc, wybor);
+				return;
+			case '5':
+				wybor = sortujRosnaco();
+				lista->sortowanie(ilosc, wybor);
+				return;
+			default:
+				break;
+			}
+
+		} while (klawisz != '6');
+	}
+}
+
+void Menu::zarzadzanieKoszem()
+{
+	char klawisz;
+
 	do
 	{
 		system("cls");
-		lista->wypiszElement();
-		opis_sortowanie();
+		kosz->wypiszElement();
+		opis_kosz();
 
 		cin >> klawisz;
 		cin.ignore();
@@ -1119,37 +1003,28 @@ void Menu::sortowanie()
 		switch (klawisz)
 		{
 		case '1':
-			wybor = sortujRosnaco();
-			lista->sortowanie(id, wybor);
-			return;
+			kosz->poprzedniElement();
+			break;
 		case '2':
-			wybor = sortujRosnaco();
-			lista->sortowanie(nazwa, wybor);
-			return;
+			kosz->nastepnyElement();
+			break;
 		case '3':
-			wybor = sortujRosnaco();
-			lista->sortowanie(typ, wybor);
-			return;
+			kosz->usunElement();
+			break;
 		case '4':
-			wybor = sortujRosnaco();
-			lista->sortowanie(wartosc, wybor);
-			return;
+			kosz->usunWszystkie();
+			break;
 		case '5':
-			wybor = sortujRosnaco();
-			lista->sortowanie(ilosc, wybor);
-			return;
+			kosz->przeniesElement(lista);
+			break;
+		case '6':
+			kosz->przeniesWszystko(lista);
+			break;
 		default:
 			break;
 		}
 
-	} while (klawisz != '6');
-
-}
-
-void Menu::zarzadzanieKoszem()
-{
-	kosz->wypiszElement();
-	opis_kosz();
+	} while (klawisz != '7');
 }
 
 void Menu::wyjscie()
@@ -1217,14 +1092,16 @@ void Menu::opis_sprzet(int x, int y)
 	cout << "1. Poprzedni";
 	pom->gotoxy((x += 15), y);
 	cout << "2. Nastêpny";
-	pom->gotoxy((x += 15), y);
+	pom->gotoxy((x += 13), y);
 	cout << "3. Edycja";
-	pom->gotoxy((x += 13), y);
+	pom->gotoxy((x += 12), y);
 	cout << "4. Sortuj";
-	pom->gotoxy((x += 13), y);
-	cout << "5. Do kosza";
-	pom->gotoxy((x += 15), y);
-	cout << "6. Powrót";
+	pom->gotoxy((x += 12), y);
+	cout << "5. Usuñ";
+	pom->gotoxy((x += 11), y);
+	cout << "6. Usuñ wszystko";
+	pom->gotoxy((x += 20), y);
+	cout << "7. Powrót";
 	pom->gotoxy(t_x, (y+1));
 	cout << "> ";
 }
