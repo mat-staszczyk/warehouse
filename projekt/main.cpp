@@ -180,7 +180,7 @@ Sprzet::Sprzet(Sprzet & inny)
 	this->sprawny = inny.sprawny;
 	this->nowy = inny.nowy;
 	this->id_produktu = inny.id_produktu;
-	this->pokaz = inny.pokaz;
+	this->pokaz = true;
 }
 
 Sprzet::~Sprzet()
@@ -367,6 +367,7 @@ void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
 	aktualny->wartosc = przedmiot->wartosc;
 	aktualny->sprawny = przedmiot->sprawny;
 	aktualny->nowy = przedmiot->nowy;
+	aktualny->pokaz = true;
 
 	aktualny->kolejny = NULL;
 	if (sprzet) {
@@ -422,30 +423,41 @@ void ListaSprzetu::wypiszElement()
 
 void ListaSprzetu::poprzedniElement()
 {
-	if (n && sprzet->poprzedni)
-		sprzet = sprzet->poprzedni;
-}
+	Sprzet *temp = sprzet;
 
-void ListaSprzetu::listaJestPusta(int x, int y)
-{
-	Pomocnik *pom = new Pomocnik;
-	pom->gotoxy((x+2), (y+6));
-	cout << "Lista jest pusta" << endl;
+	if (n)
+	{
+		do
+		{
+			sprzet = sprzet->poprzedni;
+		} while (sprzet && !sprzet->pokaz);
+	}
+
+	if (!sprzet)
+		sprzet = temp;
 }
 
 void ListaSprzetu::nastepnyElement()
 {
 	Sprzet *temp = sprzet;
+
 	if (n)
 	{
 		do
 		{
 			sprzet = sprzet->kolejny;
-		} while (sprzet && sprzet->pokaz);
+		} while (sprzet && !sprzet->pokaz);
 	}
 
 	if (!sprzet)
 		sprzet = temp;
+}
+
+void ListaSprzetu::listaJestPusta(int x, int y)
+{
+	Pomocnik *pom = new Pomocnik;
+	pom->gotoxy((x + 2), (y + 6));
+	cout << "Lista jest pusta" << endl;
 }
 
 void ListaSprzetu::przeniesElement(ListaSprzetu* innaLista)
@@ -520,7 +532,11 @@ int ListaSprzetu::wyszukiwanie(string tekst)
 
 		sprzet = (sprzet->kolejny);
 	}
-	sprzet = pierwszyWidoczny();
+	sprzet = pierwszyElement();
+
+	if (widoczne)
+		sprzet = pierwszyWidoczny();
+
 	return widoczne;
 }
 
@@ -539,8 +555,11 @@ int ListaSprzetu::wyszukiwanie(int id)
 			
 		sprzet = (sprzet->kolejny);
 	}
+	sprzet = pierwszyElement();
 
-	sprzet = pierwszyWidoczny();
+	if (widoczne)
+		sprzet = pierwszyWidoczny();
+
 	return widoczne;
 }
 
@@ -561,8 +580,11 @@ int ListaSprzetu::wyszukiwanie(double kwota_od, double kwota_do)
 
 		sprzet = (sprzet->kolejny);
 	}
+	sprzet = pierwszyElement();
 
-	sprzet = pierwszyWidoczny();
+	if (widoczne)
+		sprzet = pierwszyWidoczny();
+
 	return widoczne;
 }
 
@@ -582,8 +604,11 @@ int ListaSprzetu::wyszukiwanie(int liczba_od, int liczba_do)
 			
 		sprzet = (sprzet->kolejny);
 	}
+	sprzet = pierwszy;
 
-	sprzet = pierwszyWidoczny();
+	if (widoczne)
+		sprzet = pierwszyWidoczny();
+
 	return widoczne;
 }
 
@@ -616,8 +641,11 @@ int ListaSprzetu::wyszukiwanie(ATR atrybut, bool wartosc)
 
 		sprzet = (sprzet->kolejny);
 	}
+	sprzet = pierwszyElement();
 
-	sprzet = pierwszyWidoczny();
+	if (widoczne)
+		sprzet = pierwszyWidoczny();
+
 	return widoczne;
 }
 
@@ -641,9 +669,9 @@ void ListaSprzetu::zamien(Sprzet * temp)
 void ListaSprzetu::sortowanie(ATR atrybut, bool rosnaco)
 {
 	bool warunek;
-	sprzet = pierwszyElement();
+	sprzet = pierwszyWidoczny();
 	Sprzet * temp = sprzet;
-	sprzet = temp->kolejny;
+	nastepnyElement();
 
 	while (sprzet)
 	{
@@ -661,7 +689,7 @@ void ListaSprzetu::sortowanie(ATR atrybut, bool rosnaco)
 				}
 
 				sprzet = temp;
-				temp = temp->poprzedni;
+				do { temp = temp->poprzedni; } while (temp && !temp->pokaz);
 			}
 		}
 
@@ -681,14 +709,7 @@ int ListaSprzetu::iloscElementow()
 
 Sprzet * ListaSprzetu::pierwszyElement()
 {
-	if (n)
-	{
-		while (sprzet->poprzedni)
-		{
-			sprzet = sprzet->poprzedni;
-		}
-	}
-		return sprzet;
+	return pierwszy;
 }
 
 Sprzet * ListaSprzetu::pierwszyWidoczny()
@@ -963,41 +984,46 @@ void Menu::wyszukiwanie()
 			int id;
 			id = pom->pobierzId();
 			lista->wyszukiwanie(id);
-			wyniki->wypiszElement();
+			sprzet();
 			break;
 		case '2':
 			fraza = pom->pobierzFraze();
 			lista->wyszukiwanie(fraza);
-			wyniki->wypiszElement();
+			sprzet();
 			break;
 		case '3':
 			int * liczby;
 			liczby = pom->pobierzLiczbe();
 			lista->wyszukiwanie(liczby[0], liczby[1]);
-			wyniki->wypiszElement();
+			sprzet();
 			break;
 		case '4':
 			double * kwoty;
 			kwoty = pom->pobierzKwoty();
 			lista->wyszukiwanie(kwoty[0], kwoty[1]);
-			wyniki->wypiszElement();
+			sprzet();
 			break;
 		case '5':
 			lista->wyszukiwanie(nowy, true);
-			wyniki->wypiszElement();
+			sprzet();
 			break;
 		case '6':
 			lista->wyszukiwanie(sprawny, true);
-			wyniki->wypiszElement();
+			sprzet();
+			break;
 		case '7':
 			lista->wyszukiwanie(nowy, false);
-			wyniki->wypiszElement();
+			sprzet();
+			break;
 		case '8':
 			lista->wyszukiwanie(sprawny, false);
-			wyniki->wypiszElement();
+			sprzet();
+			break;
 		default:
 			break;
 		}
+
+		lista->pokazWszystkie();
 
 	} while (klawisz != '9');
 }
