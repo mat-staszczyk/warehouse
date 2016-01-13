@@ -66,7 +66,6 @@ public:
 	ListaSprzetu();
 	ListaSprzetu(bool);
 
-	void pokazMenu();
 	void dodajSprzet(Sprzet*);
 	void edytujSprzet();
 	void poczatekListy();
@@ -330,30 +329,6 @@ ListaSprzetu::ListaSprzetu(bool autonumeracja)
 	pierwszy = NULL;
 	n = 0;
 }
-
-void ListaSprzetu::pokazMenu() {
-	cout << endl << "Menu zarz¹dzania sprzêtem:" << endl
-		<< endl
-		<< "1. Dodaj sprzêt" << endl
-		<< "2. Wyswietl sprzêt" << endl
-		<< "3. Nastepny (test)" << endl
-		<< "4. Poprzedni (test)" << endl
-		<< "5. Wczytaj z pliku" << endl
-		<< "6. Zapis do pliku" << endl
-		<< "7. Usuñ element" << endl
-		<< "8. Przenieœ do kosza" << endl
-		<< "9. Wyszukaj tekst" << endl
-		<< "a. Wyszukaj wartoœæ" << endl
-		<< "b. Wyszukaj licznoœæ" << endl
-		<< "c. Wyœwietl sprawne" << endl
-		<< "d. Wyœwietl uszkodzone" << endl
-		<< "e. Wyœwietl nowe" << endl
-		<< "f. Wyœwietl u¿ywane" << endl
-		<< "g. Sortowanie wg nazwy" << endl
-		<< "h. Edycja elementu" << endl
-		<< "z. WyjdŸ"
-		<< endl;
-};
 
 void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
 {
