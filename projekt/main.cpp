@@ -21,6 +21,8 @@ private:
 	int sprawny;
 	int nowy;
 
+	bool pokaz;
+
 	Sprzet *poprzedni;
 	Sprzet *kolejny;
 
@@ -162,6 +164,7 @@ Sprzet::Sprzet(int ilosc, string nazwa, string typ, string informacje, double wa
 	this->sprawny = sprawny;
 	this->nowy = nowy;
 	this->id_produktu = NULL;
+	this->pokaz = true;
 }
 
 Sprzet::Sprzet(Sprzet & inny)
@@ -174,6 +177,7 @@ Sprzet::Sprzet(Sprzet & inny)
 	this->sprawny = inny.sprawny;
 	this->nowy = inny.nowy;
 	this->id_produktu = inny.id_produktu;
+	this->pokaz = inny.pokaz;
 }
 
 Sprzet::~Sprzet()
