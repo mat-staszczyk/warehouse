@@ -77,14 +77,15 @@ public:
 	void przeniesWszystko(ListaSprzetu*);
 	void usunElement();
 	void usunWszystkie();
-	void wyszukiwanie(ListaSprzetu*, string); // wyszukaj frazê
-	void wyszukiwanie(ListaSprzetu*, int); // wyszukaj id
-	void wyszukiwanie(ListaSprzetu*, double, double); // wyszukaj kwotê
-	void wyszukiwanie(ListaSprzetu*, int, int); // wyszukaj licznoœæ
-	void wyszukiwanie(ListaSprzetu*, ATR, bool); // wyszukaj sprzêt o podanym stanie
+	int wyszukiwanie(string); // wyszukaj frazê
+	int wyszukiwanie(int); // wyszukaj id
+	int wyszukiwanie(double, double); // wyszukaj kwotê
+	int wyszukiwanie(int, int); // wyszukaj licznoœæ
+	int wyszukiwanie(ATR, bool); // wyszukaj sprzêt o podanym stanie
 	void sortowanie(ATR, bool=true);
 
 	Sprzet * pierwszyElement();
+	Sprzet * pierwszyWidoczny();
 	ListaSprzetu * wczytajZPliku(string);
 
 	int iloscElementow();
@@ -432,8 +433,17 @@ void ListaSprzetu::listaJestPusta(int x, int y)
 
 void ListaSprzetu::nastepnyElement()
 {
-	if (n && sprzet->kolejny)
-		sprzet = sprzet->kolejny;
+	Sprzet *temp = sprzet;
+	if (n)
+	{
+		do
+		{
+			sprzet = sprzet->kolejny;
+		} while (sprzet && sprzet->pokaz);
+	}
+
+	if (!sprzet)
+		sprzet = temp;
 }
 
 void ListaSprzetu::przeniesElement(ListaSprzetu* innaLista)
@@ -488,76 +498,97 @@ void ListaSprzetu::usunWszystkie()
 		usunElement();
 }
 
-void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, string tekst)
+int ListaSprzetu::wyszukiwanie(string tekst)
 {
-	Sprzet *temp = sprzet;
 	Pomocnik * przeszukiwacz = new Pomocnik;
 	sprzet = pierwszyElement();
+	int licznik = n;
 
 	while (sprzet)
 	{
 		string nazwa = sprzet->nazwa, rodzaj = sprzet->typ, info = sprzet->informacje;
 
-		if (przeszukiwacz->czyZawieraFraze(nazwa, tekst) || przeszukiwacz->czyZawieraFraze(rodzaj, tekst) ||
-			przeszukiwacz->czyZawieraFraze(info, tekst))
-			wyniki->dodajSprzet(sprzet);
+		if (!(przeszukiwacz->czyZawieraFraze(nazwa, tekst) || przeszukiwacz->czyZawieraFraze(rodzaj, tekst) ||
+			przeszukiwacz->czyZawieraFraze(info, tekst)))
+		{
+			sprzet->pokaz = false;
+			licznik--;
+		}
+			
 
 		sprzet = (sprzet->kolejny);
 	}
-	sprzet = temp;
+	sprzet = pierwszyWidoczny();
+	return licznik;
 }
 
-void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, int id)
+int ListaSprzetu::wyszukiwanie(int id)
 {
-	Sprzet *temp = sprzet;
+	int licznik = n;
 	sprzet = pierwszyElement();
 
 	while (sprzet)
 	{
-		if (sprzet->id_produktu == id)
-			wyniki->dodajSprzet(sprzet);
-
+		if (sprzet->id_produktu != id)
+		{
+			sprzet->pokaz = false;
+			licznik--;
+		}
+			
 		sprzet = (sprzet->kolejny);
 	}
-	sprzet = temp;
+
+	sprzet = pierwszyWidoczny();
+	return licznik;
 }
 
-void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, double kwota_od, double kwota_do)
+int ListaSprzetu::wyszukiwanie(double kwota_od, double kwota_do)
 {
-	Sprzet *temp = sprzet;
+	int licznik = n;
 	sprzet = pierwszyElement();
 
 	while (sprzet)
 	{
 		double wartosc = sprzet->wartosc;
-		if (wartosc >= kwota_od && wartosc <= kwota_do)
-			wyniki->dodajSprzet(sprzet);
+		if (!(wartosc >= kwota_od && wartosc <= kwota_do))
+		{
+			sprzet->pokaz = false;
+			licznik--;
+		}
+			
 
 		sprzet = (sprzet->kolejny);
 	}
-	sprzet = temp;
+
+	sprzet = pierwszyWidoczny();
+	return licznik;
 }
 
-void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, int liczba_od, int liczba_do)
+int ListaSprzetu::wyszukiwanie(int liczba_od, int liczba_do)
 {
-	Sprzet *temp = sprzet;
+	int licznik = n;
 	sprzet = pierwszyElement();
 
 	while (sprzet)
 	{
 		int ilosc = sprzet->ilosc;
-		if (ilosc >= liczba_od && ilosc <= liczba_do)
-			wyniki->dodajSprzet(sprzet);
-
+		if (!(ilosc >= liczba_od && ilosc <= liczba_do))
+		{
+			sprzet->pokaz = false;
+			licznik--;
+		}
+			
 		sprzet = (sprzet->kolejny);
 	}
-	sprzet = temp;
+
+	sprzet = pierwszyWidoczny();
+	return licznik;
 }
 
-void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, ATR atrybut, bool wartosc)
+int ListaSprzetu::wyszukiwanie(ATR atrybut, bool wartosc)
 {
 	int warunek;
-	Sprzet *temp = sprzet;
+	int licznik = n;
 	sprzet = pierwszyElement();
 
 	while (sprzet)
@@ -575,13 +606,17 @@ void ListaSprzetu::wyszukiwanie(ListaSprzetu* wyniki, ATR atrybut, bool wartosc)
 			break;
 		}
 
-		if (warunek == 1)
-			wyniki->dodajSprzet(sprzet);
+		if (warunek != 1)
+		{
+			sprzet->pokaz = false;
+			licznik--;
+		}
 
 		sprzet = (sprzet->kolejny);
 	}
 
-	sprzet = temp;
+	sprzet = pierwszyWidoczny();
+	return licznik;
 }
 
 void ListaSprzetu::zamien(Sprzet * temp)
@@ -652,6 +687,17 @@ Sprzet * ListaSprzetu::pierwszyElement()
 		}
 	}
 		return sprzet;
+}
+
+Sprzet * ListaSprzetu::pierwszyWidoczny()
+{
+	sprzet = pierwszyElement();
+	while (!sprzet->pokaz)
+	{
+		sprzet = sprzet->kolejny;
+	}
+
+	return sprzet;
 }
 
 ListaSprzetu * ListaSprzetu::wczytajZPliku(string nazwa_pliku)
@@ -750,7 +796,6 @@ Menu::Menu()
 {
 	lista = new ListaSprzetu;
 	kosz = new ListaSprzetu(false);
-	wyniki = new ListaSprzetu(false);
 }
 
 void Menu::glowne()
@@ -901,38 +946,38 @@ void Menu::wyszukiwanie()
 		case '1':
 			int id;
 			id = pom->pobierzId();
-			lista->wyszukiwanie(wyniki, id);
+			lista->wyszukiwanie(id);
 			wyniki->wypiszElement();
 			break;
 		case '2':
 			fraza = pom->pobierzFraze();
-			lista->wyszukiwanie(wyniki, fraza);
+			lista->wyszukiwanie(fraza);
 			wyniki->wypiszElement();
 			break;
 		case '3':
 			int * liczby;
 			liczby = pom->pobierzLiczbe();
-			lista->wyszukiwanie(wyniki, liczby[0], liczby[1]);
+			lista->wyszukiwanie(liczby[0], liczby[1]);
 			wyniki->wypiszElement();
 			break;
 		case '4':
 			double * kwoty;
 			kwoty = pom->pobierzKwoty();
-			lista->wyszukiwanie(wyniki, kwoty[0], kwoty[1]);
+			lista->wyszukiwanie(kwoty[0], kwoty[1]);
 			wyniki->wypiszElement();
 			break;
 		case '5':
-			lista->wyszukiwanie(wyniki, nowy, true);
+			lista->wyszukiwanie(nowy, true);
 			wyniki->wypiszElement();
 			break;
 		case '6':
-			lista->wyszukiwanie(wyniki, sprawny, true);
+			lista->wyszukiwanie(sprawny, true);
 			wyniki->wypiszElement();
 		case '7':
-			lista->wyszukiwanie(wyniki, nowy, false);
+			lista->wyszukiwanie(nowy, false);
 			wyniki->wypiszElement();
 		case '8':
-			lista->wyszukiwanie(wyniki, sprawny, false);
+			lista->wyszukiwanie(sprawny, false);
 			wyniki->wypiszElement();
 		default:
 			break;
