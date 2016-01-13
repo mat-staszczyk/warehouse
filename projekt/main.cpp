@@ -46,6 +46,7 @@ private:
 	Sprzet * sprzet;
 	Sprzet * pierwszy;
 	int n = 0;
+	int widoczne = 0;
 	bool autonumeracja;
 
 public:
@@ -77,6 +78,7 @@ public:
 	void przeniesWszystko(ListaSprzetu*);
 	void usunElement();
 	void usunWszystkie();
+	void pokazWszystkie();
 	int wyszukiwanie(string); // wyszukaj frazê
 	int wyszukiwanie(int); // wyszukaj id
 	int wyszukiwanie(double, double); // wyszukaj kwotê
@@ -502,7 +504,7 @@ int ListaSprzetu::wyszukiwanie(string tekst)
 {
 	Pomocnik * przeszukiwacz = new Pomocnik;
 	sprzet = pierwszyElement();
-	int licznik = n;
+	widoczne = n;
 
 	while (sprzet)
 	{
@@ -512,19 +514,19 @@ int ListaSprzetu::wyszukiwanie(string tekst)
 			przeszukiwacz->czyZawieraFraze(info, tekst)))
 		{
 			sprzet->pokaz = false;
-			licznik--;
+			widoczne--;
 		}
 			
 
 		sprzet = (sprzet->kolejny);
 	}
 	sprzet = pierwszyWidoczny();
-	return licznik;
+	return widoczne;
 }
 
 int ListaSprzetu::wyszukiwanie(int id)
 {
-	int licznik = n;
+	widoczne = n;
 	sprzet = pierwszyElement();
 
 	while (sprzet)
@@ -532,19 +534,19 @@ int ListaSprzetu::wyszukiwanie(int id)
 		if (sprzet->id_produktu != id)
 		{
 			sprzet->pokaz = false;
-			licznik--;
+			widoczne--;
 		}
 			
 		sprzet = (sprzet->kolejny);
 	}
 
 	sprzet = pierwszyWidoczny();
-	return licznik;
+	return widoczne;
 }
 
 int ListaSprzetu::wyszukiwanie(double kwota_od, double kwota_do)
 {
-	int licznik = n;
+	widoczne = n;
 	sprzet = pierwszyElement();
 
 	while (sprzet)
@@ -553,7 +555,7 @@ int ListaSprzetu::wyszukiwanie(double kwota_od, double kwota_do)
 		if (!(wartosc >= kwota_od && wartosc <= kwota_do))
 		{
 			sprzet->pokaz = false;
-			licznik--;
+			widoczne--;
 		}
 			
 
@@ -561,12 +563,12 @@ int ListaSprzetu::wyszukiwanie(double kwota_od, double kwota_do)
 	}
 
 	sprzet = pierwszyWidoczny();
-	return licznik;
+	return widoczne;
 }
 
 int ListaSprzetu::wyszukiwanie(int liczba_od, int liczba_do)
 {
-	int licznik = n;
+	widoczne = n;
 	sprzet = pierwszyElement();
 
 	while (sprzet)
@@ -575,20 +577,20 @@ int ListaSprzetu::wyszukiwanie(int liczba_od, int liczba_do)
 		if (!(ilosc >= liczba_od && ilosc <= liczba_do))
 		{
 			sprzet->pokaz = false;
-			licznik--;
+			widoczne--;
 		}
 			
 		sprzet = (sprzet->kolejny);
 	}
 
 	sprzet = pierwszyWidoczny();
-	return licznik;
+	return widoczne;
 }
 
 int ListaSprzetu::wyszukiwanie(ATR atrybut, bool wartosc)
 {
 	int warunek;
-	int licznik = n;
+	widoczne = n;
 	sprzet = pierwszyElement();
 
 	while (sprzet)
@@ -609,14 +611,14 @@ int ListaSprzetu::wyszukiwanie(ATR atrybut, bool wartosc)
 		if (warunek != 1)
 		{
 			sprzet->pokaz = false;
-			licznik--;
+			widoczne--;
 		}
 
 		sprzet = (sprzet->kolejny);
 	}
 
 	sprzet = pierwszyWidoczny();
-	return licznik;
+	return widoczne;
 }
 
 void ListaSprzetu::zamien(Sprzet * temp)
@@ -754,6 +756,20 @@ int ListaSprzetu::zapisDoPliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
 
 	return 1;
 }
+
+void ListaSprzetu::pokazWszystkie()
+{
+	sprzet = pierwszyElement();
+	while (sprzet)
+	{
+		sprzet->pokaz = true;
+		sprzet = sprzet->kolejny;
+	}
+
+	widoczne = n;
+	sprzet = pierwszyElement();
+}
+
 
 bool ListaSprzetu::sprawdz_warunek(Sprzet *temp, Sprzet *sprzet, ATR atrybut, bool rosnaco)
 {
