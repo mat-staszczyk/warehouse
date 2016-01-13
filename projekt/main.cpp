@@ -197,9 +197,9 @@ Sprzet* Sprzet::podajDane(int x, int y)
 	pom->gotoxy(x, (y += 2));
 	cout << "Rodzaj: ";
 	pom->gotoxy(x, (y += 2));
-	cout << "Wartoœæ: ";
-	pom->gotoxy(x, (y += 2));
 	cout << "Iloœæ: ";
+	pom->gotoxy(x, (y += 2));
+	cout << "Wartoœæ: ";
 	pom->gotoxy(x, (y += 2));
 	cout << "Sprawny? (t/n):";
 	pom->gotoxy(x, (y += 2));
@@ -217,33 +217,37 @@ Sprzet* Sprzet::podajDane(int x, int y)
 
 	while (flaga)
 	{
-		pom->gotoxy(t_x, (t_y+=2));
-		fflush(stdin);
-		getline(cin, s_temp);
-		if (s_temp == "\n") {
-			wartosc = -1;
-			flaga = false;
-		} else {
-			wartosc = atof(s_temp.c_str());
-			flaga = (wartosc >= 0) ? false : true;
-		}
-	}
-	s_temp = "";
-	flaga = true;
-
-	while (flaga)
-	{
-		pom->gotoxy(t_x, (t_y+=2));
+		pom->gotoxy(t_x, (t_y += 2));
 		fflush(stdin);
 		getline(cin, s_temp);
 		if (s_temp == "\n") {
 			ilosc = -1;
 			flaga = false;
-		} else {
+		}
+		else {
 			ilosc = atoi(s_temp.c_str());
 			flaga = (ilosc >= 0) ? false : true;
 		}
 	}
+
+	s_temp = "";
+	flaga = true;
+
+	while (flaga)
+	{
+		pom->gotoxy(t_x, (t_y += 2));
+		fflush(stdin);
+		getline(cin, s_temp);
+		if (s_temp == "\n") {
+			wartosc = -1;
+			flaga = false;
+		}
+		else {
+			wartosc = atof(s_temp.c_str());
+			flaga = (wartosc >= 0) ? false : true;
+		}
+	}
+
 	if (s_temp == "\n")
 	{
 		s_temp = "";
