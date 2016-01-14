@@ -45,6 +45,7 @@ private:
 
 	Sprzet * sprzet;
 	Sprzet * pierwszy;
+	Sprzet * ostatni;
 	int n = 0;
 	int widoczne = 0;
 	bool autonumeracja;
@@ -69,6 +70,7 @@ public:
 	void dodajSprzet(Sprzet*);
 	void edytujSprzet();
 	void poczatekListy();
+	void koniecListy();
 	void wypiszElement();
 	void listaJestPusta(int = XX, int = YY);
 	void nastepnyElement();
@@ -86,6 +88,7 @@ public:
 	void sortowanie(ATR, bool = true);
 
 	Sprzet * pierwszyElement();
+	Sprzet * ostatniElement();
 	Sprzet * pierwszyWidoczny();
 	ListaSprzetu * wczytajZPliku(string);
 

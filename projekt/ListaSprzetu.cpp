@@ -32,15 +32,17 @@ void ListaSprzetu::dodajSprzet(Sprzet * przedmiot)
 
 	aktualny->kolejny = NULL;
 	if (sprzet) {
+		koniecListy();
 		sprzet->kolejny = aktualny;
 		aktualny->poprzedni = sprzet;
 		aktualny->id_produktu = (sprzet->id_produktu) + 1;
+		ostatni = aktualny;
 	}
 	else {
 		przedmiot = aktualny;
 		przedmiot->poprzedni = NULL;
 		aktualny->id_produktu = 1;
-		pierwszy = przedmiot;
+		ostatni = pierwszy = przedmiot;
 	}
 	if (autonumeracja == false) {
 		aktualny->id_produktu = id_przedmiotu;
@@ -67,9 +69,25 @@ void ListaSprzetu::edytujSprzet()
 	}
 }
 
+
+Sprzet * ListaSprzetu::pierwszyElement()
+{
+	return pierwszy;
+}
+
+Sprzet * ListaSprzetu::ostatniElement()
+{
+	return ostatni;
+}
+
 void ListaSprzetu::poczatekListy()
 {
 	sprzet = pierwszyElement();
+}
+
+void ListaSprzetu::koniecListy()
+{
+	sprzet = ostatniElement();
 }
 
 void ListaSprzetu::wypiszElement()
@@ -366,11 +384,6 @@ void ListaSprzetu::sortowanie(ATR atrybut, bool rosnaco)
 int ListaSprzetu::iloscElementow()
 {
 	return n;
-}
-
-Sprzet * ListaSprzetu::pierwszyElement()
-{
-	return pierwszy;
 }
 
 Sprzet * ListaSprzetu::pierwszyWidoczny()

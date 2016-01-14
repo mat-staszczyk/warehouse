@@ -23,6 +23,7 @@ int Menu::glowne()
 		switch (klawisz)
 		{
 		case '1':
+			lista->poczatekListy();
 			zarzadzanieSprzetem();
 			break;
 		case '2':
