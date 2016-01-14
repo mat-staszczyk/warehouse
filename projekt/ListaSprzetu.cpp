@@ -72,11 +72,27 @@ void ListaSprzetu::edytujSprzet()
 
 Sprzet * ListaSprzetu::pierwszyElement()
 {
+	if (n)
+	{
+		if (pierwszy->poprzedni)
+		{
+			while (pierwszy->poprzedni)
+				pierwszy = pierwszy->poprzedni;
+		}
+	}
 	return pierwszy;
 }
 
 Sprzet * ListaSprzetu::ostatniElement()
 {
+	if (n)
+	{
+		if (ostatni->kolejny)
+		{
+			while (ostatni->kolejny)
+				ostatni = ostatni->kolejny;
+		}
+	}
 	return ostatni;
 }
 

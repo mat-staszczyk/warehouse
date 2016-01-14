@@ -295,6 +295,29 @@ void Menu::zarzadzanieKoszem()
 	} while (klawisz != '7');
 }
 
+bool Menu::sortujRosnaco()
+{
+	char klawisz;
+
+	do
+	{
+		opis_kierunekSortowania();
+		cin >> klawisz;
+		cin.ignore();
+
+		switch (klawisz)
+		{
+		case '1':
+			return true;
+		case '2':
+			return false;
+		default:
+			break;
+		}
+
+	} while (true);
+}
+
 void Menu::wyjscie()
 {
 
@@ -450,29 +473,6 @@ void Menu::opis_kierunekSortowania(int x, int y)
 	cout << "2. Malej¹co";
 	pom->gotoxy(x, ++y);
 	cout << "> ";
-}
-
-bool Menu::sortujRosnaco()
-{
-	char klawisz;
-
-	do
-	{
-		opis_kierunekSortowania();
-		cin >> klawisz;
-		cin.ignore();
-
-		switch (klawisz)
-		{
-		case '1':
-			return true;
-		case '2':
-			return false;
-		default:
-			break;
-		}
-
-	} while (true);
 }
 
 void Menu::opis_kosz(int x, int y)
