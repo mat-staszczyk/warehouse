@@ -106,6 +106,17 @@ int Pomocnik::pobierzId(int x, int y)
 	return id;
 }
 
+string Pomocnik::podajNazwe()
+{
+	string nazwa_pliku;
+
+	cout << "Podaj nazwê pliku, w którym maj¹ zostaæ zapisane dane:" << endl;
+	fflush(stdin);
+	cin >> nazwa_pliku;
+
+	return nazwa_pliku;
+}
+
 void Pomocnik::gotoxy(int x, int y)
 {
 	COORD c;

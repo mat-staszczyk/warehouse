@@ -9,5 +9,5 @@ int main()
 
 	menu->glowne();
 
-	return EXIT_FAILURE;
+	return EXIT_SUCCESS;
 }

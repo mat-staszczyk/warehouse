@@ -6,11 +6,13 @@ Menu::Menu()
 	kosz = new ListaSprzetu(false);
 }
 
-int Menu::glowne()
+void Menu::glowne()
 {
 	string nazwa_pliku;
+	bool koniec = false;
 	char klawisz;
 	Sprzet * test;
+	Pomocnik * pom = new Pomocnik;
 
 	do
 	{
@@ -36,23 +38,21 @@ int Menu::glowne()
 			int n;
 			test = lista->pierwszyElement();
 			n = lista->iloscElementow();
+			nazwa_pliku = pom->podajNazwe();
 
-			cout << "Podaj nazwê pliku, w którym maj¹ zostaæ zapisane dane:" << endl;
-			fflush(stdin);
-			cin >> nazwa_pliku;
 			if (!lista->zapisDoPliku(nazwa_pliku, test, n))
 				cout << "Brak dostêpu do pliku." << endl;
 			else
 				cout << "Dane zosta³y pomyœle zapisane w pliku \"" << nazwa_pliku << "\"." << endl;
 			break;
+		case '4':
+			koniec = wyjscie();
 		default:
 			break;
 
 		}
 
-	} while (klawisz != '4');
-
-	return EXIT_SUCCESS;
+	} while (!koniec);
 }
 
 void Menu::zarzadzanieSprzetem()
@@ -318,9 +318,50 @@ bool Menu::sortujRosnaco()
 	} while (true);
 }
 
-void Menu::wyjscie()
+bool Menu::wyjscie()
 {
+	Sprzet *test;
+	string nazwa_pliku;
+	Pomocnik * pom = new Pomocnik;
 
+	char klawisz;
+
+	do
+	{
+		system("cls");
+		opis_wyjscie();
+		cin >> klawisz;
+		cin.ignore();
+
+		switch (klawisz)
+		{
+		case '1':
+			int n;
+			test = lista->pierwszyElement();
+			n = lista->iloscElementow();
+			nazwa_pliku = pom->podajNazwe();
+
+			if (!lista->zapisDoPliku(nazwa_pliku, test, n)) {
+				cout << "Brak dostêpu do pliku." << endl;
+				getchar();
+				getchar();
+				return false;
+			} 
+			else {
+				cout << "Dane zosta³y pomyœle zapisane w pliku \"" << nazwa_pliku << "\"." << endl;
+				getchar();
+				getchar();
+				return true;
+			}
+		case '2':
+				return true;
+		default:
+			break;
+		}
+
+	} while (klawisz != '3');
+
+	return false;
 }
 
 void Menu::opis_glowne(int x, int y)

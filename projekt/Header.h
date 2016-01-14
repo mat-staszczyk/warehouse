@@ -107,13 +107,13 @@ public:
 
 	Menu();
 
-	int glowne();
+	void glowne();
 	void zarzadzanieSprzetem();
 	void sprzet();
 	void wyszukiwanie();
 	void sortowanie();
 	void zarzadzanieKoszem();
-	void wyjscie();
+	bool wyjscie();
 
 	void opis_glowne(int = XX, int = YY);
 	void opis_zarzadzanie(int = XX, int = YY);
@@ -132,6 +132,7 @@ class Pomocnik
 public:
 
 	string tlumaczKod(int);
+	string podajNazwe();
 	string pobierzFraze(int = XX, int = YY);
 	double * pobierzKwoty(int = XX, int = YY);
 	int * pobierzLiczbe(int = XX, int = YY);
