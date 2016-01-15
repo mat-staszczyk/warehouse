@@ -360,7 +360,6 @@ void ListaSprzetu::zamien(Sprzet * temp)
 
 }
 
-
 void ListaSprzetu::sortowanie(ATR atrybut, bool rosnaco)
 {
 	bool warunek;
@@ -395,7 +394,6 @@ void ListaSprzetu::sortowanie(ATR atrybut, bool rosnaco)
 	sprzet = temp;
 	sprzet = pierwszyElement();
 }
-
 
 int ListaSprzetu::iloscElementow()
 {
@@ -480,7 +478,6 @@ void ListaSprzetu::pokazWszystkie()
 	widoczne = n;
 	sprzet = pierwszyElement();
 }
-
 
 bool ListaSprzetu::sprawdz_warunek(Sprzet *temp, Sprzet *sprzet, ATR atrybut, bool rosnaco)
 {

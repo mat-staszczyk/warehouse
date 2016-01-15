@@ -35,6 +35,7 @@ public:
 	~Sprzet();
 
 	Sprzet *podajDane(int = XX, int = YY);
+	void etykietyDanych(int x = XX, int y = YY);
 	void wypiszDane(int = XX, int = YY);
 };
 

@@ -44,23 +44,7 @@ Sprzet* Sprzet::podajDane(int x, int y)
 	Sprzet * biezacy;
 	Pomocnik * pom = new Pomocnik;
 
-	pom->gotoxy(x, y++);
-	cout << "Podaj dane przedmiotu:";
-	pom->gotoxy(x, (y += 4));
-	cout << "Nazwa:";
-	pom->gotoxy(x, (y += 2));
-	cout << "Rodzaj: ";
-	pom->gotoxy(x, (y += 2));
-	cout << "Iloœæ: ";
-	pom->gotoxy(x, (y += 2));
-	cout << "Wartoœæ: ";
-	pom->gotoxy(x, (y += 2));
-	cout << "Sprawny? (t/n):";
-	pom->gotoxy(x, (y += 2));
-	cout << "Nowy? (t/n):";
-	pom->gotoxy(x, (y += 2));
-	cout << "Informacje: ";
-
+	etykietyDanych();
 
 	pom->gotoxy(t_x, t_y);
 	fflush(stdin);
@@ -132,6 +116,28 @@ Sprzet* Sprzet::podajDane(int x, int y)
 	biezacy = new Sprzet(ilosc, nazwa, typ, info, wartosc, sprawny, nowy);
 
 	return biezacy;
+}
+
+void Sprzet::etykietyDanych(int x, int y)
+{
+	Pomocnik *pom = new Pomocnik;
+
+	pom->gotoxy(x, y++);
+	cout << "Podaj dane przedmiotu:";
+	pom->gotoxy(x, (y += 4));
+	cout << "Nazwa:";
+	pom->gotoxy(x, (y += 2));
+	cout << "Rodzaj: ";
+	pom->gotoxy(x, (y += 2));
+	cout << "Iloœæ: ";
+	pom->gotoxy(x, (y += 2));
+	cout << "Wartoœæ: ";
+	pom->gotoxy(x, (y += 2));
+	cout << "Sprawny? (t/n):";
+	pom->gotoxy(x, (y += 2));
+	cout << "Nowy? (t/n):";
+	pom->gotoxy(x, (y += 2));
+	cout << "Informacje: ";
 }
 
 void Sprzet::wypiszDane(int x, int y)
