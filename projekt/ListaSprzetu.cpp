@@ -419,6 +419,7 @@ ListaSprzetu * ListaSprzetu::wczytajZPliku(string nazwa_pliku)
 	string nazwa, typ, info;
 
 	ifstream plik;
+	nazwa_pliku += ".mdat";
 	plik.open(nazwa_pliku.c_str(), ios::in | ios::binary);
 
 	plik.read((char*)&n, sizeof(n));

@@ -113,6 +113,7 @@ string Pomocnik::podajNazwe()
 	cout << "Podaj nazwê pliku, w którym maj¹ zostaæ zapisane dane:" << endl;
 	fflush(stdin);
 	cin >> nazwa_pliku;
+	nazwa_pliku += ".mdat";
 
 	return nazwa_pliku;
 }
