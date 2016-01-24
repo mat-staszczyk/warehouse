@@ -420,7 +420,7 @@ ListaSprzetu * ListaSprzetu::wczytajZPliku(string nazwa_pliku)
 
 	ifstream plik;
 	nazwa_pliku += ".mdat";
-	plik.open(nazwa_pliku.c_str(), ios::in | ios::binary);
+	plik.open(nazwa_pliku.c_str(), (ios::in|ios::binary));
 
 	plik.read((char*)&n, sizeof(n));
 	Sprzet *temp = new Sprzet;
@@ -450,21 +450,24 @@ ListaSprzetu * ListaSprzetu::wczytajZPliku(string nazwa_pliku)
 
 int ListaSprzetu::zapisDoPliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
 {
-	ofstream plik;
-	plik.open(nazwa_pliku.c_str(), (ios::out | ios::binary));
+	if (n)
+	{
+		ofstream plik;
+		plik.open(nazwa_pliku.c_str(), (ios::out | ios::binary)); // trunc?
 
-	if (!plik)
-		return 0;
+		if (!plik)
+			return 0;
 
-	plik.write((char*)&rozmiar, sizeof(rozmiar));
+		plik.write((char*)&rozmiar, sizeof(rozmiar));
 
-	do {
-		plik.write((char*)sprzet, sizeof(Sprzet));
-	} while ((sprzet = sprzet->kolejny));
+		do {
+			plik.write((char*)sprzet, sizeof(Sprzet));
+		} while ((sprzet = sprzet->kolejny));
 
-	plik.close();
+		plik.close();
 
-	return 1;
+		return 1;
+	}
 }
 
 void ListaSprzetu::pokazWszystkie()

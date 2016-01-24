@@ -4,6 +4,7 @@ Menu::Menu()
 {
 	lista = new ListaSprzetu;
 	kosz = new ListaSprzetu(false);
+	lista = lista->wczytajZPliku("magazyn.mdat");
 }
 
 void Menu::glowne()
@@ -91,6 +92,7 @@ void Menu::zarzadzanieSprzetem()
 
 	} while (klawisz != '5');
 
+	lista->zapisDoPliku("magazyn.mdat", (lista->pierwszyElement()), (lista->iloscElementow()));
 }
 
 void Menu::sprzet()
