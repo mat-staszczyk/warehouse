@@ -1,11 +1,10 @@
 #Warehouse
 
-#Projekt zaliczeniowy
-na 3:
+##Projekt zaliczeniowy
 
-* [x] Stworzyć nowy plik w miejsce dotychczasowego
-* [x] dopisywać nowy rekord na koniec, musi umieć przeglądać bazę po 1 rekordzie w przód i w tył (nie listing (for, cout)
-* edycja (poprawienie rekordu bieżącego)
+* [x] stworzyć nowy plik w miejsce dotychczasowego
+* [x] dopisywać nowy rekord na koniec, musi umieć przeglądać bazę po 1 rekordzie w przód i w tył
+* [x] edycja (poprawienie rekordu bieżącego)
 * [x] usuwanie rekordu bieżącego
 * [x] zapis bazy danych
 * [x] otwarcie istniejącego pliku
@@ -13,16 +12,12 @@ na 3:
 		1. tekstowe
 		2. numeryczne
 * [x] sortowanie
+* [x] menu
 
-Dodatki:
+##Dodatki:
 
-* Praca z wieloma plikami (osobno - z jednym wybranym) lub jednocześnie
-* Usuwanie grupowe (stare faktury, przeterm. towar)
-* Instytucja kosza (z obsługą)
-* Wyszukiwanie wielokryterialne
+* [x] Praca z wieloma plikami (osobno - z jednym wybranym) lub jednocześnie
+* [x] usuwanie grupowe (stare faktury, przeterm. towar)
+* [x] instytucja kosza (z obsługą)
 * [x] Nałożenie filtra na bazę (toggle)
 * Zabezpieczenia danych
-
-Założenia:
-* Liczba pól danych - MINIMUM 5-7
-* Menu
