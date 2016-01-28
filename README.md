@@ -2,7 +2,7 @@
 
 ##Projekt zaliczeniowy
 
-* [x] stworzyć nowy plik w miejsce dotychczasowego
+* [] stworzyć nowy plik w miejsce dotychczasowego
 * [x] dopisywać nowy rekord na koniec, musi umieć przeglądać bazę po 1 rekordzie w przód i w tył
 * [x] edycja (poprawienie rekordu bieżącego)
 * [x] usuwanie rekordu bieżącego
@@ -16,8 +16,8 @@
 
 ##Dodatki:
 
-* [x] Praca z wieloma plikami (osobno - z jednym wybranym) lub jednocześnie
-* [x] usuwanie grupowe (stare faktury, przeterm. towar)
+* [x] praca z wieloma plikami osobno (z jednym wybranym) lub jednocześnie
+* [x] usuwanie grupowe (uszkodzony sprzęt)
 * [x] instytucja kosza (z obsługą)
-* [x] Nałożenie filtra na bazę (toggle)
-* Zabezpieczenia danych
+* [x] nałożenie filtra na bazę (toggle)
+* [] zabezpieczenia danych
