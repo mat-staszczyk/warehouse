@@ -1,23 +1,22 @@
 #Warehouse
 
-##Projekt zaliczeniowy
+##Podstawowe funkcje:
 
-* [ ] stworzyć nowy plik w miejsce dotychczasowego
-* [x] dopisywać nowy rekord na koniec, musi umieć przeglądać bazę po 1 rekordzie w przód i w tył
-* [x] edycja (poprawienie rekordu bieżącego)
-* [x] usuwanie rekordu bieżącego
-* [x] zapis bazy danych
-* [x] otwarcie istniejącego pliku
-* [x] wyszukiwanie wg dwóch kryteriów:
-	1. tekstowe
-	2. numeryczne
-* [x] sortowanie
-* [x] menu
+* [ ] Zapis danych do pliku
+* [x] Wczytywanie danych z pliku
+* [x] Dodawanie nowego rekordu
+* [x] Edycja (poprawienie rekordu bieżącego)
+* [x] Usuwanie rekordu bieżącego
+* [x] Wyszukiwanie wg różnych kryteriów:
+	1. tekstowych
+	2. numerycznych
+* [x] Sortowanie
+* [x] Wielopoziomowe menu
 
 ##Dodatki:
 
-* [x] praca z wieloma plikami osobno (z jednym wybranym) lub jednocześnie
-* [x] usuwanie grupowe (uszkodzony sprzęt)
-* [x] instytucja kosza (z obsługą)
-* [x] nałożenie filtra na bazę (toggle)
+* [x] Praca z wieloma plikami osobno (z jednym wybranym) lub jednocześnie
+* [x] Instytucja kosza (z obsługą)
+* [x] Nałożenie filtra na bazę (toggle)
+* [x] Usuwanie grupowe (np. uszkodzony sprzęt)
 * [ ] zabezpieczenia danych
