@@ -1,4 +1,4 @@
-#Warehouse
+#Warehouse management system
 
 ##Podstawowe funkcje:
 
