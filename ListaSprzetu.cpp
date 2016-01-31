@@ -453,7 +453,7 @@ int ListaSprzetu::zapisDoPliku(string nazwa_pliku, Sprzet *sprzet, int rozmiar)
 	if (n)
 	{
 		ofstream plik;
-		plik.open(nazwa_pliku.c_str(), (ios::out | ios::binary)); // trunc?
+		plik.open(nazwa_pliku.c_str(), (ios::out | ios::trunc | ios::binary));
 
 		if (!plik)
 			return 0;
