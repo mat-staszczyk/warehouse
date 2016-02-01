@@ -2,7 +2,7 @@
 
 ##Podstawowe funkcje:
 
-* [ ] Zapis danych do pliku
+* [x] Automatyczny zapis danych do pliku
 * [x] Wczytywanie danych z pliku
 * [x] Dodawanie nowego rekordu
 * [x] Edycja (poprawienie rekordu bieżącego)
@@ -19,4 +19,3 @@
 * [x] Instytucja kosza (z obsługą)
 * [x] Nałożenie filtra na bazę (toggle)
 * [x] Usuwanie grupowe (np. uszkodzony sprzęt)
-* [ ] zabezpieczenia danych
