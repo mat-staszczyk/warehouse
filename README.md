@@ -1,21 +1,20 @@
 #Warehouse management system
 
-##Podstawowe funkcje:
+Simple CRUD application created as a C++ OOD training.
 
-* [x] Automatyczny zapis danych do pliku
-* [x] Wczytywanie danych z pliku
-* [x] Dodawanie nowego rekordu
-* [x] Edycja (poprawienie rekordu bieżącego)
-* [x] Usuwanie rekordu bieżącego
-* [x] Wyszukiwanie wg różnych kryteriów:
-	1. tekstowych
-	2. numerycznych
-* [x] Sortowanie
-* [x] Wielopoziomowe menu
+##Main features:
 
-##Dodatki:
-
-* [x] Praca z wieloma plikami osobno (z jednym wybranym) lub jednocześnie
-* [x] Instytucja kosza (z obsługą)
-* [x] Nałożenie filtra na bazę (toggle)
-* [x] Usuwanie grupowe (np. uszkodzony sprzęt)
+* Adding new record
+* Editing record fields
+* Deleting actucal record
+* Group deleting
+* Search for:
+	1. text phrases
+	2. numeric values
+* Sorting records
+* Database autosave
+* Loading database at startup
+* Works with multiple database files (save, load)
+* CLI menus
+* Thrash for deleted files
+* Filters toggle
