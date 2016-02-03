@@ -150,7 +150,7 @@ void ListaSprzetu::nastepnyElement()
 
 void ListaSprzetu::listaJestPusta(int x, int y)
 {
-	Pomocnik *pom = new Pomocnik;
+	Helper *pom = new Helper;
 	pom->gotoxy((x + 2), (y + 6));
 	cout << "Lista jest pusta" << endl;
 }
@@ -209,7 +209,7 @@ void ListaSprzetu::usunWszystkie()
 
 int ListaSprzetu::wyszukiwanie(string tekst)
 {
-	Pomocnik * przeszukiwacz = new Pomocnik;
+	Helper * przeszukiwacz = new Helper;
 	sprzet = pierwszyElement();
 	widoczne = n;
 

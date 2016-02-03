@@ -127,7 +127,7 @@ public:
 	bool sortujRosnaco();
 };
 
-class Pomocnik
+class Helper
 {
 
 public:

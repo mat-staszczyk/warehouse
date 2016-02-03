@@ -1,11 +1,11 @@
 #include "./Header.h"
 
-string Pomocnik::tlumaczKod(int wartosc)
+string Helper::tlumaczKod(int wartosc)
 {
 	return (wartosc == 1) ? "tak" : "nie";
 }
 
-bool Pomocnik::czyZawieraFraze(string tekst, string nowy_tekst)
+bool Helper::czyZawieraFraze(string tekst, string nowy_tekst)
 {
 	unsigned long t_len = tekst.length();
 	unsigned long n_len = nowy_tekst.length();
@@ -31,7 +31,7 @@ bool Pomocnik::czyZawieraFraze(string tekst, string nowy_tekst)
 	return (flaga == true);
 }
 
-string Pomocnik::pobierzFraze(int x, int y)
+string Helper::pobierzFraze(int x, int y)
 {
 	string fraza;
 
@@ -46,7 +46,7 @@ string Pomocnik::pobierzFraze(int x, int y)
 	return fraza;
 }
 
-double * Pomocnik::pobierzKwoty(int x, int y)
+double * Helper::pobierzKwoty(int x, int y)
 {
 	double kwoty[2];
 	double *wsk_kwoty;
@@ -68,7 +68,7 @@ double * Pomocnik::pobierzKwoty(int x, int y)
 	return wsk_kwoty;
 }
 
-int * Pomocnik::pobierzLiczbe(int x, int y)
+int * Helper::pobierzLiczbe(int x, int y)
 {
 	int licznosc[2];
 	int *wsk_licz;
@@ -91,7 +91,7 @@ int * Pomocnik::pobierzLiczbe(int x, int y)
 	return wsk_licz;
 }
 
-int Pomocnik::pobierzId(int x, int y)
+int Helper::pobierzId(int x, int y)
 {
 	int id;
 
@@ -106,7 +106,7 @@ int Pomocnik::pobierzId(int x, int y)
 	return id;
 }
 
-string Pomocnik::podajNazwe()
+string Helper::podajNazwe()
 {
 	string nazwa_pliku;
 
@@ -118,7 +118,7 @@ string Pomocnik::podajNazwe()
 	return nazwa_pliku;
 }
 
-void Pomocnik::gotoxy(int x, int y)
+void Helper::gotoxy(int x, int y)
 {
 	COORD c;
 	c.X = x - 1;

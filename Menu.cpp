@@ -13,7 +13,7 @@ void Menu::glowne()
 	bool koniec = false;
 	char klawisz;
 	Sprzet * test;
-	Pomocnik * pom = new Pomocnik;
+	Helper * pom = new Helper;
 
 	do
 	{
@@ -141,7 +141,7 @@ void Menu::wyszukiwanie()
 
 	ListaSprzetu::ATR nowy = ListaSprzetu::ATR::nowy;
 	ListaSprzetu::ATR sprawny = ListaSprzetu::ATR::sprawny;
-	Pomocnik * pom = new Pomocnik;
+	Helper * pom = new Helper;
 	string fraza;
 	char klawisz;
 
@@ -324,7 +324,7 @@ bool Menu::wyjscie()
 {
 	Sprzet *test;
 	string nazwa_pliku;
-	Pomocnik * pom = new Pomocnik;
+	Helper * pom = new Helper;
 
 	char klawisz;
 
@@ -368,7 +368,7 @@ bool Menu::wyjscie()
 
 void Menu::opis_glowne(int x, int y)
 {
-	Pomocnik *pom = new Pomocnik;
+	Helper *pom = new Helper;
 
 	pom->gotoxy(x, y++);
 	cout << "###################";
@@ -392,7 +392,7 @@ void Menu::opis_glowne(int x, int y)
 
 void Menu::opis_zarzadzanie(int x, int y)
 {
-	Pomocnik *pom = new Pomocnik;
+	Helper *pom = new Helper;
 
 	pom->gotoxy(x, y++);
 	cout << "############################";
@@ -420,7 +420,7 @@ void Menu::opis_sprzet(int x, int y)
 {
 	int t_x = XX;
 	y += 23;
-	Pomocnik *pom = new Pomocnik;
+	Helper *pom = new Helper;
 
 	pom->gotoxy(x, y);
 	cout << "1. Poprzedni";
@@ -442,7 +442,7 @@ void Menu::opis_sprzet(int x, int y)
 
 void Menu::opis_wyszukiwanie(int x, int y)
 {
-	Pomocnik *pom = new Pomocnik;
+	Helper *pom = new Helper;
 
 	pom->gotoxy(x, y++);
 	cout << "####################";
@@ -477,7 +477,7 @@ void Menu::opis_wyszukiwanie(int x, int y)
 void Menu::opis_sortowanie(int x, int y)
 {
 	x += 45;
-	Pomocnik *pom = new Pomocnik;
+	Helper *pom = new Helper;
 
 	pom->gotoxy(x, y++);
 	cout << "####################";
@@ -506,7 +506,7 @@ void Menu::opis_sortowanie(int x, int y)
 void Menu::opis_kierunekSortowania(int x, int y)
 {
 	x += 70;
-	Pomocnik *pom = new Pomocnik;
+	Helper *pom = new Helper;
 
 	pom->gotoxy(x, y++);
 	cout << "Kierunek sortowania:";
@@ -522,7 +522,7 @@ void Menu::opis_kosz(int x, int y)
 {
 	int t_x = XX;
 	y += 23;
-	Pomocnik *pom = new Pomocnik;
+	Helper *pom = new Helper;
 
 	pom->gotoxy(x, y);
 	cout << "1. Poprzedni";
@@ -544,7 +544,7 @@ void Menu::opis_kosz(int x, int y)
 
 void Menu::opis_wyjscie(int x, int y)
 {
-	Pomocnik *pom = new Pomocnik;
+	Helper *pom = new Helper;
 
 	x += 15;
 	y += 5;

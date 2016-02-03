@@ -42,7 +42,7 @@ Sprzet* Sprzet::podajDane(int x, int y)
 	double wartosc;
 	int ilosc, nowy, sprawny, t_x = (x + 27), t_y = (y + 5);
 	Sprzet * biezacy;
-	Pomocnik * pom = new Pomocnik;
+	Helper * pom = new Helper;
 
 	etykietyDanych();
 
@@ -120,7 +120,7 @@ Sprzet* Sprzet::podajDane(int x, int y)
 
 void Sprzet::etykietyDanych(int x, int y)
 {
-	Pomocnik *pom = new Pomocnik;
+	Helper *pom = new Helper;
 
 	pom->gotoxy(x, y++);
 	cout << "Podaj dane przedmiotu:";
@@ -142,26 +142,26 @@ void Sprzet::etykietyDanych(int x, int y)
 
 void Sprzet::wypiszDane(int x, int y)
 {
-	Pomocnik * pomocnik = new Pomocnik;
+	Helper * helper = new Helper;
 
-	pomocnik->gotoxy(x, y++);
+	helper->gotoxy(x, y++);
 	cout << "Dane przedmiotu:" << endl << endl;
-	pomocnik->gotoxy(x, (y += 2));
+	helper->gotoxy(x, (y += 2));
 	cout << "ID:             " << this->id_produktu << endl;
-	pomocnik->gotoxy(x, (y += 2));
+	helper->gotoxy(x, (y += 2));
 	cout << "Nazwa:          " << this->nazwa << endl;
-	pomocnik->gotoxy(x, (y += 2));
+	helper->gotoxy(x, (y += 2));
 	cout << "Rodzaj:         " << this->typ << endl;
-	pomocnik->gotoxy(x, (y += 2));
+	helper->gotoxy(x, (y += 2));
 	cout << "Iloœæ:          " << this->ilosc << endl;
-	pomocnik->gotoxy(x, (y += 2));
+	helper->gotoxy(x, (y += 2));
 	cout << "Wartoœæ:        " << this->wartosc << endl;
-	pomocnik->gotoxy(x, (y += 2));
-	cout << "Sprawny:        " << pomocnik->tlumaczKod(this->sprawny) << endl;
-	pomocnik->gotoxy(x, (y += 2));
-	cout << "Nowy:           " << pomocnik->tlumaczKod(this->nowy) << endl;
-	pomocnik->gotoxy(x, (y += 2));
+	helper->gotoxy(x, (y += 2));
+	cout << "Sprawny:        " << helper->tlumaczKod(this->sprawny) << endl;
+	helper->gotoxy(x, (y += 2));
+	cout << "Nowy:           " << helper->tlumaczKod(this->nowy) << endl;
+	helper->gotoxy(x, (y += 2));
 	cout << "Informacje:     " << this->informacje << endl << endl;
 
-	delete pomocnik;
+	delete helper;
 }
